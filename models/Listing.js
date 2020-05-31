@@ -1,2 +1,5 @@
-const mongoose = require('mongoose');
-const testing = -1;
+
+const mongoose = require("mongoose");
+
+const listingSchema = new mongoose.Schema({});
+
