@@ -55,10 +55,10 @@ router.delete("/:post_id", isLoggedIn, async (req, res) => {
     const post = await Post.findById(postID);
 
     if (!post.author.equals(req.user.id)) {
-      return res.status("400").send("not allowed to delete");
+      return res.status(401).send("not allowed to delete");
     }
 
-    await Post.findByIdAndRemove(req.params.post_id);
+    await post.remove();
     res.json({ msg: "post was deleted" });
   } catch (err) {
     console.log(err.message);
@@ -89,10 +89,10 @@ router.post(
       const { text, title } = req.body;
 
       if (!post.author.equals(req.user.id)) {
-        return res.status("400").send("not allowed to update");
+        return res.status(401).send("not allowed to update");
       }
 
-      await Post.findByIdAndUpdate(postID, { text: text, title: title });
+      await post.update({ text: text, title: title });
 
       res.json({ msg: "post updated" });
     } catch (err) {
