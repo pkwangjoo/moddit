@@ -7,7 +7,12 @@ const { check, validationResult } = require("express-validator");
 
 router.get("/", isLoggedIn, async (req, res) => {
   try {
-    let posts = await Post.find().populate("author", ["name", "avatar"]);
+    let posts = await Post.find()
+      .populate("author", ["name", "avatar"])
+      .populate({
+        path: "comments",
+        populate: { path: "author", select: "name" },
+      });
     res.json(posts);
   } catch (err) {
     console.log(err.message);
