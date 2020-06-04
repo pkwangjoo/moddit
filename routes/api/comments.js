@@ -83,4 +83,46 @@ router.post(
   }
 );
 
+router.put("/:comment_id/like", isLoggedIn, async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.comment_id);
+
+    if (comment.likes.some((like) => like.user.equals(req.user.id))) {
+      return res.status(400).json({ msg: "comment already liked" });
+    }
+
+    comment.likes.unshift({ user: req.user.id });
+
+    await comment.save();
+
+    return res.json(comment.likes);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.put("/:comment_id/unlike", isLoggedIn, async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.comment_id);
+
+    console.log(comment);
+
+    if (!comment.likes.some((like) => like.user.equals(req.user.id))) {
+      return res.status(400).json({ msg: "comment not liked yet " });
+    }
+
+    comment.likes = comment.likes.filter(
+      ({ user }) => !user.equals(req.user.id)
+    );
+
+    await comment.save();
+
+    return res.json(comment.likes);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;
