@@ -26,6 +26,8 @@ app.use(passport.session());
 
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/profile", require("./routes/api/profile"));
+app.use("/api/posts", require("./routes/api/posts"));
+app.use("/api/posts/:id/comments", require("./routes/api/comments"));
 
 app.get("/", (req, res) => {
   res.send("API running");
