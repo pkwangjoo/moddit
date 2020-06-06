@@ -15,8 +15,8 @@ router.get("/", isLoggedIn, async (req, res) => {
       });
     res.json(posts);
   } catch (err) {
-    console.log(err.message);
-    res.status(500).send("server error");
+    console.error(error);
+    return res.status(500).send("server error");
   }
 });
 

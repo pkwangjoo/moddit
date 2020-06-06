@@ -106,8 +106,6 @@ router.put("/:comment_id/unlike", isLoggedIn, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.comment_id);
 
-    console.log(comment);
-
     if (!comment.likes.some((like) => like.user.equals(req.user.id))) {
       return res.status(400).json({ msg: "comment not liked yet " });
     }
