@@ -8,6 +8,7 @@ const { check, validationResult } = require("express-validator");
 router.get("/", isLoggedIn, async (req, res) => {
   try {
     let posts = await Post.find()
+      .sort({ date: -1 })
       .populate("author", ["name", "avatar"])
       .populate({
         path: "comments",
