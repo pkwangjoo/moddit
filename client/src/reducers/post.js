@@ -37,6 +37,14 @@ export default (state = initialState, action) => {
         ...state,
         posts: state.posts.filter((post) => post._id !== payload),
       };
+    case "CREATE_POST":
+      return { ...state, posts: [...state.posts, payload], loading: false };
+    case "SELECT_POST":
+      return {
+        ...state,
+        post: payload,
+        loading: false,
+      };
 
     default:
       return state;

@@ -9,6 +9,8 @@ import PostList from "./components/posts/PostList";
 import ProtectedRoute from "./components/route/ProtectedRoute";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/dashboard/CreateProfile";
+import NewPost from "./components/posts/NewPost";
+import Post from "./components/posts/Post";
 import { Provider } from "react-redux";
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
@@ -31,7 +33,7 @@ function App() {
 
           <section className="container">
             <Route exact path="/" component={Main} />
-            <switch>
+            <Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <ProtectedRoute exact path="/posts" component={PostList} />
@@ -41,7 +43,9 @@ function App() {
                 path="/createprofile"
                 component={CreateProfile}
               />
-            </switch>
+              <ProtectedRoute exact path="/posts/new" component={NewPost} />
+              <ProtectedRoute exact path="/posts/:post_id" component={Post} />
+            </Switch>
           </section>
         </Fragment>
       </Router>

@@ -53,7 +53,6 @@ export const unlikePost = (post_id) => async (dispatch) => {
 
 export const deletePost = (post_id) => async (dispatch) => {
   try {
-    console.log(post_id + "from react");
     await axios.delete(`/api/posts/${post_id}`);
 
     dispatch({
@@ -62,6 +61,48 @@ export const deletePost = (post_id) => async (dispatch) => {
     });
   } catch (err) {
     console.log(err);
+    dispatch({
+      type: "POST_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const createPost = (formData, history) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const res = await axios.post("/api/posts", formData, config);
+
+    dispatch({
+      type: "CREATE_POST",
+      payload: res.data,
+    });
+
+    history.push("/posts");
+  } catch (err) {
+    dispatch({
+      type: "POST_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const selectPost = (post_id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/posts/${post_id}`);
+
+    console.log(res);
+
+    dispatch({
+      type: "SELECT_POST",
+      payload: res.data,
+    });
+  } catch (err) {
     dispatch({
       type: "POST_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },

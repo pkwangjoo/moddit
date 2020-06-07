@@ -146,4 +146,14 @@ router.put("/:id/unlike", isLoggedIn, async (req, res) => {
   }
 });
 
+router.get("/:id", isLoggedIn, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    return res.json(post);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("server error");
+  }
+});
+
 module.exports = router;

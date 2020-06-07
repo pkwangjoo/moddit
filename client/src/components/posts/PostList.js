@@ -2,6 +2,7 @@ import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getPosts } from "../../actions/post";
+import { Link } from "react-router-dom";
 import PostItem from "./PostItem";
 
 const PostList = ({ getPosts, post: { posts, loading } }) => {
@@ -9,16 +10,28 @@ const PostList = ({ getPosts, post: { posts, loading } }) => {
     getPosts();
   }, [getPosts]);
 
-  return loading ? (
-    "loading"
-  ) : (
-    <Fragment>
-      <div>
-        {posts.map((post) => (
-          <PostItem key={post._id} post={post} />
-        ))}
+  return (
+    <div>
+      <div class="ui pointing menu">
+        <a class="active item">All</a>
+        <a class="item">Messages</a>
+        <a class="item">Friends</a>
+        <div class="right menu">
+          <div class="item">
+            <Link to="/posts/new">New Post</Link>
+          </div>
+        </div>
       </div>
-    </Fragment>
+      {!loading && (
+        <Fragment>
+          <div>
+            {posts.map((post) => (
+              <PostItem key={post._id} post={post} />
+            ))}
+          </div>
+        </Fragment>
+      )}
+    </div>
   );
 };
 
