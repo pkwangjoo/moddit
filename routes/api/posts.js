@@ -148,7 +148,7 @@ router.put("/:id/unlike", isLoggedIn, async (req, res) => {
 
 router.get("/:id", isLoggedIn, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate("comments");
     return res.json(post);
   } catch (err) {
     console.log(err.message);

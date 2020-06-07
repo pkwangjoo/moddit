@@ -29,13 +29,15 @@ router.post(
 
       await newComment.save();
 
-      let post = await Post.findById(req.params.id).populate("comments");
+      let post = await (await Post.findById(req.params.id)).populate(
+        "comments.Comment"
+      );
 
       post.comments.push(newComment);
 
       await post.save();
 
-      res.json(post);
+      res.json(post.comments);
     } catch (err) {
       console.log(err.message);
       res.status(500).send("server error");

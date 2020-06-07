@@ -45,6 +45,12 @@ export default (state = initialState, action) => {
         post: payload,
         loading: false,
       };
+    case "ADD_COMMENT":
+      return {
+        ...state,
+        post: { ...state.post, comments: payload },
+        loading: false,
+      };
 
     default:
       return state;

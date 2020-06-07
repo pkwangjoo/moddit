@@ -38,7 +38,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   return (
     <div>
       <nav className="navbar navbar-default">
-        <div className="container">
+        <div className="ui main container">
           <div className="navbar-header">
             <button
               type="button"

@@ -96,8 +96,6 @@ export const selectPost = (post_id) => async (dispatch) => {
   try {
     const res = await axios.get(`/api/posts/${post_id}`);
 
-    console.log(res);
-
     dispatch({
       type: "SELECT_POST",
       payload: res.data,
@@ -108,4 +106,24 @@ export const selectPost = (post_id) => async (dispatch) => {
       payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
+};
+
+export const addComment = (post_id, formData) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const res = await axios.post(
+      `/api/posts/${post_id}/comments`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: "ADD_COMMENT",
+      payload: res.data,
+    });
+  } catch (err) {}
 };

@@ -55,7 +55,7 @@ const PostItem = ({
             <i aria-hidden="true" class="heart icon"></i>
             Discussions
           </Link>
-          <a class="ui left pointing basic label">{likes.length}</a>
+          <a class="ui left pointing basic label">{comments.length}</a>
         </div>
         <div class="right floated author">{author && author.name}</div>
       </div>

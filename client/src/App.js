@@ -31,7 +31,7 @@ function App() {
         <Fragment>
           <Navbar />
 
-          <section className="container">
+          <div className="ui main text container">
             <Route exact path="/" component={Main} />
             <Switch>
               <Route exact path="/login" component={Login} />
@@ -46,7 +46,7 @@ function App() {
               <ProtectedRoute exact path="/posts/new" component={NewPost} />
               <ProtectedRoute exact path="/posts/:post_id" component={Post} />
             </Switch>
-          </section>
+          </div>
         </Fragment>
       </Router>
     </Provider>
