@@ -25,7 +25,7 @@ const Login = ({ login, isAuthenticated }) => {
   }
   return (
     <Fragment>
-      <h1 className="large text-primary">Log in</h1>
+      <h1 className="ui orange header">Log in</h1>
       <form class="ui form" onSubmit={onSubmit}>
         <div class="field">
           <input
@@ -38,7 +38,7 @@ const Login = ({ login, isAuthenticated }) => {
         </div>
 
         <div class="field">
-          <label>passord</label>
+          <label>password</label>
           <input
             type="password"
             placeholder="Password"

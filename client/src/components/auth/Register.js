@@ -26,12 +26,10 @@ const Register = ({ register, isAuthenticated }) => {
   }
   return (
     <Fragment>
-      <h1 className="large text-primary">Sign Up</h1>
-      <p className="lead">
-        <i className="fas fa-user" /> Create Your Account
-      </p>
-      <form className="form" onSubmit={onSubmit}>
-        <div className="form-group">
+      <h1 className="ui orange header">Sign Up</h1>
+
+      <form className="ui form" onSubmit={onSubmit}>
+        <div className="field">
           <input
             type="text"
             placeholder="Name"
@@ -40,7 +38,7 @@ const Register = ({ register, isAuthenticated }) => {
             onChange={onChange}
           />
         </div>
-        <div className="form-group">
+        <div className="field">
           <input
             type="email"
             placeholder="Email Address"
@@ -49,7 +47,7 @@ const Register = ({ register, isAuthenticated }) => {
             onChange={onChange}
           />
         </div>
-        <div className="form-group">
+        <div className="field">
           <input
             type="password"
             placeholder="Password"
@@ -59,7 +57,7 @@ const Register = ({ register, isAuthenticated }) => {
           />
         </div>
 
-        <input type="submit" className="btn btn-primary" value="Register" />
+        <input type="submit" className="ui button" value="Register" />
       </form>
       <p className="my-1">
         Already have an account? <Link to="/login">Sign In</Link>

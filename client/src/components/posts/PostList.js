@@ -13,9 +13,8 @@ const PostList = ({ getPosts, post: { posts, loading } }) => {
   return (
     <div>
       <div class="ui pointing menu">
-        <a class="active item">All</a>
-        <a class="item">Messages</a>
-        <a class="item">Friends</a>
+        <a class="active item">All Posts</a>
+
         <div class="right menu">
           <div class="item">
             <Link to="/posts/new">New Post</Link>
