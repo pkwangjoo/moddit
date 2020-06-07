@@ -16,8 +16,8 @@ router.get("/", isLoggedIn, async (req, res) => {
       });
     res.json(posts);
   } catch (err) {
-    console.error(error);
-    return res.status(500).send("server error");
+    console.log(err.message);
+    res.status(500).send("server error");
   }
 });
 
@@ -60,7 +60,7 @@ router.delete("/:post_id", isLoggedIn, async (req, res) => {
 
     const post = await Post.findById(postID);
 
-    if (!post.author.equals(req.user.id)) {
+    if (!post.author._id === req.user.id) {
       return res.status(401).send("not allowed to delete");
     }
 
@@ -122,8 +122,8 @@ router.put("/:id/like", isLoggedIn, async (req, res) => {
 
     return res.json(post.likes);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
+    console.log(err.message);
+    res.status(500).send("server error");
   }
 });
 
@@ -141,8 +141,8 @@ router.put("/:id/unlike", isLoggedIn, async (req, res) => {
 
     return res.json(post.likes);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
+    console.log(err.message);
+    res.status(500).send("server error");
   }
 });
 

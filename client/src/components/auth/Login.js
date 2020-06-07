@@ -6,8 +6,8 @@ import { login } from "../../actions/auth";
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: "pkj5257@gmail.com",
+    password: "123456",
   });
 
   const { email, password } = formData;

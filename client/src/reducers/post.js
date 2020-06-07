@@ -21,6 +21,22 @@ export default (state = initialState, action) => {
         error: payload,
         loading: false,
       };
+    case "UPDATE_POST_LIKE":
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === payload.post_id
+            ? { ...post, likes: payload.likes }
+            : post
+        ),
+        loading: false,
+      };
+
+    case "DELETE_POST":
+      return {
+        ...state,
+        posts: state.posts.filter((post) => post._id !== payload),
+      };
 
     default:
       return state;

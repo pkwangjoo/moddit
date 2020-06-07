@@ -13,8 +13,6 @@ const PostList = ({ getPosts, post: { posts, loading } }) => {
     "loading"
   ) : (
     <Fragment>
-      <h1 className="large text-primary text-center">Posts</h1>
-
       <div>
         {posts.map((post) => (
           <PostItem key={post._id} post={post} />
