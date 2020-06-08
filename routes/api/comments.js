@@ -29,13 +29,18 @@ router.post(
 
       await newComment.save();
 
-      let post = await Post.findById(req.params.id).populate("comments");
+      let post = await Post.findById(req.params.id);
 
       post.comments.push(newComment);
 
-      await post.save();
+      await post.execPopulate({
+        path: "comments",
+        populate: { path: "author" },
+      });
 
-      res.json(post);
+      await post.save();
+      post.comments.sort();
+      res.json(post.comments);
     } catch (err) {
       console.log(err.message);
       res.status(500).send("server error");
@@ -105,8 +110,6 @@ router.put("/:comment_id/like", isLoggedIn, async (req, res) => {
 router.put("/:comment_id/unlike", isLoggedIn, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.comment_id);
-
-    console.log(comment);
 
     if (!comment.likes.some((like) => like.user.equals(req.user.id))) {
       return res.status(400).json({ msg: "comment not liked yet " });

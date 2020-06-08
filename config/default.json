@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://kwangjoo:kwangjoo@cluster0-j9evy.mongodb.net/test?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://kwangjoo:kwangjoo@cluster0-j9evy.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "kwangjoooooo"
 }

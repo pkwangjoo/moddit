@@ -5,11 +5,19 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const config = require("config");
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const auth = require("../../middleware/auth");
 
 const User = require("../../models/User");
 
-router.get("/", (req, res) => {
-  res.send("users route");
+router.get("/", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    res.json(user);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("server error");
+  }
 });
 
 router.post(
@@ -50,8 +58,21 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
 
-      res.json(user);
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: "5 days" },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
     } catch (err) {
       console.log(err);
       res.status(500).send("Server error");
@@ -59,17 +80,58 @@ router.post(
   }
 );
 
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: "/api/users",
-    failureRedirect: "/api/users/failed",
-  })(req, res, next);
-});
+router.post(
+  "/login",
+  [
+    check("email", "Please include a valid email").isEmail(),
+    check("password", "Password is required").exists(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-router.get("/logout", (req, res) => {
-  req.logout();
-  res.send("logged out");
-});
+    const { email, password } = req.body;
+
+    try {
+      let user = await User.findOne({ email });
+
+      if (!user) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Invalid Credentials" }] });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Invalid Credentials" }] });
+      }
+
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: "5 days" },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
 
 //just to test in json
 router.get("/failed", (req, res) => {
