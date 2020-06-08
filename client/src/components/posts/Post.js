@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { selectPost } from "../../actions/post";
 import PostItem from "./PostItem";
 import CommentItem from "./CommentItem";
+import CommentForm from "./CommentForm";
 
 const Post = ({ selectPost, post: { post, loading }, match }) => {
   useEffect(() => {
@@ -15,10 +16,17 @@ const Post = ({ selectPost, post: { post, loading }, match }) => {
     !loading && (
       <Fragment>
         <PostItem key={post._id} post={post} />
+
         <div className="ui fluid container">
+          <CommentForm postID={post._id} />
+
           {post.comments.map((comment) => {
-            console.log("hello");
-            return <CommentItem key={comment._id} comment={comment} />;
+            console.log(comment);
+            return (
+              comment.author && (
+                <CommentItem key={comment._id} comment={comment} />
+              )
+            );
           })}
         </div>
       </Fragment>
@@ -26,7 +34,9 @@ const Post = ({ selectPost, post: { post, loading }, match }) => {
   );
 };
 
-Post.propTypes = {};
+Post.propTypes = {
+  post: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   post: state.post,

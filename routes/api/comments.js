@@ -29,14 +29,17 @@ router.post(
 
       await newComment.save();
 
-      let post = await (await Post.findById(req.params.id)).populate(
-        "comments.Comment"
-      );
+      let post = await Post.findById(req.params.id);
 
       post.comments.push(newComment);
 
-      await post.save();
+      await post.execPopulate({
+        path: "comments",
+        populate: { path: "author" },
+      });
 
+      await post.save();
+      post.comments.sort();
       res.json(post.comments);
     } catch (err) {
       console.log(err.message);

@@ -110,6 +110,7 @@ export const selectPost = (post_id) => async (dispatch) => {
 
 export const addComment = (post_id, formData) => async (dispatch) => {
   try {
+    console.log("add comment dispatched");
     const config = {
       headers: {
         "Content-Type": "application/json",

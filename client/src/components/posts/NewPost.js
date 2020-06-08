@@ -17,28 +17,29 @@ const NewPost = ({ createPost, history }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log("hi");
     createPost(formData, history);
   };
   return (
-    <form class="ui form" onSubmit={onSubmit}>
-      <div class="field">
-        <label>Title</label>
-        <textarea
-          onChange={onChange}
-          name="title"
-          value={title}
-          rows="2"
-        ></textarea>
-      </div>
-      <div class="field">
-        <label>Text</label>
-        <textarea onChange={onChange} name="text" value={text}></textarea>
-      </div>
-      <button class="ui button" type="submit">
-        Submit
-      </button>
-    </form>
+    <div style={{ marginTop: "70px" }} className="ui fluid raised card">
+      <form style={{ padding: "10px" }} class="ui form" onSubmit={onSubmit}>
+        <div class="field">
+          <label>Title</label>
+          <textarea
+            onChange={onChange}
+            name="title"
+            value={title}
+            rows="2"
+          ></textarea>
+        </div>
+        <div class="field">
+          <label>Text</label>
+          <textarea onChange={onChange} name="text" value={text}></textarea>
+        </div>
+        <button class="ui button" type="submit">
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 
