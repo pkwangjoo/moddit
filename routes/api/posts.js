@@ -5,6 +5,9 @@ const User = require("../../models/User");
 const Post = require("../../models/Post");
 const { check, validationResult } = require("express-validator");
 
+/**
+ * Gets all the posts
+ */
 router.get("/", isLoggedIn, async (req, res) => {
   try {
     let posts = await Post.find()
@@ -14,6 +17,7 @@ router.get("/", isLoggedIn, async (req, res) => {
         path: "comments",
         populate: { path: "author", select: "name" },
       });
+    console.log(posts);
     res.json(posts);
   } catch (err) {
     console.log(err.message);
@@ -21,6 +25,9 @@ router.get("/", isLoggedIn, async (req, res) => {
   }
 });
 
+/**
+ * Create a new post
+ */
 router.post(
   "/",
   [
@@ -54,6 +61,9 @@ router.post(
   }
 );
 
+/**
+ * Deletes a particular post
+ */
 router.delete("/:post_id", isLoggedIn, async (req, res) => {
   try {
     const postID = req.params.post_id;
@@ -72,6 +82,9 @@ router.delete("/:post_id", isLoggedIn, async (req, res) => {
   }
 });
 
+/**
+ * Updates a particular post
+ */
 router.post(
   "/:post_id",
   [
@@ -108,6 +121,9 @@ router.post(
   }
 );
 
+/**
+ * Add likkes to a particular post
+ */
 router.put("/:id/like", isLoggedIn, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -127,6 +143,9 @@ router.put("/:id/like", isLoggedIn, async (req, res) => {
   }
 });
 
+/**
+ * Remove likes from a particular post
+ */
 router.put("/:id/unlike", isLoggedIn, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -146,6 +165,9 @@ router.put("/:id/unlike", isLoggedIn, async (req, res) => {
   }
 });
 
+/**
+ * Gets a particular post
+ */
 router.get("/:id", isLoggedIn, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate({
@@ -155,8 +177,62 @@ router.get("/:id", isLoggedIn, async (req, res) => {
     return res.json(post);
   } catch (err) {
     console.log(err.message);
+
     res.status(500).send("server error");
   }
 });
+
+/**
+ * Gets all the post inside a forum
+ */
+router.get("/forum/:forum_id", isLoggedIn, async (req, res) => {
+  try {
+    let posts = await Post.find({ forum: req.params.forum_id }).sort({
+      date: -1,
+    });
+    res.json(posts);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+/**
+ * Create a new post inside a forum
+ */
+router.post(
+  "/forum/:forum_id",
+  [
+    isLoggedIn,
+    [
+      check("text", "text is required").not().isEmpty(),
+      check("title", "title is required").not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { title, text } = req.body;
+
+      let newPost = new Post({
+        title: title,
+        text: text,
+        author: req.user.id,
+        forum: req.params.forum_id,
+      });
+
+      await newPost.save();
+
+      res.json(newPost);
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send("server error");
+    }
+  }
+);
 
 module.exports = router;

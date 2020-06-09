@@ -5,6 +5,7 @@ const postSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
+    autopopulate: true,
   },
   text: {
     type: String,
@@ -26,12 +27,19 @@ const postSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment",
+      autopopulate: true,
     },
   ],
   date: {
     type: Date,
     default: Date.now,
   },
+  forum: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Forum",
+  },
 });
+
+postSchema.plugin(require("mongoose-autopopulate"));
 
 module.exports = mongoose.model("Post", postSchema);

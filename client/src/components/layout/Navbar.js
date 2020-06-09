@@ -55,6 +55,11 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
             <Link className="navbar-brand" to="/">
               Moddit
             </Link>
+            <ul class="nav navbar-nav">
+              <li>
+                <Link to="/forums">Forum</Link>
+              </li>
+            </ul>
           </div>
 
           <div

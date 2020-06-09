@@ -11,6 +11,9 @@ import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/dashboard/CreateProfile";
 import NewPost from "./components/posts/NewPost";
 import Post from "./components/posts/Post";
+import Forum from "./components/forum/Forum";
+import ForumList from "./components/forum/ForumList";
+import ForumPostForm from "./components/posts/ForumPostForm";
 import { Provider } from "react-redux";
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
@@ -36,6 +39,12 @@ function App() {
             <Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <ProtectedRoute exact path="/forums" component={ForumList} />
+              <ProtectedRoute
+                exact
+                path="/forums/:forum_id"
+                component={Forum}
+              />
               <ProtectedRoute exact path="/posts" component={PostList} />
               <ProtectedRoute exact path="/dashboard" component={Dashboard} />
               <ProtectedRoute
@@ -45,6 +54,11 @@ function App() {
               />
               <ProtectedRoute exact path="/posts/new" component={NewPost} />
               <ProtectedRoute exact path="/posts/:post_id" component={Post} />
+              <ProtectedRoute
+                exact
+                path="/forums/:forum_id/posts/new"
+                component={ForumPostForm}
+              />
             </Switch>
           </div>
         </Fragment>

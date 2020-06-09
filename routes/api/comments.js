@@ -10,6 +10,9 @@ router.get("/", (req, res) => {
   res.send("comments route");
 });
 
+/**
+ * Adds a comment to a particular post
+ */
 router.post(
   "/",
   [isLoggedIn, check("text", "type a comment").not().isEmpty()],
@@ -48,6 +51,9 @@ router.post(
   }
 );
 
+/**
+ * Deletes a particular comment
+ */
 router.delete("/:comment_id", isLoggedIn, async (req, res) => {
   try {
     let comment = await Comment.findById(req.params.comment_id);
@@ -64,6 +70,9 @@ router.delete("/:comment_id", isLoggedIn, async (req, res) => {
   }
 });
 
+/**
+ * Edits a particular comment
+ */
 router.post(
   "/:comment_id",
   [isLoggedIn, check("text", "updating text cannot be empty").not().isEmpty()],
@@ -88,6 +97,9 @@ router.post(
   }
 );
 
+/**
+ * Adds like to a particular comment
+ */
 router.put("/:comment_id/like", isLoggedIn, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.comment_id);
@@ -107,6 +119,9 @@ router.put("/:comment_id/like", isLoggedIn, async (req, res) => {
   }
 });
 
+/**
+ * Remove likes from a particular comment
+ */
 router.put("/:comment_id/unlike", isLoggedIn, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.comment_id);
