@@ -187,7 +187,9 @@ router.get("/:id", isLoggedIn, async (req, res) => {
  */
 router.get("/forum/:forum_id", isLoggedIn, async (req, res) => {
   try {
-    let posts = await Post.find({ forum: req.params.forum_id });
+    let posts = await Post.find({ forum: req.params.forum_id }).sort({
+      date: -1,
+    });
     res.json(posts);
   } catch (err) {
     console.log(err.message);

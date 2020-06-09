@@ -2,16 +2,18 @@ import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { selectForum } from "../../actions/forum";
+import { clearPosts } from "../../actions/post";
 import ForumPostList from "../posts/ForumPostList";
 const Forum = ({
   selectForum,
+  clearPosts,
 
   forum: { forum, loading },
   match,
 }) => {
   useEffect(() => {
     selectForum(match.params.forum_id);
-  }, [selectForum]);
+  }, [clearPosts, selectForum]);
 
   return (
     forum !== null &&

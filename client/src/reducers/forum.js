@@ -12,7 +12,14 @@ export default (state = initialState, action) => {
     case "GET_FORUMS":
       return {
         ...state,
+        forum: null,
         forums: payload,
+        loading: false,
+      };
+    case "ADD_FORUM":
+      return {
+        ...state,
+        forums: [...state.forums, payload],
         loading: false,
       };
 

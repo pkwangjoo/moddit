@@ -180,3 +180,9 @@ export const createForumPost = (forum_id, formData, history) => async (
     });
   }
 };
+
+export const clearPosts = () => async (dispatch) => {
+  dispatch({
+    type: "CLEAR_POSTS",
+  });
+};

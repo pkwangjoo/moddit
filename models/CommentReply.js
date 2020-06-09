@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const commentSchema = new mongoose.Schema({
+const commentReplySchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -22,14 +22,6 @@ const commentSchema = new mongoose.Schema({
       },
     },
   ],
-  replies: [
-    {
-      commentReplies: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "CommentReply",
-      },
-    },
-  ],
 });
 
-module.exports = mongoose.model("Comment", commentSchema);
+module.exports = mongoose.model("CommentReply", commentReplySchema);

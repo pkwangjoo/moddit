@@ -32,3 +32,24 @@ export const selectForum = (forum_id) => async (dispatch) => {
     });
   }
 };
+
+export const addForum = (formData) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const res = await axios.post("/api/forums", formData, config);
+
+    dispatch({
+      type: "ADD_FORUM",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "FORUM_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
