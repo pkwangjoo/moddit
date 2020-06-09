@@ -7,27 +7,13 @@ const app = express();
 
 connectDB();
 
-// require("./config/passport")(passport);
-
 app.use(express.json({ extended: false }));
-
-// Express session
-// app.use(
-//   session({
-//     secret: "secret",
-//     resave: true,
-//     saveUninitialized: true,
-//   })
-// );
-
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/posts", require("./routes/api/posts"));
 app.use("/api/posts/:id/comments", require("./routes/api/comments"));
+app.use("/api/forums", require("./routes/api/forums"));
 
 app.get("/", (req, res) => {
   res.send("API running");

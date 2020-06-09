@@ -9,7 +9,6 @@ export const getPosts = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (err) {
-    console.log(err);
     dispatch({
       type: "POST_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },
@@ -127,4 +126,57 @@ export const addComment = (post_id, formData) => async (dispatch) => {
       payload: res.data,
     });
   } catch (err) {}
+};
+
+export const getForumPosts = (forum_id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/posts/forum/${forum_id}`);
+
+    if (res.data !== null) {
+      dispatch({
+        type: "GET_POSTS",
+        payload: res.data,
+      });
+    } else {
+      dispatch({
+        type: "GET_POSTS",
+        payload: [],
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: "POST_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const createForumPost = (forum_id, formData, history) => async (
+  dispatch
+) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const res = await axios.post(
+      `/api/posts/forum/${forum_id}`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: "CREATE_POST",
+      payload: res.data,
+    });
+
+    history.push(`/forums/${forum_id}`);
+  } catch (err) {
+    dispatch({
+      type: "POST_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
 };

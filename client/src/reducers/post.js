@@ -51,6 +51,13 @@ export default (state = initialState, action) => {
         post: { ...state.post, comments: payload },
         loading: false,
       };
+    case "CLEAR_POSTS":
+      return {
+        state,
+        post: null,
+        posts: [],
+        loading: false,
+      };
 
     default:
       return state;

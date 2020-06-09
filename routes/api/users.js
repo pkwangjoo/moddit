@@ -10,6 +10,10 @@ const auth = require("../../middleware/auth");
 
 const User = require("../../models/User");
 
+/**
+ * GETS the currently logged in user
+ */
+
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -20,6 +24,9 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+/**
+ * Registers the user
+ */
 router.post(
   "/register",
   [
@@ -80,6 +87,10 @@ router.post(
   }
 );
 
+/**
+ * Logs in the user
+ */
+
 router.post(
   "/login",
   [
@@ -133,7 +144,9 @@ router.post(
   }
 );
 
-//just to test in json
+/**
+ * Dummy route for testing using postman
+ */
 router.get("/failed", (req, res) => {
   res.send("failed log in");
 });
