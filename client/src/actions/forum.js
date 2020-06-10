@@ -53,3 +53,4 @@ export const addForum = (formData) => async (dispatch) => {
     });
   }
 };
+

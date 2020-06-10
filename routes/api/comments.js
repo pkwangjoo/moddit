@@ -4,52 +4,8 @@ const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Comment = require("../../models/Comment");
+const CommentReply = require("../../models/CommentReply");
 const { check, validationResult } = require("express-validator");
-
-router.get("/", (req, res) => {
-  res.send("comments route");
-});
-
-/**
- * Adds a comment to a particular post
- */
-router.post(
-  "/",
-  [isLoggedIn, check("text", "type a comment").not().isEmpty()],
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-      }
-
-      const text = req.body.text;
-
-      const newComment = new Comment({
-        author: req.user.id,
-        text: text,
-      });
-
-      await newComment.save();
-
-      let post = await Post.findById(req.params.id);
-
-      post.comments.push(newComment);
-
-      await post.execPopulate({
-        path: "comments",
-        populate: { path: "author" },
-      });
-
-      await post.save();
-      post.comments.sort();
-      res.json(post.comments);
-    } catch (err) {
-      console.log(err.message);
-      res.status(500).send("server error");
-    }
-  }
-);
 
 /**
  * Deletes a particular comment
@@ -73,7 +29,7 @@ router.delete("/:comment_id", isLoggedIn, async (req, res) => {
 /**
  * Edits a particular comment
  */
-router.post(
+router.put(
   "/:comment_id",
   [isLoggedIn, check("text", "updating text cannot be empty").not().isEmpty()],
   async (req, res) => {
@@ -140,6 +96,55 @@ router.put("/:comment_id/unlike", isLoggedIn, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
+  }
+});
+
+//adding replies to a particular comment
+router.post("/:comment_id", isLoggedIn, async (req, res) => {
+  try {
+    const { text } = req.body;
+
+    const commentReply = new CommentReply({
+      author: req.user.id,
+      text: text,
+    });
+
+    await commentReply.save();
+
+    let comment = await Comment.findById(req.params.comment_id);
+
+    comment.replies.push(commentReply);
+
+    await comment.save();
+
+    await comment.execPopulate({
+      path: "replies",
+      populate: { path: "author" },
+    });
+
+    res.json(comment.replies);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+/**
+ * Get a particular comment
+ */
+router.get("/:comment_id", async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.comment_id);
+
+    await comment.execPopulate({
+      path: "replies",
+      populate: { path: "author" },
+    });
+
+    res.json(comment);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("server error");
   }
 });
 

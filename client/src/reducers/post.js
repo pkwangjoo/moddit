@@ -13,6 +13,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         posts: payload,
+        post: null,
         loading: false,
       };
     case "POST_ERROR":
@@ -29,6 +30,10 @@ export default (state = initialState, action) => {
             ? { ...post, likes: payload.likes }
             : post
         ),
+        post:
+          state.post !== null
+            ? { ...state.post, likes: payload.likes }
+            : state.post,
         loading: false,
       };
 

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { addComment } from "../../actions/post";
+import { addCommentReply } from "../../actions/comment";
+
 import PropTypes from "prop-types";
 
-const CommentForm = ({ addComment, postID }) => {
+const CommentReplyForm = ({ toggleInput, addCommentReply, commentID }) => {
   const [formData, setFormData] = useState({
     text: "",
   });
@@ -15,9 +16,9 @@ const CommentForm = ({ addComment, postID }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    addComment(postID, formData);
-
+    addCommentReply(commentID, formData);
     setFormData({ text: "" });
+    toggleInput();
   };
   return (
     <form onSubmit={onSubmit} class="ui reply form">
@@ -26,18 +27,23 @@ const CommentForm = ({ addComment, postID }) => {
           name="text"
           value={text}
           onChange={onChange}
-          rows="1"
+          rows="50"
         ></textarea>
       </div>
       <button class="ui primary submit labeled icon tiny button">
-        <i class="icon edit"></i> Add Comment
+        <i class="icon edit"></i> Reply Comment
       </button>
     </form>
   );
 };
 
-CommentForm.propTypes = {
-  addComment: PropTypes.func.isRequired,
+CommentReplyForm.propTypes = {
+  comment: PropTypes.object.isRequired,
+  addCommentReply: PropTypes.func.isRequired,
 };
 
-export default connect(null, { addComment })(CommentForm);
+const mapStateToProps = (state) => ({
+  comment: state.comment,
+});
+
+export default connect(mapStateToProps, { addCommentReply })(CommentReplyForm);

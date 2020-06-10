@@ -3,6 +3,7 @@ const router = express.Router();
 const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
+const Comment = require("../../models/Comment");
 const { check, validationResult } = require("express-validator");
 
 /**
@@ -170,14 +171,75 @@ router.put("/:id/unlike", isLoggedIn, async (req, res) => {
  */
 router.get("/:id", isLoggedIn, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate({
+    const post = await Post.findById(req.params.id);
+
+    await post.execPopulate({
       path: "comments",
       populate: { path: "author" },
     });
+
     return res.json(post);
   } catch (err) {
     console.log(err.message);
 
+    res.status(500).send("server error");
+  }
+});
+
+router.post(
+  "/:id/comments",
+  [isLoggedIn, check("text", "type a comment").not().isEmpty()],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const text = req.body.text;
+
+      const newComment = new Comment({
+        author: req.user.id,
+        text: text,
+      });
+
+      await newComment.save();
+
+      let post = await Post.findById(req.params.id);
+
+      post.comments.push(newComment);
+
+      await post.execPopulate({
+        path: "comments",
+        populate: { path: "author" },
+      });
+
+      await post.save();
+      post.comments.sort();
+      res.json(post.comments);
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send("server error");
+    }
+  }
+);
+
+/**
+ * Gets all comments from a particular post
+ */
+router.get("/:id/comments/", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    await post.execPopulate({
+      path: "comments",
+      populate: { path: "author" },
+      populate: { path: "replies", populate: { path: "author" } },
+    });
+
+    res.json(post.comments);
+  } catch (err) {
+    console.log(err.message);
     res.status(500).send("server error");
   }
 });

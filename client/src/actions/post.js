@@ -15,6 +15,32 @@ export const getPosts = () => async (dispatch) => {
     });
   }
 };
+export const addComment = (post_id, formData) => async (dispatch) => {
+  try {
+    console.log("add comment dispatched");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const res = await axios.post(
+      `/api/posts/${post_id}/comments`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: "ADD_COMMENT",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "POST_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
 
 export const likePost = (post_id) => async (dispatch) => {
   try {
@@ -107,40 +133,14 @@ export const selectPost = (post_id) => async (dispatch) => {
   }
 };
 
-export const addComment = (post_id, formData) => async (dispatch) => {
-  try {
-    console.log("add comment dispatched");
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const res = await axios.post(
-      `/api/posts/${post_id}/comments`,
-      formData,
-      config
-    );
-
-    dispatch({
-      type: "ADD_COMMENT",
-      payload: res.data,
-    });
-  } catch (err) {}
-};
-
 export const getForumPosts = (forum_id) => async (dispatch) => {
   try {
     const res = await axios.get(`/api/posts/forum/${forum_id}`);
 
-    if (res.data !== null) {
+    {
       dispatch({
         type: "GET_POSTS",
         payload: res.data,
-      });
-    } else {
-      dispatch({
-        type: "GET_POSTS",
-        payload: [],
       });
     }
   } catch (err) {
