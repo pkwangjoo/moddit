@@ -9,7 +9,7 @@ import PostList from "./components/posts/PostList";
 import ProtectedRoute from "./components/route/ProtectedRoute";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/dashboard/CreateProfile";
-import NewPost from "./components/posts/NewPost";
+import PostForm from "./components/posts/PostForm";
 import Post from "./components/posts/Post";
 import Forum from "./components/forum/Forum";
 import ForumList from "./components/forum/ForumList";
@@ -52,7 +52,7 @@ function App() {
                 path="/createprofile"
                 component={CreateProfile}
               />
-              <ProtectedRoute exact path="/posts/new" component={NewPost} />
+              <ProtectedRoute exact path="/posts/new" component={PostForm} />
               <ProtectedRoute exact path="/posts/:post_id" component={Post} />
               <ProtectedRoute
                 exact

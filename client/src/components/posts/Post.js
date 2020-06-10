@@ -5,6 +5,7 @@ import { selectPost } from "../../actions/post";
 import PostItem from "./PostItem";
 import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm";
+import CommentList from "./CommentList";
 
 const Post = ({ selectPost, post: { post, loading }, match }) => {
   useEffect(() => {
@@ -19,15 +20,7 @@ const Post = ({ selectPost, post: { post, loading }, match }) => {
 
         <div className="ui fluid container">
           <CommentForm postID={post._id} />
-
-          {post.comments.map((comment) => {
-            console.log(comment);
-            return (
-              comment.author && (
-                <CommentItem key={comment._id} comment={comment} />
-              )
-            );
-          })}
+          <CommentList />
         </div>
       </Fragment>
     )

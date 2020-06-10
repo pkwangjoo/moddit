@@ -4,7 +4,7 @@ import { createPost } from "../../actions/post";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-const NewPost = ({ createPost, history }) => {
+const PostForm = ({ createPost, history }) => {
   const [formData, setFormData] = useState({
     title: "",
     text: "",
@@ -43,8 +43,8 @@ const NewPost = ({ createPost, history }) => {
   );
 };
 
-NewPost.propTypes = {
+PostForm.propTypes = {
   createPost: PropTypes.func.isRequired,
 };
 
-export default connect(null, { createPost })(withRouter(NewPost));
+export default connect(null, { createPost })(withRouter(PostForm));

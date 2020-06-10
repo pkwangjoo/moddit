@@ -23,13 +23,11 @@ const ForumList = ({ getForums, forum: { forums, loading } }) => {
         <input type="text" placeholder="Search..." />
         <div class="ui button">Search</div>
       </div>
-      <button
-        onClick={toggleInput}
-        style={{ padding: "5px" }}
-        class="circular ui icon button"
-      >
-        <i class="plus icon"></i>
-      </button>
+      <div style={{ paddingTop: "20px" }}>
+        <button onClick={toggleInput} class="circular ui icon button">
+          Add Forum <i class="plus icon"></i>
+        </button>
+      </div>
       {inputActive && <ForumForm />}
       {!loading && (
         <Fragment>
