@@ -4,6 +4,9 @@ import post from "./post";
 import profile from "./profile";
 import forum from "./forum";
 import comment from "./comment";
+import chat from "./chat";
+import chatRoom from "./chatRoom";
+import listing from "./listing";
 
 export default combineReducers({
   auth,
@@ -11,4 +14,7 @@ export default combineReducers({
   profile,
   forum,
   comment,
+  chat,
+  chatRoom,
+  listing,
 });

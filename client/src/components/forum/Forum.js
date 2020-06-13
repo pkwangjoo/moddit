@@ -1,9 +1,10 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { selectForum } from "../../actions/forum";
 import { clearPosts } from "../../actions/post";
 import ForumPostList from "../posts/ForumPostList";
+import ListingList from "../listing/ListingList";
 const Forum = ({
   selectForum,
   clearPosts,
@@ -11,9 +12,21 @@ const Forum = ({
   forum: { forum, loading },
   match,
 }) => {
+  const [forumState, setForumState] = useState({
+    posts: true,
+    listings: false,
+  });
   useEffect(() => {
     selectForum(match.params.forum_id);
   }, [clearPosts, selectForum]);
+
+  const toggleListing = (e) => {
+    setForumState({ posts: false, listings: true });
+  };
+
+  const toggleDiscussion = (e) => {
+    setForumState({ posts: true, listings: false });
+  };
 
   return (
     forum !== null &&
@@ -24,12 +37,25 @@ const Forum = ({
             {forum.title}
           </h2>
           <div style={{ padding: "10px" }} class="ui secondary pointing menu">
-            <a class="active item">Discussion</a>
+            <a
+              class
+              onClick={toggleDiscussion}
+              className={forumState.posts ? "active item" : "item"}
+            >
+              Discussion
+            </a>
             <a class="item">Marketplace</a>
-            <a class="item">Listings</a>
+            <a
+              class
+              onClick={toggleListing}
+              className={forumState.listings ? "active item" : "item"}
+            >
+              Listings
+            </a>
           </div>
         </div>
-        <ForumPostList forumID={forum._id} />
+        {forumState.posts && <ForumPostList forumID={forum._id} />}
+        {forumState.listings && <ListingList forumID={forum._id} />}
       </Fragment>
     )
   );
