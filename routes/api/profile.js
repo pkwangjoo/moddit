@@ -6,6 +6,9 @@ const User = require("../../models/User");
 const Profile = require("../../models/Profile");
 const { check, validationResult } = require("express-validator");
 
+/**
+ * Getting the profile of the currently logged in user
+ */
 router.get("/me", isLoggedIn, async (req, res) => {
   try {
     const profile = await Profile.findOne({
@@ -60,6 +63,9 @@ router.post(
   }
 );
 
+/**
+ * Gets all the profiles of the users
+ */
 router.get("/", async (req, res) => {
   try {
     let profiles = await Profile.find().populate("user", ["name", "avatar"]);
@@ -72,7 +78,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/user/:user_id", async (req, res) => {
+/**
+ * Gets the profile with the user id in the params
+ */
+router.get("/:user_id", async (req, res) => {
   try {
     let profile = await Profile.findOne({ user: req.params.user_id });
 
@@ -90,6 +99,10 @@ router.get("/user/:user_id", async (req, res) => {
     res.status(500).send("server error");
   }
 });
+
+/**
+ * Deletes the profile of the currently logged in user
+ */
 
 router.delete("/", auth, async (req, res) => {
   try {

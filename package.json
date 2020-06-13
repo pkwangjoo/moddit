@@ -5,21 +5,33 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "server": "nodemon server"
+    "server": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "kwangjoo",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.1",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "express-validator": "^6.5.0",
     "gravatar": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.26.0",
     "mongoose": "^5.9.16",
+    "mongoose-autopopulate": "^0.12.2",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "request": "^2.88.2"
+    "react-moment": "^0.9.7",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "request": "^2.88.2",
+    "thunk": "0.0.1"
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
