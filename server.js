@@ -25,6 +25,7 @@ app.use("/api/forums", require("./routes/api/forums"));
 app.use("/api/comments", require("./routes/api/comments"));
 app.use("/api/chat", require("./routes/api/chat"));
 app.use("/api/listing", require("./routes/api/listing"));
+app.use("/api/dashboard", require("./routes/api/dashboard"));
 
 app.get("/", (req, res) => {
   res.send("API running");

@@ -7,7 +7,6 @@ const Comment = require("../../models/Comment");
 const Listing = require("../../models/Listing");
 const ChatRoom = require("../../models/ChatRoom");
 const { check, validationResult } = require("express-validator");
-const { model } = require("../../models/Listing");
 
 router.get("/", isLoggedIn, async (req, res) => {
   try {
@@ -144,6 +143,17 @@ router.post("/:listing_id/chatRoom", isLoggedIn, async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(500).send("server error");
+  }
+});
+
+router.get("/user/:user_id", isLoggedIn, async (req, res) => {
+  try {
+    const listings = await Listing.find({ participants: req.params.user_id });
+
+    res.json(listings);
+  } catch (err) {
+    console.log(err.message);
     res.status(500).send("server error");
   }
 });

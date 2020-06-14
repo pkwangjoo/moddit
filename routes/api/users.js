@@ -144,15 +144,4 @@ router.post(
   }
 );
 
-/**
- * Dummy route for testing using postman
- */
-router.get("/failed", (req, res) => {
-  res.send("failed log in");
-});
-
-router.get("/login", (req, res) => {
-  res.send("post to log in");
-});
-
 module.exports = router;

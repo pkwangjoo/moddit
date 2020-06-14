@@ -15,6 +15,22 @@ export const getPosts = () => async (dispatch) => {
     });
   }
 };
+
+export const getPostsByUser = (user_id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/posts/user/${user_id}`);
+
+    dispatch({
+      type: "GET_POSTS",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "POST_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
 export const addComment = (post_id, formData) => async (dispatch) => {
   try {
     console.log("add comment dispatched");

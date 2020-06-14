@@ -52,12 +52,24 @@ router.post("/chatRoom", isLoggedIn, async (req, res) => {
 //joining chat room
 router.post("/chatRoom/:id", isLoggedIn, async (req, res) => {
   try {
-    let chatRoom = await ChatRoom.findById(req.params.id);
-    if (!chatRoom.user.includes(req.user.id)) {
-      await ChatRoom.update({ user: [...chatRoom.user, req.user.id] });
+    const chatRoom = await ChatRoom.findById(req.params.id);
+    const user = await User.findById(req.user.id);
+
+    var userExists = false;
+    for (let i = 0; i < chatRoom.users.length; i++) {
+      if (chatRoom.users[i].equals(user)) {
+        userExists = true;
+        break;
+      }
+    }
+    if (!userExists) {
+      console.log("unique user");
+      await chatRoom.updateOne({
+        users: chatRoom.users.concat(user),
+      });
     }
 
-    res.json(ChatRoom);
+    res.json(chatRoom);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("server error");

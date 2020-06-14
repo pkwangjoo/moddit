@@ -28,7 +28,6 @@ const Chat = ({
     chatRoom && socket.emit("join", { room: chatRoom.name });
 
     socket.on("message", (msg) => {
-      console.log(msg);
       udpateChatMessages(msg);
     });
 
