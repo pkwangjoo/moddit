@@ -61,13 +61,14 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { title, text } = req.body;
+      const { title, text, limit } = req.body;
 
       let newListing = new Listing({
         title: title,
         text: text,
         author: req.user.id,
         forum: req.params.forum_id,
+        limit: limit,
       });
 
       await newListing.save();
@@ -110,6 +111,11 @@ router.post("/:listing_id/participants", isLoggedIn, async (req, res) => {
         break;
       }
     }
+
+    if (listing.limit && listing.participants.length >= listing.limit) {
+      res.status(400).send("Listing is currently full");
+    }
+
     if (!userExists) {
       console.log("unique user");
       await listing.updateOne({
@@ -131,6 +137,7 @@ router.post("/:listing_id/chatRoom", isLoggedIn, async (req, res) => {
     if (!listing.ChatRoom) {
       const newChatRoom = new ChatRoom({
         name: req.body.name,
+        limit: listing.limit,
       });
 
       await newChatRoom.save();

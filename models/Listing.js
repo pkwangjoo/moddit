@@ -36,6 +36,9 @@ const listingSchema = new mongoose.Schema({
     ref: "ChatRoom",
     autopopulate: true,
   },
+  limit: {
+    type: Number,
+  },
 });
 
 listingSchema.plugin(require("mongoose-autopopulate"));
