@@ -25,6 +25,20 @@ router.get("/", auth, async (req, res) => {
 });
 
 /**
+ * GETS all the users
+ */
+router.get("/all", auth, async (req, res) => {
+  try {
+    const users = await User.find();
+
+    res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+/**
  * Registers the user
  */
 router.post(

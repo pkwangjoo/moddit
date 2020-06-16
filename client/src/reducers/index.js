@@ -7,6 +7,7 @@ import comment from "./comment";
 import chat from "./chat";
 import chatRoom from "./chatRoom";
 import listing from "./listing";
+import user from "./user";
 
 export default combineReducers({
   auth,
@@ -17,4 +18,5 @@ export default combineReducers({
   chat,
   chatRoom,
   listing,
+  user,
 });

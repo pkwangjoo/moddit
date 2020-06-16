@@ -18,6 +18,7 @@ import Chat from "./components/chat/Chat";
 import ChatRoomList from "./components/chat/ChatRoomList";
 import ListingForm from "./components/listing/ListingForm";
 import Listing from "./components/listing/Listing";
+import UserList from "./components/user/UserList";
 import { Provider } from "react-redux";
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
@@ -51,7 +52,11 @@ function App() {
                 component={Forum}
               />
               <ProtectedRoute exact path="/posts" component={PostList} />
-              <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+              <ProtectedRoute
+                exact
+                path="/dashboard/:user_id"
+                component={Dashboard}
+              />
               <ProtectedRoute
                 exact
                 path="/createprofile"
@@ -80,6 +85,7 @@ function App() {
                 path="/chat/join"
                 component={ChatRoomList}
               />
+              <ProtectedRoute exact path="/users" component={UserList} />
             </Switch>
           </div>
         </Fragment>
