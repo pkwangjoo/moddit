@@ -4,7 +4,6 @@ const chatRoomSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   users: [
     {
@@ -16,6 +15,10 @@ const chatRoomSchema = new mongoose.Schema({
 
   limit: {
     type: Number,
+  },
+  private: {
+    type: Boolean,
+    default: false,
   },
 });
 

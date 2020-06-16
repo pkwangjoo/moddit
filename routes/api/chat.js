@@ -67,6 +67,41 @@ router.post("/chatRoom", isLoggedIn, async (req, res) => {
   }
 });
 
+router.post("/chatRoom/private", isLoggedIn, async (req, res) => {
+  try {
+    const { sender_id, receiver_id } = req.body;
+
+    const sender = await User.findById(sender_id);
+    const receiver = await User.findById(receiver_id);
+
+    const chatRoom = new ChatRoom({
+      name: `${sender.name} and ${receiver.name}s' chat`,
+      users: [sender_id, receiver_id],
+      private: true,
+    });
+
+    await chatRoom.save();
+
+    res.json(chatRoom);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+router.get("/chatRoom/private/:user_id", isLoggedIn, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.user_id);
+
+    const chatRooms = await ChatRoom.find({ users: user, private: true });
+
+    res.json(chatRooms);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
+
 //joining chat room
 router.post("/chatRoom/:id", isLoggedIn, async (req, res) => {
   try {

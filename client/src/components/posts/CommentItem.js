@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addComment } from "../../actions/post";
+import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import { likeComment, selectComment } from "../../actions/comment";
 import CommentReplyForm from "./CommentReplyForm";
@@ -10,14 +11,7 @@ import CommentReplyItem from "./CommentReplyItem";
 const CommentItem = ({
   selectComment,
   likeComment,
-  comment: {
-    _id,
-    author: { name, loading },
-    text,
-    date,
-    likes,
-    replies,
-  },
+  comment: { _id, author, text, date, likes, replies },
 }) => {
   const [inputActive, setInputActive] = useState(false);
 
@@ -30,7 +24,9 @@ const CommentItem = ({
       <div className="ui comments">
         <div style={{ padding: "10px" }} class="comment">
           <div class="content">
-            <a class="author">{name}</a>
+            <Link to={`/dashboard/${author._id}`} class="author">
+              {author.name}
+            </Link>
             <div class="metadata">
               <span class="date">
                 {" "}
