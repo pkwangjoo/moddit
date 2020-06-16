@@ -74,6 +74,19 @@ router.post("/chatRoom/private", isLoggedIn, async (req, res) => {
     const sender = await User.findById(sender_id);
     const receiver = await User.findById(receiver_id);
 
+    const chatRoomExists = await ChatRoom.exists({
+      users: { $all: [sender_id, receiver_id] },
+    });
+
+    if (chatRoomExists) {
+      const exisitingChatRoom = await ChatRoom.findOne({
+        users: { $all: [sender_id, receiver_id] },
+      });
+
+      console.log(exisitingChatRoom);
+      return res.json(exisitingChatRoom);
+    }
+
     const chatRoom = new ChatRoom({
       name: `${sender.name} and ${receiver.name}s' chat`,
       users: [sender_id, receiver_id],
