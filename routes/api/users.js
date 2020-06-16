@@ -39,6 +39,21 @@ router.get("/all", auth, async (req, res) => {
 });
 
 /**
+ * GETs a specific user
+ */
+
+router.get("/:user_id", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.user_id);
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+/**
  * Registers the user
  */
 router.post(

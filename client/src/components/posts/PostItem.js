@@ -57,7 +57,9 @@ const PostItem = ({
           </Link>
           <a class="ui left pointing basic label">{comments.length}</a>
         </div>
-        <div class="right floated author">{author && author.name}</div>
+        <Link to={`/dashboard/${author._id}`} class="right floated author">
+          {author && author.name}
+        </Link>
       </div>
     </div>
   );
