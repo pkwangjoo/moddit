@@ -16,6 +16,22 @@ export const getLoggedProfile = () => async (dispatch) => {
   }
 };
 
+export const getUserProfile = (user_id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/${user_id}`);
+
+    dispatch({
+      type: "GET_PROFILE",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "PROFILE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
 export const createProfile = (formData, history, editMode = false) => async (
   dispatch
 ) => {
@@ -47,4 +63,10 @@ export const createProfile = (formData, history, editMode = false) => async (
       payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
+};
+
+export const clearProfile = () => (dispatch) => {
+  dispatch({
+    type: "CLEAR_PROFILE",
+  });
 };

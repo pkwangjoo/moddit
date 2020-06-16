@@ -13,6 +13,10 @@ const chatRoomSchema = new mongoose.Schema({
       autopopulate: true,
     },
   ],
+
+  limit: {
+    type: Number,
+  },
 });
 
 chatRoomSchema.plugin(require("mongoose-autopopulate"));

@@ -4,6 +4,7 @@ const profileSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    autopopulate: true,
   },
 
   major: {
@@ -18,4 +19,5 @@ const profileSchema = new mongoose.Schema({
   ],
 });
 
+profileSchema.plugin(require("mongoose-autopopulate"));
 module.exports = mongoose.model("Profile", profileSchema);

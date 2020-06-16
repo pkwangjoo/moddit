@@ -9,7 +9,7 @@ const ListingItem = ({
   addParticipant,
   deleteListing,
   auth,
-  listing: { _id, author, title, text, date },
+  listing: { _id, author, title, text, date, limit, participants },
 }) => {
   const handleClick = (e) => {
     addParticipant(_id);
@@ -38,9 +38,17 @@ const ListingItem = ({
         </div>
       </div>
       <div class="extra content">
-        <button onClick={handleClick} class="ui basic green button">
-          Participate
-        </button>
+        <a className="right floated">
+          <i class="users icon"></i> {participants.length} / {limit} Members
+        </a>
+        {"  "}
+        {participants.length < limit ? (
+          <button onClick={handleClick} class="ui basic green button">
+            Participate
+          </button>
+        ) : (
+          <a class="ui red label">Full</a>
+        )}
       </div>
     </div>
   );

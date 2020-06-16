@@ -7,7 +7,6 @@ const Comment = require("../../models/Comment");
 const Listing = require("../../models/Listing");
 const ChatRoom = require("../../models/ChatRoom");
 const { check, validationResult } = require("express-validator");
-const { model } = require("../../models/Listing");
 
 router.get("/", isLoggedIn, async (req, res) => {
   try {
@@ -62,13 +61,14 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { title, text } = req.body;
+      const { title, text, limit } = req.body;
 
       let newListing = new Listing({
         title: title,
         text: text,
         author: req.user.id,
         forum: req.params.forum_id,
+        limit: limit,
       });
 
       await newListing.save();
@@ -111,6 +111,11 @@ router.post("/:listing_id/participants", isLoggedIn, async (req, res) => {
         break;
       }
     }
+
+    if (listing.limit && listing.participants.length >= listing.limit) {
+      res.status(400).send("Listing is currently full");
+    }
+
     if (!userExists) {
       console.log("unique user");
       await listing.updateOne({
@@ -132,6 +137,7 @@ router.post("/:listing_id/chatRoom", isLoggedIn, async (req, res) => {
     if (!listing.ChatRoom) {
       const newChatRoom = new ChatRoom({
         name: req.body.name,
+        limit: listing.limit,
       });
 
       await newChatRoom.save();
@@ -144,6 +150,17 @@ router.post("/:listing_id/chatRoom", isLoggedIn, async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(500).send("server error");
+  }
+});
+
+router.get("/user/:user_id", isLoggedIn, async (req, res) => {
+  try {
+    const listings = await Listing.find({ participants: req.params.user_id });
+
+    res.json(listings);
+  } catch (err) {
+    console.log(err.message);
     res.status(500).send("server error");
   }
 });

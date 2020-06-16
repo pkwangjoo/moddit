@@ -16,6 +16,22 @@ export const getListings = (form_id) => async (dispatch) => {
   }
 };
 
+export const getListingsByUser = (user_id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/listing/user/${user_id}`);
+
+    dispatch({
+      type: "GET_LISTINGS",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "LISTING_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
 export const selectListing = (listing_id) => async (dispatch) => {
   try {
     const res = await axios.get(`/api/listing/${listing_id}`);
