@@ -1,23 +1,56 @@
 const mongoose = require("mongoose");
 
 const marketplaceSchema = new mongoose.Schema({
+
+  // author: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "User",
+  //   required: true,
+  //   autopopulate: true,
+  // },
+
+  text: {
+    type: String,
+    required: true,
+  },
+
   title: {
     type: String,
     required: true,
-    unique: true,
   },
 
-  posts: [
+  likes: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Mpost",
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
     },
-  ]
+  ],
 
-  // file: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'File'
-  // }
+  // comments: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "Comment",
+  //     autopopulate: true,
+  //   },
+  // ],
+
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+
+  forum: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Forum",
+  },
+
+  file: {
+    type: String,
+    // ref: 'upload.files',
+    required: true
+  }
 
 });
 

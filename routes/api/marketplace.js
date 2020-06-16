@@ -12,9 +12,11 @@ const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Marketplace = require('../../models/Marketplace');
+const File = require('../../models/File');
 // const methodOverride = require('method-override');
 const db = require('../../config/default.json')
 const mongoURI = db.mongoURI;
+const { check, validationResult } = require('express-validator');
 
 // Create Mongo Connection
 const conn = mongoose.createConnection(mongoURI, {
@@ -65,27 +67,60 @@ const upload = multer({ storage })
 //     }
 // });
 
-router.post('/', isLoggedIn, async (req, res) => {
+// @router GET
+// @desc Gets all the posts
+router.get('/', isLoggedIn, async (req, res) => {
     try {
-        const title = req.body.title;
-        let newMarketplace = new Marketplace({
-            title,
-        });
-
-        await newMarketplace.save();
-        res.json(newMarketplace);
+        let marketplace = await Marketplace.find()
+            .sort({ date: -1 });
+        console.log(marketplace);
+        res.json(marketplace);
     } catch (err) {
         console.log(err.message);
         res.status(500).send('Server Error');
     }
-});
+})
+
+// @router POST
+// @desc Creates a new marketplace
+router.post(
+    '/', 
+    [
+        // isLoggedIn,
+        [
+            check("text", "text is require").not().isEmpty(),
+            check("title", "title is require").not().isEmpty(),
+            check("file", "file is required").not().isEmpty(),
+        ],
+        upload.single('file'),
+    ],
+
+    async (req, res) => {
+        try {
+            const { title, text } = req.body;
+
+            let newMarketplace = new Marketplace({
+                title: title,
+                text: text,
+                file: req.file.filename, 
+                // author: req.user.id,
+            });
+
+            await newMarketplace.save();
+            res.json(newMarketplace);
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).send('Server Error');
+        }
+    }
+);
 
 // @route POST 
 // @desc Uploads file to DB
-router.post('/upload', upload.single('file'), (req, res) => {
-    res.json({ file: req.file });
-    res.redirect('/');
-});
+// router.post('/upload', upload.single('file'), (req, res) => {
+//     res.json({ file: req.file });
+//     res.redirect('/');
+// });
 
 
 // router.post('/upload', (req, res) => {
@@ -98,19 +133,80 @@ router.post('/upload', upload.single('file'), (req, res) => {
 //     }));
 // });
 
-router.get('/', (req, res) => {
-    gfs.files.find().toArray((err, files) => {
-        // Check if files exist
-        if (!files || files.length === 0) {
-            return res.status(404).json('Files do not exist');
-        };
-        return res.json(files);
-    });
+// router.get('/', (req, res) => {
+//     gfs.files.find().toArray((err, files) => {
+//         // Check if files exist
+//         if (!files || files.length === 0) {
+//             return res.status(404).json('Files do not exist');
+//         };
+//         return res.json(files);
+//     });
 
+// });
+
+//@router DELETE
+//@desc Deletes a marketplace
+router.delete('/:marketplace_id', async (req, res) => {
+    try {
+        const marketplace = await Marketplace.findById(req.params.marketplace_id);
+
+        if (!marketplace.author._id === req.user.id) {
+            return res.status(401).send('Not allowed to delete');
+        }
+
+        await marketplace.remove();
+        res.json({ msg: 'Post was deleted' });
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send('Server Error');
+    }
 });
 
-router.get('/:filename', (req,res) => {
-    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+//@router PUT
+//@desc Add likes to a marketplace
+router.put('/:marketplace_id/like', isLoggedIn, async (req, res) => {
+    try {
+        const marketplace = await Marketplace.findById(req.params.marketplace_id);
+
+        if (marketplace.likes.some((like) => like.user.equals(req.user.id))) {
+            return res.status(400).json({ msg: 'Post already liked' });
+        }
+
+        marketplace.likes.unshift({ user: req.user.id });
+
+        await marketplace.save();
+
+        return res.json(marketplace.likes);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+//@router PUT
+//@desc Removes likes from a marketplace
+router.put('/:marketplace_id/unlike', isLoggedIn, async(req, res) => {
+    try {
+        const marketplace = await Marketplace.findById(req.params.marketplace_id);
+
+        if (marketplace.likes.some((like) => like.user.equals(req.user.id))) {
+            return res.status(400).json({ msg: 'Post not liked yet' });
+        }
+
+        marketplace.likes = marketplace.likes.filter(({ user }) => !user.equals(req.user.id));
+
+        await marketplace.save();
+
+        return res.json(marketplace.likes);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+router.get('/:marketplace_id', (req,res) => {
+    gfs.files.findOne({ filename: req.params.marketplace_id }, (err, file) => {
         if (!file || file.length === 0) {
             return res.status(404).json('File does not exists');
         };
@@ -118,9 +214,9 @@ router.get('/:filename', (req,res) => {
     });
 });
 
-router.get('/:filename/download', (req, res) => {
+router.get('/:marketplace_id/download', (req, res) => {
     // Check file exists on DB
-    var filename = req.params.filename;
+    var filename = req.params.marketplace_id;
     gfs.files.findOne({ filename: filename }, (err, file) => {
         if (!file || file.length === 0 ) {
             return res.status(404).send('File Not Found');
