@@ -20,6 +20,7 @@ server.listen(PORT, () => console.log("server starting"));
 
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/profile", require("./routes/api/profile"));
+app.use("/api/marketplace", require("./routes/api/marketplace"));
 app.use("/api/posts", require("./routes/api/posts"));
 app.use("/api/forums", require("./routes/api/forums"));
 app.use("/api/comments", require("./routes/api/comments"));
