@@ -4,6 +4,7 @@ const auth = require("../../middleware/auth");
 const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
+const Module = require("../../models/Module");
 const { check, validationResult } = require("express-validator");
 
 /**
@@ -112,6 +113,63 @@ router.delete("/", auth, async (req, res) => {
     res.json({ msg: "user was deleted" });
   } catch (err) {
     console.log(err.msg);
+    res.status(500).send("server error");
+  }
+});
+
+/**
+ * Adding modules to the profiles
+ */
+
+router.post("/modules/:module_id", isLoggedIn, async (req, res) => {
+  try {
+    const moduleID = req.params.module_id;
+
+    const module = await Module.findById(moduleID);
+
+    const profileExisits = await Profile.exists({ user: req.user.id });
+
+    if (!profileExisits) {
+      return res.status(400).send("the user has no profile");
+    }
+
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    var moduleExisits = false;
+
+    for (let i = 0; i < profile.modules.length; i++) {
+      if (profile.modules[i]._id.equals(moduleID)) {
+        moduleExisits = true;
+        break;
+      }
+    }
+
+    if (moduleExisits) {
+      return res.json(profile.modules);
+    }
+
+    await profile.updateOne({
+      modules: [...profile.modules, module],
+    });
+
+    return res.json(profile.modules);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+router.get("/:user_id/modules", isLoggedIn, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.params.user_id });
+
+    if (!profile) {
+      return res.status(400).send("no such profile");
+    }
+
+    res.json(profile.modules);
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send("server error");
   }
 });

@@ -52,7 +52,7 @@ export const createProfile = (formData, history, editMode = false) => async (
     console.log("profile created");
 
     if (!editMode) {
-      history.push("/dashboard");
+      history.push(`/dashboard/${res.data.user._id}`);
     }
   } catch (err) {
     const errors = err.response.data.errors;
