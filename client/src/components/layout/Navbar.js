@@ -68,6 +68,9 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
               <li>
                 <Link to="/users">users</Link>
               </li>
+              <li>
+                <Link to="/module">Module</Link>
+              </li>
             </ul>
           </div>
 
