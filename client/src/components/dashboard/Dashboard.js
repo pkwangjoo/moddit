@@ -9,6 +9,7 @@ import ListingListByUser from "../listing/ListingListByUser";
 import PostListByUser from "../posts/PostListByUser";
 import { privateChat, getPrivateChat } from "../../actions/chatRoom";
 import ChatList from "../chat/ChatList";
+import ModuleItem from "../module/ModuleItem";
 
 const Dashboard = ({
   auth: { user },
@@ -43,6 +44,7 @@ const Dashboard = ({
     listings: false,
     marketplace: false,
     privateChat: false,
+    modules: false,
   });
 
   const toggleListing = (e) => {
@@ -50,6 +52,7 @@ const Dashboard = ({
       listings: true,
       posts: false,
       privateChat: false,
+      modules: false,
     });
   };
 
@@ -58,6 +61,7 @@ const Dashboard = ({
       listings: false,
       posts: true,
       privateChat: false,
+      modules: false,
     });
   };
 
@@ -66,6 +70,16 @@ const Dashboard = ({
       listings: false,
       posts: false,
       privateChat: true,
+      modules: false,
+    });
+  };
+
+  const toggleModules = (e) => {
+    setDashboardState({
+      listings: false,
+      posts: false,
+      privateChat: false,
+      modules: true,
     });
   };
 
@@ -149,6 +163,9 @@ const Dashboard = ({
                   Private Chats
                 </a>
               )}
+              <a onClick={toggleModules} class="item">
+                Modules
+              </a>
             </div>
           </div>
           <div class="twelve wide stretched column">
@@ -161,6 +178,13 @@ const Dashboard = ({
               )}
               {dashboardState.privateChat &&
                 match.params.user_id === user._id && <ChatList />}
+              {dashboardState.modules && (
+                <Fragment>
+                  {profile.modules.map((module) => {
+                    return <ModuleItem key={module._id} module={module} />;
+                  })}
+                </Fragment>
+              )}
             </div>
           </div>
         </div>

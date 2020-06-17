@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getModule } from "../../actions/module";
+import axios from "axios";
+import ModuleItem from "./ModuleItem";
 
 const ModuleSearch = ({ getModule, module: { module, loading } }) => {
   const [modData, setModData] = useState({
@@ -17,6 +19,11 @@ const ModuleSearch = ({ getModule, module: { module, loading } }) => {
     setModData({
       modCode: "",
     });
+  };
+
+  const addModule = async () => {
+    console.log("module added to profile");
+    await axios.post(`/api/profile/modules/${module._id}`);
   };
 
   const FoundModule = () => {
@@ -37,6 +44,9 @@ const ModuleSearch = ({ getModule, module: { module, loading } }) => {
             >
               Go to Forum
             </Link>
+            <button onClick={addModule} className="ui button basiac primary">
+              Add to modules
+            </button>
           </div>
         </div>
       </Fragment>
