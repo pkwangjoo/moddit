@@ -2,7 +2,11 @@ import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import io from "socket.io-client";
 
-import { getChatMessages, udpateChatMessages } from "../../actions/chat";
+import {
+  getChatMessages,
+  udpateChatMessages,
+  clearChatMessages,
+} from "../../actions/chat";
 import Messages from "./Messages/Messages";
 import { Redirect } from "react-router-dom";
 
@@ -13,6 +17,7 @@ const Chat = ({
   chatRoom: { chatRoom, loading },
   getChatMessages,
   udpateChatMessages,
+  clearChatMessages,
   location,
 }) => {
   const [chatMessage, setChatMessage] = useState({
@@ -33,6 +38,7 @@ const Chat = ({
 
     return () => {
       socket.disconnect();
+      clearChatMessages();
     };
   }, []);
 
@@ -88,4 +94,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getChatMessages,
   udpateChatMessages,
+  clearChatMessages,
 })(Chat);

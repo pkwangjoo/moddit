@@ -61,7 +61,6 @@ export default (state = initialState, action) => {
         state,
         post: null,
         posts: [],
-        loading: false,
       };
 
     default:

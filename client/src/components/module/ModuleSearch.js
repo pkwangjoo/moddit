@@ -100,7 +100,9 @@ const ModuleSearch = ({
           <i type="submit" class="search icon"></i>
         </div>
       </form>
-      {!loading && (module !== null ? <FoundModule /> : <ModuleNotFound />)}
+      {!loading &&
+        profile !== null &&
+        (module !== null ? <FoundModule /> : <ModuleNotFound />)}
     </Fragment>
   );
 };

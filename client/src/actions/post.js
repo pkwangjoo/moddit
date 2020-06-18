@@ -197,7 +197,7 @@ export const createForumPost = (forum_id, formData, history) => async (
   }
 };
 
-export const clearPosts = () => async (dispatch) => {
+export const clearPosts = () => (dispatch) => {
   dispatch({
     type: "CLEAR_POSTS",
   });

@@ -29,3 +29,9 @@ export const udpateChatMessages = (message) => (dispatch) => {
     });
   }
 };
+
+export const clearChatMessages = () => (dispatch) => {
+  dispatch({
+    type: "CLEAR_CHATMESSAGES",
+  });
+};
