@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getUserProfile, clearProfile } from "../../actions/profile";
 import { Link, withRouter } from "react-router-dom";
-import { getListingsByUser, getListings } from "../../actions/listing";
+import {
+  getListingsByUser,
+  getListings,
+  clearListings,
+} from "../../actions/listing";
 import { getPostsByUser, clearPosts } from "../../actions/post";
 import ListingListByUser from "../listing/ListingListByUser";
 import PostListByUser from "../posts/PostListByUser";
@@ -19,6 +23,8 @@ const Dashboard = ({
   getPostsByUser,
   getUserProfile,
   clearProfile,
+  clearListings,
+  clearPosts,
   privateChat,
   getPrivateChat,
   match,
@@ -30,7 +36,11 @@ const Dashboard = ({
     getListingsByUser(match.params.user_id);
     getPrivateChat(match.params.user_id);
 
-    return () => clearProfile();
+    return () => {
+      clearProfile();
+      clearPosts();
+      clearListings();
+    };
   }, [
     getUserProfile,
     getPostsByUser,
@@ -217,4 +227,6 @@ export default connect(mapStateToProps, {
   clearProfile,
   privateChat,
   getPrivateChat,
+  clearPosts,
+  clearListings,
 })(withRouter(Dashboard));

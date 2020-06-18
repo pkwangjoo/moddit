@@ -18,7 +18,8 @@ const Forum = ({
   });
   useEffect(() => {
     selectForum(match.params.forum_id);
-  }, [clearPosts, selectForum]);
+    return () => clearPosts();
+  }, [selectForum]);
 
   const toggleListing = (e) => {
     setForumState({ posts: false, listings: true });
@@ -70,4 +71,4 @@ const mapStateToProps = (state) => ({
   forum: state.forum,
 });
 
-export default connect(mapStateToProps, { selectForum })(Forum);
+export default connect(mapStateToProps, { selectForum, clearPosts })(Forum);

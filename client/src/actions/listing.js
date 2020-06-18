@@ -136,3 +136,9 @@ export const addChatRoom = (listing_id, roomData) => async (dispatch) => {
     });
   }
 };
+
+export const clearListings = () => (dispatch) => {
+  dispatch({
+    type: "CLEAR_LISTINGS",
+  });
+};

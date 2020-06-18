@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -12,6 +12,19 @@ const PostItem = ({
   unlikePost,
   deletePost,
 }) => {
+  const userDidLike = () => {
+    var userExists = false;
+
+    for (let i = 0; i < likes.length; i++) {
+      if (likes[i].user === auth.user._id) {
+        userExists = true;
+        break;
+      }
+    }
+
+    return userExists;
+  };
+
   return (
     <div class="ui centered raised fluid card">
       <div class="content">
@@ -39,9 +52,10 @@ const PostItem = ({
           <button
             onClick={() => likePost(_id)}
             type="button"
-            className="ui icon button"
+            className={userDidLike() ? "ui red button" : "ui button"}
           >
             {" "}
+            {console.log(userDidLike())}
             <i aria-hidden="true" class="heart icon"></i>
             Like
           </button>

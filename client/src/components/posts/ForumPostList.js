@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getForumPosts } from "../../actions/post";
+import { getForumPosts, clearPosts } from "../../actions/post";
 import { Link } from "react-router-dom";
 import PostItem from "./PostItem";
 
@@ -12,6 +12,7 @@ const ForumPostList = ({
 }) => {
   useEffect(() => {
     getForumPosts(forumID);
+    return () => clearPosts();
   }, [getForumPosts]);
 
   return (
@@ -48,4 +49,6 @@ const mapStateToProps = (state) => ({
   post: state.post,
 });
 
-export default connect(mapStateToProps, { getForumPosts })(ForumPostList);
+export default connect(mapStateToProps, { getForumPosts, clearPosts })(
+  ForumPostList
+);

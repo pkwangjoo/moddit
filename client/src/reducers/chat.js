@@ -23,6 +23,11 @@ export default (state = initialState, action) => {
 
     case "CHAT_ERROR":
       return { ...state, error: payload };
+    case "CLEAR_CHATMESSAGES":
+      return {
+        ...state,
+        chatMessages: [],
+      };
     default:
       return state;
   }
