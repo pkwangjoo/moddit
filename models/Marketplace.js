@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 const marketplaceSchema = new mongoose.Schema({
 
-  // author: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "User",
-  //   required: true,
-  //   autopopulate: true,
-  // },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    autopopulate: true,
+  },
 
   text: {
     type: String,
@@ -53,5 +53,7 @@ const marketplaceSchema = new mongoose.Schema({
   }
 
 });
+
+marketplaceSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = mongoose.model("Marketplace", marketplaceSchema);

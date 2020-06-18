@@ -18,8 +18,26 @@ router.get("/", isLoggedIn, async (req, res) => {
     });
 });
 
-router.get("/chatRoom/:chatroom_id/messages", async (req, res) => {
+router.get("/chatRoom/:chatroom_id/messages", isLoggedIn, async (req, res) => {
   try {
+    // const chatRoom = await ChatRoom.findById(req.params.chatroom_id);
+    // const currUser = await User.findById(req.user.id);
+
+    // var userInChatRoom = false;
+
+    // for (let i = 0; i < chatRoom.users.length; i++) {
+    //   if (chatRoom.users[i].equals(currUser)) {
+    //     userInChatRoom = true;
+    //     break;
+    //   }
+    // }
+
+    // if (!userInChatRoom) {
+    //   return res
+    //     .status(400)
+    //     .send("The current user is not authorised to view to messages");
+    // }
+
     let chatmessages = await ChatMessage.find({
       chatRoom: req.params.chatroom_id,
     });
@@ -52,12 +70,28 @@ router.post("/chatRoom", isLoggedIn, async (req, res) => {
 //joining chat room
 router.post("/chatRoom/:id", isLoggedIn, async (req, res) => {
   try {
-    let chatRoom = await ChatRoom.findById(req.params.id);
-    if (!chatRoom.user.includes(req.user.id)) {
-      await ChatRoom.update({ user: [...chatRoom.user, req.user.id] });
+    const chatRoom = await ChatRoom.findById(req.params.id);
+    const user = await User.findById(req.user.id);
+
+    var userExists = false;
+    for (let i = 0; i < chatRoom.users.length; i++) {
+      if (chatRoom.users[i].equals(user)) {
+        userExists = true;
+        break;
+      }
     }
 
-    res.json(ChatRoom);
+    if (chatRoom.limit && chatRoom.limit >= chatRoom.users.length) {
+      return res.status(400).send("the chatroom is full");
+    }
+    if (!userExists) {
+      console.log("unique user");
+      await chatRoom.updateOne({
+        users: chatRoom.users.concat(user),
+      });
+    }
+
+    res.json(chatRoom);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("server error");

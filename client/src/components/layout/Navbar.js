@@ -23,11 +23,17 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   const loggedin = (
     <ul className="nav navbar-nav navbar-right">
       <li>
+        <Link to='/marketplace'>Marketplace</Link>
+      </li>
+      <li>
         <Link to="/posts">Posts</Link>
       </li>
       <li>
-        <Link to="/dashboard">Signed in as {user && user.name}</Link>
+        <Link to={`/dashboard/${user && user._id}`}>
+          Signed in as {user && user.name}
+        </Link>
       </li>
+
       <li>
         <a href="" onClick={logout}>
           Logout
@@ -61,6 +67,9 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
               </li>
               <li>
                 <Link to="/chat/join">Chat</Link>
+              </li>
+              <li>
+                <Link to="/users">users</Link>
               </li>
             </ul>
           </div>

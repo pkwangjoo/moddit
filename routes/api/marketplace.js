@@ -12,7 +12,7 @@ const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Marketplace = require('../../models/Marketplace');
-const File = require('../../models/File');
+// const File = require('../../models/File');
 // const methodOverride = require('method-override');
 const db = require('../../config/default.json')
 const mongoURI = db.mongoURI;
@@ -86,7 +86,7 @@ router.get('/', isLoggedIn, async (req, res) => {
 router.post(
     '/', 
     [
-        // isLoggedIn,
+        isLoggedIn,
         [
             check("text", "text is require").not().isEmpty(),
             check("title", "title is require").not().isEmpty(),
@@ -99,21 +99,29 @@ router.post(
         try {
             const { title, text } = req.body;
 
+            const formData = req.body;
+
+            console.log( title );
+            console.log( text );
+            console.log( req.file )
+            console.log( req.user.id )
+
             let newMarketplace = new Marketplace({
                 title: title,
                 text: text,
                 file: req.file.filename, 
-                // author: req.user.id,
+                author: req.user.id,
             });
-
             await newMarketplace.save();
             res.json(newMarketplace);
+            res.redirect('/')
         } catch (err) {
             console.log(err.message);
             res.status(500).send('Server Error');
         }
     }
 );
+
 
 // @route POST 
 // @desc Uploads file to DB

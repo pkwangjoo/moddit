@@ -3,17 +3,21 @@ import { withRouter } from "react-router-dom";
 import { createListing } from "../../actions/listing";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import NumericInput from "react-numeric-input";
 
 const ListingForm = ({ createListing, history, match }) => {
   const [formData, setFormData] = useState({
     title: "",
     text: "",
+    limit: 10,
   });
 
-  const { title, text } = formData;
+  const { title, text, limit } = formData;
 
-  const onChange = (e) =>
+  const onChange = (e) => {
+    console.log(formData);
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -35,6 +39,10 @@ const ListingForm = ({ createListing, history, match }) => {
         <div class="field">
           <label>Text</label>
           <textarea onChange={onChange} name="text" value={text}></textarea>
+        </div>
+        <div className="field">
+          <label>Limit</label>
+          <input type="number" onChange={onChange} name="limit" value={limit} />
         </div>
         <button class="ui button" type="submit">
           Submit

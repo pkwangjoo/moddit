@@ -25,6 +25,20 @@ router.get("/", auth, async (req, res) => {
 });
 
 /**
+ * GETS all the users
+ */
+router.get("/all", auth, async (req, res) => {
+  try {
+    const users = await User.find();
+
+    res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+/**
  * Registers the user
  */
 router.post(
@@ -143,16 +157,5 @@ router.post(
     }
   }
 );
-
-/**
- * Dummy route for testing using postman
- */
-router.get("/failed", (req, res) => {
-  res.send("failed log in");
-});
-
-router.get("/login", (req, res) => {
-  res.send("post to log in");
-});
 
 module.exports = router;

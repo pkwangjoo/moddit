@@ -26,6 +26,16 @@ router.get("/", isLoggedIn, async (req, res) => {
   }
 });
 
+router.get("/user/:user_id", isLoggedIn, async (req, res) => {
+  try {
+    const posts = await Post.find({ author: req.params.user_id });
+    res.json(posts);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("server error");
+  }
+});
+
 /**
  * Create a new post
  */
