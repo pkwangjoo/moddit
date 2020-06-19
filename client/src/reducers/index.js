@@ -9,6 +9,7 @@ import chatRoom from "./chatRoom";
 import listing from "./listing";
 import user from "./user";
 import marketplace from"./marketplace";
+import module from "./module";
 
 export default combineReducers({
   auth,
@@ -20,5 +21,6 @@ export default combineReducers({
   chatRoom,
   listing,
   user,
-  marketplace
+  marketplace,
+  module,
 });

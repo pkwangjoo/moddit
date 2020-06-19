@@ -9,11 +9,32 @@ import FileSaver from 'file-saver';
 
 const MarketplaceItem = ({
     auth,
-    marketplace: { _id, text, title, author, date, likes, file },
+    marketplace: { _id, text, title, author, date, likes, file, filename },
     //   likePost,
     //   unlikePost,
     //   deletePost,
 }) => {
+
+    const fileType = () => {
+        const type = filename.slice(-4);
+
+        switch (type) {
+            case ".pdf":
+                return "file pdf outline icon";
+            
+            case "docx" || "docs":
+                return "file word outline icon";
+
+            case ".csv" || "xlsx" || ".xls":
+                return "file excel outline icon";
+
+            case ".ppt" || "pptx":
+                return "file powerpoint outline icon";
+
+            default:
+                return "file outline icon";
+        }
+    }
 
     const downloadFile = async () => {
         axios({
@@ -21,12 +42,12 @@ const MarketplaceItem = ({
             url: `/api/marketplace/${file}/download`,
             responseType: "blob"
         })
-        .then(response => {
-            FileSaver.saveAs(response.data, `${file}`);
-        })
-        .then(() => {
-            console.log("Download Complete");
-        })
+            .then(response => {
+                FileSaver.saveAs(response.data, `${file}`);
+            })
+            .then(() => {
+                console.log("Download Complete");
+            })
     };
 
     return auth && (
@@ -45,6 +66,16 @@ const MarketplaceItem = ({
                 <div class="description">
                     <p>{text}</p>
                 </div>
+                
+                <br></br>
+                
+                <div class="ui vertical labeled icon buttons">
+                    <button class="ui button" onClick={downloadFile}>
+                        <i class={fileType()}></i>
+                        { filename }
+                    </button>
+                </div>
+
             </div>
 
             <div class="extra content">
@@ -62,23 +93,23 @@ const MarketplaceItem = ({
                         Discussions
                     </Link>
                 </div>
-                <div className="ui right labeled button">
-                    <button className="ui basic primary button" onClick={ downloadFile }>
+                {/* <div className="ui right labeled button">
+                    <button className="ui basic primary button" onClick={downloadFile}>
                         Download
                     </button>
-                </div>
+                </div> */}
                 <div class="right floated author">{author && author.name}</div>
             </div>
         </div>
-    //     <Fragment>
+        //     <Fragment>
 
-    //         <div>the title is {title}</div>
-    // <div>the author is {author.name}</div>
-    // <div>currently logged in is {auth.user.name}</div>
-    //     </Fragment>
+        //         <div>the title is {title}</div>
+        // <div>the author is {author.name}</div>
+        // <div>currently logged in is {auth.user.name}</div>
+        //     </Fragment>
 
 
-        
+
     );
 };
 
@@ -91,7 +122,7 @@ MarketplaceItem.propTypes = {
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
-    
+
 });
 export default connect(mapStateToProps/*, { likePost, unlikePost, deletePost }*/)(
     MarketplaceItem

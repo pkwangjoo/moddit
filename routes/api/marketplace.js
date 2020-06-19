@@ -99,19 +99,16 @@ router.post(
         try {
             const { title, text } = req.body;
 
-            const formData = req.body;
-
-            console.log( title );
-            console.log( text );
-            console.log( req.file )
-            console.log( req.user.id )
-
             let newMarketplace = new Marketplace({
                 title: title,
                 text: text,
                 file: req.file.filename, 
+                filename: req.file.originalname,
                 author: req.user.id,
             });
+
+            console.log('Marketplace');
+
             await newMarketplace.save();
             res.json(newMarketplace);
             res.redirect('/')

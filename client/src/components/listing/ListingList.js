@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
-import { getListings } from "../../actions/listing";
+import { getListings, clearListings } from "../../actions/listing";
 import { Link } from "react-router-dom";
 import ListingItem from "./ListingItem";
 
@@ -8,9 +8,12 @@ const ListingList = ({
   listing: { listings, loading },
   forumID,
   getListings,
+  clearListings,
 }) => {
   useEffect(() => {
     getListings(forumID);
+
+    return () => clearListings();
   }, [getListings]);
   return (
     <Fragment>
@@ -36,4 +39,6 @@ const mapStateToProps = (state) => ({
   listing: state.listing,
 });
 
-export default connect(mapStateToProps, { getListings })(ListingList);
+export default connect(mapStateToProps, { getListings, clearListings })(
+  ListingList
+);

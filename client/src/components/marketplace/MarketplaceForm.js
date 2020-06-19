@@ -30,7 +30,6 @@ const MarketplaceForm = ({ createMarketplace, history }) => {
         fileData.append('text', text);
         fileData.append('title', title);
         fileData.append('file', selectedFile);
-
         createMarketplace(fileData, history);
 
 

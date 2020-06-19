@@ -2,39 +2,67 @@ import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getUserProfile, clearProfile } from "../../actions/profile";
-import { Link } from "react-router-dom";
-import { getListingsByUser, getListings } from "../../actions/listing";
+import { Link, withRouter } from "react-router-dom";
+import {
+  getListingsByUser,
+  getListings,
+  clearListings,
+} from "../../actions/listing";
 import { getPostsByUser, clearPosts } from "../../actions/post";
 import ListingListByUser from "../listing/ListingListByUser";
 import PostListByUser from "../posts/PostListByUser";
+import { privateChat, getPrivateChat } from "../../actions/chatRoom";
+import ChatList from "../chat/ChatList";
+import ModuleItem from "../module/ModuleItem";
 
 const Dashboard = ({
   auth: { user },
   profile: { loading, profile },
+  chatRoom,
   getListingsByUser,
   getPostsByUser,
   getUserProfile,
   clearProfile,
+  clearListings,
+  clearPosts,
+  privateChat,
+  getPrivateChat,
   match,
+  history,
 }) => {
   useEffect(() => {
     getUserProfile(match.params.user_id);
     getPostsByUser(match.params.user_id);
     getListingsByUser(match.params.user_id);
+    getPrivateChat(match.params.user_id);
 
-    return () => clearProfile();
-  }, [getUserProfile, getPostsByUser, getListingsByUser]);
+    return () => {
+      clearProfile();
+      clearPosts();
+      clearListings();
+    };
+  }, [
+    getUserProfile,
+    getPostsByUser,
+    getListingsByUser,
+    match.params.user_id,
+    getPrivateChat,
+  ]);
 
   const [dashboardState, setDashboardState] = useState({
     posts: false,
     listings: false,
     marketplace: false,
+    privateChat: false,
+    modules: false,
   });
 
   const toggleListing = (e) => {
     setDashboardState({
       listings: true,
       posts: false,
+      privateChat: false,
+      modules: false,
     });
   };
 
@@ -42,15 +70,61 @@ const Dashboard = ({
     setDashboardState({
       listings: false,
       posts: true,
+      privateChat: false,
+      modules: false,
     });
   };
 
-  const createProfile = () => {
-    return <Link to="/createprofile">Click here to make ur profile</Link>;
+  const togglePrivateChat = (e) => {
+    setDashboardState({
+      listings: false,
+      posts: false,
+      privateChat: true,
+      modules: false,
+    });
   };
 
-  const noProfile = () => {
-    return <div>This person has no profile</div>;
+  const toggleModules = (e) => {
+    setDashboardState({
+      listings: false,
+      posts: false,
+      privateChat: false,
+      modules: true,
+    });
+  };
+
+  const startMessage = (e) => {
+    const userData = {
+      sender_id: user._id,
+      receiver_id: profile.user._id,
+    };
+
+    privateChat(userData, history);
+  };
+
+  const NoProfile = () => {
+    return user._id === match.params.user_id ? (
+      <Fragment>
+        <AuthHeader />
+        <Link to="/createprofile">Click here to make your profile</Link>
+      </Fragment>
+    ) : (
+      <div>This user has no profile</div>
+    );
+  };
+
+  const HasProfile = () => {
+    return user._id === match.params.user_id ? (
+      <Fragment>
+        <AuthHeader />
+        <Body />
+      </Fragment>
+    ) : (
+      <Fragment>
+        <NormalHeader />
+        <Body />
+      </Fragment>
+    );
   };
 
   const AuthHeader = () => (
@@ -58,10 +132,17 @@ const Dashboard = ({
   );
 
   const NormalHeader = () => (
-    <h1 className="ui center aligned header ">{profile.name}'s Profile</h1>
+    <Fragment>
+      <h1 className="ui center aligned header ">
+        {profile.user.name}'s Profile
+      </h1>
+      <button onClick={startMessage} class="ui centered basic button">
+        <i class="paper plane outline icon"></i> Message
+      </button>
+    </Fragment>
   );
 
-  const body = () => {
+  const Body = () => {
     return (
       <Fragment>
         <div role="list" class="ui list">
@@ -87,6 +168,14 @@ const Dashboard = ({
               <a onClick={toggleListing} class="item">
                 Listings
               </a>
+              {match.params.user_id === user._id && (
+                <a onClick={togglePrivateChat} className="item">
+                  Private Chats
+                </a>
+              )}
+              <a onClick={toggleModules} class="item">
+                Modules
+              </a>
             </div>
           </div>
           <div class="twelve wide stretched column">
@@ -97,6 +186,15 @@ const Dashboard = ({
               {dashboardState.posts && (
                 <PostListByUser userID={match.params.user_id} />
               )}
+              {dashboardState.privateChat &&
+                match.params.user_id === user._id && <ChatList />}
+              {dashboardState.modules && (
+                <Fragment>
+                  {profile.modules.map((module) => {
+                    return <ModuleItem key={module._id} module={module} />;
+                  })}
+                </Fragment>
+              )}
             </div>
           </div>
         </div>
@@ -106,87 +204,10 @@ const Dashboard = ({
 
   return (
     user && (
-      <Fragment>
-        <div>
-          {user._id === match.params.user_id ? (
-            <AuthHeader />
-          ) : profile === null ? (
-            <div>this person has no profile</div>
-          ) : (
-            <NormalHeader />
-          )}
-        </div>
-      </Fragment>
+      <Fragment>{profile !== null ? <HasProfile /> : <NoProfile />}</Fragment>
     )
   );
 };
-
-// return (
-//   user && (
-//     <Fragment>
-//       <div>{console.log(user._id)}</div>
-//       <div>{console.log(profile)}</div>
-//       <div>{console.log(match.params.user_id)}</div>
-//     </Fragment>
-//   )
-// );
-
-//   return !loading && profile ? (
-//     <Fragment>
-//       {user._id === profile.user._id ? (
-//         <h1 className="ui center aligned header ">
-//           Welcome, {user && user.name}
-//         </h1>
-//       ) : (
-//         <h1 className="ui center aligned header ">
-//           {user && user.name}'s Profile
-//         </h1>
-//       )}
-//       <Fragment>
-//         <div role="list" class="ui list">
-//           <div role="listitem" class="item">
-//             <i aria-hidden="true" class="fas fa-university"></i>
-//             <div class="content">{profile.major}</div>
-//           </div>
-
-//           <div role="listitem" class="item">
-//             <i aria-hidden="true" class="mail icon"></i>
-//             <div class="content">
-//               <a href="">{profile.user.email}</a>
-//             </div>
-//           </div>
-//         </div>
-//         <div class="ui grid">
-//           <div class="four wide column">
-//             <div class="ui vertical fluid tabular menu">
-//               <a class="item">Bio</a>
-//               <a onClick={togglePost} class="item">
-//                 Posts
-//               </a>
-//               <a onClick={toggleListing} class="item">
-//                 Listings
-//               </a>
-//             </div>
-//           </div>
-//           <div class="twelve wide stretched column">
-//             <div class="ui segment">
-//               {dashboardState.listings && (
-//                 <ListingListByUser userID={match.params.user_id} />
-//               )}
-//               {dashboardState.posts && (
-//                 <PostListByUser userID={match.params.user_id} />
-//               )}
-//             </div>
-//           </div>
-//         </div>
-//       </Fragment>
-//     </Fragment>
-//   ) : match.params.user_id === user._id ? (
-//     <createProfile />
-//   ) : (
-//     <noProfile />
-//   );
-// };
 
 Dashboard.propTypes = {
   auth: PropTypes.object.isRequired,
@@ -197,10 +218,15 @@ Dashboard.propTypes = {
 const mapStateToProps = (state) => ({
   auth: state.auth,
   profile: state.profile,
+  chatRoom: state.chatRoom,
 });
 export default connect(mapStateToProps, {
   getPostsByUser,
   getListingsByUser,
   getUserProfile,
   clearProfile,
-})(Dashboard);
+  privateChat,
+  getPrivateChat,
+  clearPosts,
+  clearListings,
+})(withRouter(Dashboard));

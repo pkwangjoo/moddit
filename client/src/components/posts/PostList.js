@@ -1,13 +1,14 @@
 import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getPosts } from "../../actions/post";
+import { getPosts, clearPosts } from "../../actions/post";
 import { Link } from "react-router-dom";
 import PostItem from "./PostItem";
 
-const PostList = ({ getPosts, post: { posts, loading } }) => {
+const PostList = ({ getPosts, clearPosts, post: { posts, loading } }) => {
   useEffect(() => {
     getPosts();
+    return () => clearPosts();
   }, [getPosts]);
 
   return (
@@ -43,4 +44,4 @@ const mapStateToProps = (state) => ({
   post: state.post,
 });
 
-export default connect(mapStateToProps, { getPosts })(PostList);
+export default connect(mapStateToProps, { getPosts, clearPosts })(PostList);

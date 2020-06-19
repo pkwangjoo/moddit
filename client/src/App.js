@@ -19,6 +19,7 @@ import ChatRoomList from "./components/chat/ChatRoomList";
 import ListingForm from "./components/listing/ListingForm";
 import Listing from "./components/listing/Listing";
 import UserList from "./components/user/UserList";
+import ModuleSearch from "./components/module/ModuleSearch";
 import { Provider } from "react-redux";
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
@@ -92,6 +93,7 @@ function App() {
 
               <ProtectedRoute exact path='/marketplace' component = {MarketplaceList}/>
               <ProtectedRoute exact path='/marketplace/new' component = {MarketplaceForm}/>
+              <ProtectedRoute exact path="/module" component={ModuleSearch} />
             </Switch>
           </div>
         </Fragment>

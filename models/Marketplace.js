@@ -50,6 +50,11 @@ const marketplaceSchema = new mongoose.Schema({
     type: String,
     // ref: 'upload.files',
     required: true
+  },
+
+  filename: {
+    type: String,
+    required: true
   }
 
 });

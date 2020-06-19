@@ -59,6 +59,12 @@ export default (state = initialState, action) => {
 
         loading: false,
       };
+    case "CLEAR_LISTINGS":
+      return {
+        ...state,
+        listings: [],
+        listing: null,
+      };
     default:
       return state;
   }
