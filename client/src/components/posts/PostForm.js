@@ -12,9 +12,9 @@ const PostForm = ({ createPost, history }) => {
 
   const { title, text } = formData;
 
-  const onChange = (e) =>
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
+  }
   const onSubmit = (e) => {
     e.preventDefault();
     createPost(formData, history);

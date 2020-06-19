@@ -25,6 +25,9 @@ import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
 import { loadUser } from "./actions/auth";
 
+import MarketplaceList from "./components/marketplace/MarketplaceList";
+import MarketplaceForm from "./components/marketplace/MarketplaceForm";
+
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -87,6 +90,9 @@ function App() {
                 component={ChatRoomList}
               />
               <ProtectedRoute exact path="/users" component={UserList} />
+
+              <ProtectedRoute exact path='/marketplace' component = {MarketplaceList}/>
+              <ProtectedRoute exact path='/marketplace/new' component = {MarketplaceForm}/>
               <ProtectedRoute exact path="/module" component={ModuleSearch} />
             </Switch>
           </div>

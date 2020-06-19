@@ -1,11 +1,6 @@
 const express = require("express");
 const connectDB = require("./config/db");
-
-//###########################################
 const ChatMessage = require("./models/ChatMessage");
-
-//###########################################
-
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
@@ -26,6 +21,7 @@ app.use("/api/comments", require("./routes/api/comments"));
 app.use("/api/chat", require("./routes/api/chat"));
 app.use("/api/listing", require("./routes/api/listing"));
 app.use("/api/dashboard", require("./routes/api/dashboard"));
+app.use("/api/marketplace", require("./routes/api/marketplace"));
 app.use("/api/module", require("./routes/api/module"));
 
 app.get("/", (req, res) => {

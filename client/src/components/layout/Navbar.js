@@ -23,6 +23,9 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   const loggedin = (
     <ul className="nav navbar-nav navbar-right">
       <li>
+        <Link to='/marketplace'>Marketplace</Link>
+      </li>
+      <li>
         <Link to="/posts">Posts</Link>
       </li>
       <li>
