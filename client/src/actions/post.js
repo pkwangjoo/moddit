@@ -50,6 +50,11 @@ export const addComment = (post_id, formData) => async (dispatch) => {
       type: "ADD_COMMENT",
       payload: res.data,
     });
+
+    dispatch({
+      type: "UPDATE_COMMENTS",
+      payload: res.data,
+    });
   } catch (err) {
     dispatch({
       type: "POST_ERROR",

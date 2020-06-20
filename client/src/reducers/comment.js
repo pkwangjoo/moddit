@@ -9,12 +9,13 @@ export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case "ADD_COMMENT":
+    case "UPDATE_COMMENTS":
       return {
         ...state,
         comments: payload,
         loading: false,
       };
+
     case "GET_COMMENTS":
       return {
         ...state,

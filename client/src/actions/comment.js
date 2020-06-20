@@ -16,6 +16,22 @@ export const getComments = (post_id) => async (dispatch) => {
   }
 };
 
+export const getMComments = (marketplace_id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/marketplace/${marketplace_id}/comments`);
+
+    dispatch({
+      type: "GET_COMMENTS",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "COMMENT_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
 export const likeComment = (comment_id) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/comments/${comment_id}/like`);

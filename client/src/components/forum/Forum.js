@@ -5,6 +5,7 @@ import { selectForum } from "../../actions/forum";
 import { clearPosts } from "../../actions/post";
 import ForumPostList from "../posts/ForumPostList";
 import ListingList from "../listing/ListingList";
+import ForumMarketplaceList from "../marketplace/ForumMarketplaceList";
 const Forum = ({
   selectForum,
   clearPosts,
@@ -15,6 +16,7 @@ const Forum = ({
   const [forumState, setForumState] = useState({
     posts: true,
     listings: false,
+    marketplace: false,
   });
   useEffect(() => {
     selectForum(match.params.forum_id);
@@ -22,11 +24,15 @@ const Forum = ({
   }, [selectForum]);
 
   const toggleListing = (e) => {
-    setForumState({ posts: false, listings: true });
+    setForumState({ posts: false, listings: true, marketplace: false });
   };
 
   const toggleDiscussion = (e) => {
-    setForumState({ posts: true, listings: false });
+    setForumState({ posts: true, listings: false, marketplace: false });
+  };
+
+  const toggleMarketplace = (e) => {
+    setForumState({ posts: false, listings: false, marketplace: true });
   };
 
   return (
@@ -45,7 +51,12 @@ const Forum = ({
             >
               Discussion
             </a>
-            <a class="item">Marketplace</a>
+            <a
+              onClick={toggleMarketplace}
+              className={forumState.marketplace ? "active item" : "item"}
+            >
+              Marketplace
+            </a>
             <a
               class
               onClick={toggleListing}
@@ -57,6 +68,7 @@ const Forum = ({
         </div>
         {forumState.posts && <ForumPostList forumID={forum._id} />}
         {forumState.listings && <ListingList forumID={forum._id} />}
+        {forumState.marketplace && <ForumMarketplaceList forumID={forum._id} />}
       </Fragment>
     )
   );
