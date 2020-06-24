@@ -59,6 +59,19 @@ export default (state = initialState, action) => {
         ),
       };
 
+    case "MARKETPLACE_ERROR":
+      return {
+        ...state,
+        error: payload,
+      };
+
+    case "CLEAR_MARKETPLACE":
+      return {
+        ...state,
+        marketplaces: [],
+        marketplace: null,
+      };
+
     default:
       return state;
   }

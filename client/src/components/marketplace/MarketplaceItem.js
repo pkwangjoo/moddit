@@ -24,7 +24,7 @@ const MarketplaceItem = ({
   unlikeMPost,
   deleteMPost,
 }) => {
-  const fileType = () => {
+  const fileType = (filename) => {
     const type = filename.slice(-4);
 
     switch (type) {
@@ -99,7 +99,7 @@ const MarketplaceItem = ({
 
           <div class="ui vertical labeled icon buttons">
             <button class="ui button" onClick={downloadFile}>
-              <i class={fileType()}></i>
+              <i class={filename && fileType(filename)}></i>
               {filename}
             </button>
           </div>

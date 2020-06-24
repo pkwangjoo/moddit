@@ -1,17 +1,20 @@
 import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getForumMarketplaces } from "../../actions/marketplace";
+import { getForumMarketplaces, clearMPost } from "../../actions/marketplace";
 import { Link } from "react-router-dom";
 import MarketplaceItem from "./MarketplaceItem";
 
 const ForumMarketplaceList = ({
   getForumMarketplaces,
+  clearMPost,
   marketplace: { marketplaces, loading },
   forumID,
 }) => {
   useEffect(() => {
     getForumMarketplaces(forumID);
+
+    return () => clearMPost();
   }, [getForumMarketplaces]);
   return (
     <div>
@@ -41,6 +44,6 @@ const mapStateToProps = (state) => ({
   marketplace: state.marketplace,
 });
 
-export default connect(mapStateToProps, { getForumMarketplaces })(
+export default connect(mapStateToProps, { getForumMarketplaces, clearMPost })(
   ForumMarketplaceList
 );

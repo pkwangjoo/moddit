@@ -9,11 +9,11 @@ export const getMarketplaces = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (err) {
-    // dispatch({
-    //     type: "MARKETPLACE_ERROR",
-    //     payload: { msg: err.response.statusText, status: err.respsonse.status },
-    // });
-    console.log("error");
+    console.log(err);
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
   }
 };
 
@@ -34,7 +34,10 @@ export const createMarketplace = (formData, history) => async (dispatch) => {
 
     history.push("/marketplace");
   } catch (err) {
-    console.log("error");
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
   }
 };
 
@@ -48,7 +51,12 @@ export const getForumMarketplaces = (forum_id) => async (dispatch) => {
         payload: res.data,
       });
     }
-  } catch (err) {}
+  } catch (err) {
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
 };
 
 export const createForumMarketplace = (forum_id, formData, history) => async (
@@ -73,7 +81,12 @@ export const createForumMarketplace = (forum_id, formData, history) => async (
     });
 
     history.push(`/forums/${forum_id}`);
-  } catch (err) {}
+  } catch (err) {
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
 };
 
 export const selectMarketplace = (marketplace_id) => async (dispatch) => {
@@ -84,7 +97,12 @@ export const selectMarketplace = (marketplace_id) => async (dispatch) => {
       type: "SELECT_MARKETPLACE",
       payload: res.data,
     });
-  } catch (err) {}
+  } catch (err) {
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
 };
 
 export const addMComment = (marketplace_id, formData) => async (dispatch) => {
@@ -111,7 +129,12 @@ export const addMComment = (marketplace_id, formData) => async (dispatch) => {
       type: "UPDATE_COMMENTS",
       payload: res.data,
     });
-  } catch (err) {}
+  } catch (err) {
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
 };
 
 export const likeMPost = (marketplace_id) => async (dispatch) => {
@@ -123,7 +146,10 @@ export const likeMPost = (marketplace_id) => async (dispatch) => {
       payload: { marketplace_id, likes: res.data },
     });
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
   }
 };
 
@@ -136,7 +162,10 @@ export const unlikeMPost = (marketplace_id) => async (dispatch) => {
       payload: { marketplace_id, likes: res.data },
     });
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
   }
 };
 
@@ -149,7 +178,10 @@ export const deleteMPost = (marketplace_id) => async (dispatch) => {
       payload: marketplace_id,
     });
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
   }
 };
 
@@ -161,5 +193,16 @@ export const getMarketplacesByUser = (user_id) => async (dispatch) => {
       type: "GET_MARKETPLACES",
       payload: res.data,
     });
-  } catch (err) {}
+  } catch (err) {
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const clearMPost = () => (dispatch) => {
+  dispatch({
+    type: "CLEAR_MARKETPLACE",
+  });
 };

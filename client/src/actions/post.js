@@ -72,7 +72,7 @@ export const likePost = (post_id) => async (dispatch) => {
       payload: { post_id, likes: res.data },
     });
   } catch (err) {
-    console.log(err);
+    console.log(err.response);
     dispatch({
       type: "POST_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },
@@ -89,7 +89,7 @@ export const unlikePost = (post_id) => async (dispatch) => {
       payload: { post_id, likes: res.data },
     });
   } catch (err) {
-    console.log(err);
+    console.log(err.response);
     dispatch({
       type: "POST_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },

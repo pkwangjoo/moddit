@@ -9,7 +9,7 @@ import {
   clearListings,
 } from "../../actions/listing";
 import { getPostsByUser, clearPosts } from "../../actions/post";
-import { getMarketplacesByUser } from "../../actions/marketplace";
+import { getMarketplacesByUser, clearMPost } from "../../actions/marketplace";
 
 import ListingListByUser from "../listing/ListingListByUser";
 import PostListByUser from "../posts/PostListByUser";
@@ -28,6 +28,7 @@ const Dashboard = ({
   clearProfile,
   clearListings,
   clearPosts,
+  clearMPost,
   privateChat,
   getPrivateChat,
   getMarketplacesByUser,
@@ -45,6 +46,7 @@ const Dashboard = ({
       clearProfile();
       clearPosts();
       clearListings();
+      clearMPost();
     };
   }, [
     getUserProfile,
@@ -255,5 +257,6 @@ export default connect(mapStateToProps, {
   getPrivateChat,
   clearPosts,
   clearListings,
+  clearMPost,
   getMarketplacesByUser,
 })(withRouter(Dashboard));
