@@ -27,6 +27,8 @@ import { loadUser } from "./actions/auth";
 
 import MarketplaceList from "./components/marketplace/MarketplaceList";
 import MarketplaceForm from "./components/marketplace/MarketplaceForm";
+import ForumMarketplaceForm from "./components/marketplace/ForumMarketplaceForm";
+import Marketplace from "./components/marketplace/Marketplace";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -80,6 +82,11 @@ function App() {
               />
               <ProtectedRoute
                 exact
+                path="/forums/:forum_id/marketplaces/new"
+                component={ForumMarketplaceForm}
+              />
+              <ProtectedRoute
+                exact
                 path="/listing/:listing_id"
                 component={Listing}
               />
@@ -91,8 +98,21 @@ function App() {
               />
               <ProtectedRoute exact path="/users" component={UserList} />
 
-              <ProtectedRoute exact path='/marketplace' component = {MarketplaceList}/>
-              <ProtectedRoute exact path='/marketplace/new' component = {MarketplaceForm}/>
+              <ProtectedRoute
+                exact
+                path="/marketplace"
+                component={MarketplaceList}
+              />
+              <ProtectedRoute
+                exact
+                path="/marketplace/:marketplace_id"
+                component={Marketplace}
+              />
+              <ProtectedRoute
+                exact
+                path="/marketplace/new"
+                component={MarketplaceForm}
+              />
               <ProtectedRoute exact path="/module" component={ModuleSearch} />
             </Switch>
           </div>

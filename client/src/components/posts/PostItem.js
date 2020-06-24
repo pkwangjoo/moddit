@@ -55,7 +55,6 @@ const PostItem = ({
             className={userDidLike() ? "ui red button" : "ui button"}
           >
             {" "}
-            {console.log(userDidLike())}
             <i aria-hidden="true" class="heart icon"></i>
             Like
           </button>

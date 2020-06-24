@@ -1,19 +1,21 @@
 import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getMarketplaces } from "../../actions/marketplace";
+import { getForumMarketplaces, clearMPost } from "../../actions/marketplace";
 import { Link } from "react-router-dom";
-// import PostItem from "./PostItem";
 import MarketplaceItem from "./MarketplaceItem";
 
-const MarketplaceList = ({
-  getMarketplaces,
+const ForumMarketplaceList = ({
+  getForumMarketplaces,
+  clearMPost,
   marketplace: { marketplaces, loading },
+  forumID,
 }) => {
   useEffect(() => {
-    getMarketplaces();
-  }, [getMarketplaces]);
+    getForumMarketplaces(forumID);
 
+    return () => clearMPost();
+  }, [getForumMarketplaces]);
   return (
     <div>
       <div class="ui pointing menu">
@@ -21,7 +23,9 @@ const MarketplaceList = ({
 
         <div class="right menu">
           <div class="item">
-            <Link to="/marketplace/new">New Marketplace</Link>
+            <Link to={`/forums/${forumID}/marketplaces/new`}>
+              New Marketplace
+            </Link>
           </div>
         </div>
       </div>
@@ -36,13 +40,10 @@ const MarketplaceList = ({
   );
 };
 
-MarketplaceList.propTypes = {
-  getMarketplaces: PropTypes.func.isRequired,
-  marketplace: PropTypes.object.isRequired,
-};
-
 const mapStateToProps = (state) => ({
   marketplace: state.marketplace,
 });
 
-export default connect(mapStateToProps, { getMarketplaces })(MarketplaceList);
+export default connect(mapStateToProps, { getForumMarketplaces, clearMPost })(
+  ForumMarketplaceList
+);

@@ -9,8 +9,11 @@ import {
   clearListings,
 } from "../../actions/listing";
 import { getPostsByUser, clearPosts } from "../../actions/post";
+import { getMarketplacesByUser, clearMPost } from "../../actions/marketplace";
+
 import ListingListByUser from "../listing/ListingListByUser";
 import PostListByUser from "../posts/PostListByUser";
+import MListByUser from "../marketplace/MListByUser";
 import { privateChat, getPrivateChat } from "../../actions/chatRoom";
 import ChatList from "../chat/ChatList";
 import ModuleItem from "../module/ModuleItem";
@@ -25,8 +28,10 @@ const Dashboard = ({
   clearProfile,
   clearListings,
   clearPosts,
+  clearMPost,
   privateChat,
   getPrivateChat,
+  getMarketplacesByUser,
   match,
   history,
 }) => {
@@ -35,11 +40,13 @@ const Dashboard = ({
     getPostsByUser(match.params.user_id);
     getListingsByUser(match.params.user_id);
     getPrivateChat(match.params.user_id);
+    getMarketplacesByUser(match.params.user_id);
 
     return () => {
       clearProfile();
       clearPosts();
       clearListings();
+      clearMPost();
     };
   }, [
     getUserProfile,
@@ -47,6 +54,7 @@ const Dashboard = ({
     getListingsByUser,
     match.params.user_id,
     getPrivateChat,
+    getMarketplacesByUser,
   ]);
 
   const [dashboardState, setDashboardState] = useState({
@@ -63,6 +71,7 @@ const Dashboard = ({
       posts: false,
       privateChat: false,
       modules: false,
+      marketplace: false,
     });
   };
 
@@ -72,6 +81,7 @@ const Dashboard = ({
       posts: true,
       privateChat: false,
       modules: false,
+      marketplace: false,
     });
   };
 
@@ -81,6 +91,7 @@ const Dashboard = ({
       posts: false,
       privateChat: true,
       modules: false,
+      marketplace: false,
     });
   };
 
@@ -90,6 +101,17 @@ const Dashboard = ({
       posts: false,
       privateChat: false,
       modules: true,
+      marketplace: false,
+    });
+  };
+
+  const toggleMarketplace = (e) => {
+    setDashboardState({
+      listings: false,
+      posts: false,
+      privateChat: false,
+      modules: false,
+      marketplace: true,
     });
   };
 
@@ -176,6 +198,9 @@ const Dashboard = ({
               <a onClick={toggleModules} class="item">
                 Modules
               </a>
+              <a onClick={toggleMarketplace} class="item">
+                Marketplace
+              </a>
             </div>
           </div>
           <div class="twelve wide stretched column">
@@ -194,6 +219,9 @@ const Dashboard = ({
                     return <ModuleItem key={module._id} module={module} />;
                   })}
                 </Fragment>
+              )}
+              {dashboardState.marketplace && (
+                <MListByUser useID={match.params.user_id} />
               )}
             </div>
           </div>
@@ -229,4 +257,6 @@ export default connect(mapStateToProps, {
   getPrivateChat,
   clearPosts,
   clearListings,
+  clearMPost,
+  getMarketplacesByUser,
 })(withRouter(Dashboard));
