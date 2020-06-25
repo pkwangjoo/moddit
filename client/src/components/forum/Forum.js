@@ -66,9 +66,11 @@ const Forum = ({
             </a>
           </div>
         </div>
-        {forumState.posts && <ForumPostList forumID={forum._id} />}
-        {forumState.listings && <ListingList forumID={forum._id} />}
-        {forumState.marketplace && <ForumMarketplaceList forumID={forum._id} />}
+        {forumState.posts && <ForumPostList forumID={match.params.forum_id} />}
+        {forumState.listings && <ListingList forumID={match.params.forum_id} />}
+        {forumState.marketplace && (
+          <ForumMarketplaceList forumID={match.params.forum_id} />
+        )}
       </Fragment>
     )
   );
