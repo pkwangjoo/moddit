@@ -12,7 +12,7 @@ const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Marketplace = require('../../models/Marketplace');
-// const File = require('../../models/File');
+const File = require('../../models/File');
 // const methodOverride = require('method-override');
 const db = require('../../config/default.json')
 const mongoURI = db.mongoURI;
@@ -84,7 +84,7 @@ router.get('/', isLoggedIn, async (req, res) => {
 // @router POST
 // @desc Creates a new marketplace
 router.post(
-    '/', 
+    '/',
     [
         isLoggedIn,
         [
@@ -92,28 +92,47 @@ router.post(
             check("title", "title is require").not().isEmpty(),
             check("file", "file is required").not().isEmpty(),
         ],
-        upload.single('file'),
+        upload.array('file', 3),
     ],
 
     async (req, res) => {
         try {
             const { title, text } = req.body;
 
+            var fileArray = [];
+
+            
             let newMarketplace = new Marketplace({
                 title: title,
                 text: text,
-                file: req.file.filename, 
-                filename: req.file.originalname,
+                files: [],
                 author: req.user.id,
             });
 
-            console.log('Marketplace');
+            // await newMarketplace.save();
+
+            req.files.forEach(async function (item, index) {
+                try {
+                    let newFile = new File({
+                        file: item.filename,
+                        filename: item.originalname,
+                    });
+
+                    newMarketplace.files.push(newFile);
+                    await newFile.save();
+                } catch (err) {
+                    console.log(err.message);
+                    res.status(500).send('Server Error');
+                }
+            });
+            
+
+            // newMarketplace.files.push(fileArray);
 
             await newMarketplace.save();
             res.json(newMarketplace);
-            res.redirect('/')
         } catch (err) {
-            console.log(err.message);
+            console.log(err.message, 'hello');
             res.status(500).send('Server Error');
         }
     }
@@ -190,7 +209,7 @@ router.put('/:marketplace_id/like', isLoggedIn, async (req, res) => {
 
 //@router PUT
 //@desc Removes likes from a marketplace
-router.put('/:marketplace_id/unlike', isLoggedIn, async(req, res) => {
+router.put('/:marketplace_id/unlike', isLoggedIn, async (req, res) => {
     try {
         const marketplace = await Marketplace.findById(req.params.marketplace_id);
 
@@ -210,7 +229,7 @@ router.put('/:marketplace_id/unlike', isLoggedIn, async(req, res) => {
 });
 
 
-router.get('/:marketplace_id', (req,res) => {
+router.get('/:marketplace_id', (req, res) => {
     gfs.files.findOne({ filename: req.params.marketplace_id }, (err, file) => {
         if (!file || file.length === 0) {
             return res.status(404).json('File does not exists');
@@ -223,7 +242,7 @@ router.get('/:marketplace_id/download', (req, res) => {
     // Check file exists on DB
     var filename = req.params.marketplace_id;
     gfs.files.findOne({ filename: filename }, (err, file) => {
-        if (!file || file.length === 0 ) {
+        if (!file || file.length === 0) {
             return res.status(404).send('File Not Found');
         }
         var readstream = gfs.createReadStream({ filename: filename });
@@ -234,11 +253,11 @@ router.get('/:marketplace_id/download', (req, res) => {
 // router.post("/", isLoggedIn, async (req, res) => {
 //     try {
 //       const title = req.body.title;
-  
+
 //       let newForum = new Forum({
 //         title,
 //       });
-  
+
 //       await newForum.save();
 //       res.json(newForum);
 //     } catch (err) {

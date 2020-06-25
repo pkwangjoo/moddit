@@ -1,0 +1,62 @@
+img.bg {
+    min-height: 100%;
+    min-width: 1024px;
+
+    width: 100%;
+    height: auto;
+}
+
+div.admin-bg {
+    min-height:100%;
+    min-width: 1024px;
+    
+    width: 100%;
+    height: auto;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+@media screen and (max-width: 1024px) {
+    img.bg {
+        left: 50%;
+        margin-left: -512px;
+    }
+
+    div.admin-bg{
+        left: 50%;
+        margin-left: -512px;
+    }
+}
+
+.main{
+    align-items: center;
+}
+
+.banner-text{
+    position: absolute;
+    right: 13%;
+    top: 40%;
+    background-color: black;
+    opacity: 0.8;
+    width: 75%;
+    margin: auto;
+    border-radius: 10px;
+    padding: 20px;
+
+}
+
+.banner-text h1{
+    font-size: 66px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+.banner-text p{
+    font-size: 40px;
+    color: white;
+    text-align: center;
+}

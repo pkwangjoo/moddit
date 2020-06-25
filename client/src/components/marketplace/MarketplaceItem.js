@@ -5,50 +5,54 @@ import { connect } from "react-redux";
 import Moment from "react-moment";
 import axios from "axios";
 import FileSaver from 'file-saver';
+import FileList from './FileList';
 // import { likePost, unlikePost, deletePost } from "../../actions/post";
 
 const MarketplaceItem = ({
     auth,
-    marketplace: { _id, text, title, author, date, likes, file, filename },
+    marketplace: { _id, text, title, author, date, likes, files /*, filename*/ },
     //   likePost,
     //   unlikePost,
     //   deletePost,
 }) => {
 
-    const fileType = () => {
-        const type = filename.slice(-4);
+    // const fileType = () => {
+    //     const type = filename.slice(-4);
 
-        switch (type) {
-            case ".pdf":
-                return "file pdf outline icon";
-            
-            case "docx" || "docs":
-                return "file word outline icon";
+    //     switch (type) {
+    //         case ".pdf":
+    //             return "file pdf outline icon";
 
-            case ".csv" || "xlsx" || ".xls":
-                return "file excel outline icon";
+    //         case "docx" || "docs":
+    //             return "file word outline icon";
 
-            case ".ppt" || "pptx":
-                return "file powerpoint outline icon";
+    //         case ".csv" || "xlsx" || ".xls":
+    //             return "file excel outline icon";
 
-            default:
-                return "file outline icon";
-        }
-    }
+    //         case ".ppt" || "pptx":
+    //             return "file powerpoint outline icon";
 
-    const downloadFile = async () => {
-        axios({
-            method: "GET",
-            url: `/api/marketplace/${file}/download`,
-            responseType: "blob"
-        })
-            .then(response => {
-                FileSaver.saveAs(response.data, `${file}`);
-            })
-            .then(() => {
-                console.log("Download Complete");
-            })
-    };
+    //         case ".jpg" || ".png" || "jpeg":
+    //             return "file image outline icon";
+
+    //         default:
+    //             return "file outline icon";
+    //     }
+    // }
+
+    // const downloadFile = async () => {
+    //     axios({
+    //         method: "GET",
+    //         url: `/api/marketplace/${file}/download`,
+    //         responseType: "blob"
+    //     })
+    //         .then(response => {
+    //             FileSaver.saveAs(response.data, `${file}`);
+    //         })
+    //         .then(() => {
+    //             console.log("Download Complete");
+    //         })
+    // };
 
     return auth && (
         <div class="ui centered raised fluid card">
@@ -66,14 +70,18 @@ const MarketplaceItem = ({
                 <div class="description">
                     <p>{text}</p>
                 </div>
-                
+
                 <br></br>
-                
+
                 <div class="ui vertical labeled icon buttons">
-                    <button class="ui button" onClick={downloadFile}>
+                    {files.map((file) => (
+                    <FileList key={file._id} file={file} />
+                    ))}
+                    
+                    {/* <button class="ui button" onClick={downloadFile}>
                         <i class={fileType()}></i>
                         { filename }
-                    </button>
+                    </button> */}
                 </div>
 
             </div>
@@ -100,7 +108,7 @@ const MarketplaceItem = ({
                 </div> */}
                 <div class="right floated author">{author && author.name}</div>
             </div>
-        </div>
+        </div >
         //     <Fragment>
 
         //         <div>the title is {title}</div>
