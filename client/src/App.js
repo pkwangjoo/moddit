@@ -30,6 +30,8 @@ import MarketplaceForm from "./components/marketplace/MarketplaceForm";
 import ForumMarketplaceForm from "./components/marketplace/ForumMarketplaceForm";
 import Marketplace from "./components/marketplace/Marketplace";
 
+import LeaderboardList from "./components/leaderboard/LeaderboardList";
+
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -114,6 +116,8 @@ function App() {
                 component={MarketplaceForm}
               />
               <ProtectedRoute exact path="/module" component={ModuleSearch} />
+
+              <Route exact path="/leaderboard" component={LeaderboardList} />
             </Switch>
           </div>
         </Fragment>

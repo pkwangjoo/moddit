@@ -13,11 +13,13 @@ const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Marketplace = require("../../models/Marketplace");
 const Comment = require("../../models/Comment");
+const Leaderboard = require("../../models/Leaderboard");
 // const File = require('../../models/File');
 // const methodOverride = require('method-override');
 const db = require("../../config/default.json");
 const mongoURI = db.mongoURI;
 const { check, validationResult } = require("express-validator");
+const { disconnect } = require("process");
 
 // Create Mongo Connection
 const conn = mongoose.createConnection(mongoURI, {
@@ -116,11 +118,10 @@ router.post(
         author: req.user.id,
       });
 
-      console.log("Marketplace");
+      let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { marketplace: 1, points: 10 } }, { new: true, upsert: true });
 
       await newMarketplace.save();
       res.json(newMarketplace);
-      res.redirect("/");
     } catch (err) {
       console.log(err.message);
       res.status(500).send("Server Error");
@@ -165,6 +166,8 @@ router.delete("/:marketplace_id", isLoggedIn, async (req, res) => {
     if (!marketplace.author._id === req.user.id) {
       return res.status(401).send("Not allowed to delete");
     }
+
+    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { posts: -1, points: -10 } }, { new: true, upsert: true });
 
     await marketplace.remove();
     res.json({ msg: "Post was deleted" });
@@ -268,6 +271,8 @@ router.post(
         forum: req.params.forum_id,
       });
 
+      let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { marketplace: 1, points: 10 } }, { new: true, upsert: true });
+
       console.log("Marketplace");
 
       await newMarketplace.save();
@@ -338,6 +343,8 @@ router.post(
       let marketplace = await Marketplace.findById(req.params.marketplace_id);
 
       marketplace.comments.push(newComment);
+
+    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { comments: 1, points: 1 } }, { new: true, upsert: true });
 
       await marketplace.save();
 

@@ -5,6 +5,7 @@ const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Comment = require("../../models/Comment");
 const CommentReply = require("../../models/CommentReply");
+const Leaderboard = require("../../models/Leaderboard");
 const { check, validationResult } = require("express-validator");
 
 /**
@@ -114,6 +115,8 @@ router.post("/:comment_id", isLoggedIn, async (req, res) => {
     let comment = await Comment.findById(req.params.comment_id);
 
     comment.replies.push(commentReply);
+
+    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { comments: 1, points: 1 } }, { new: true, upsert: true });
 
     await comment.save();
 
