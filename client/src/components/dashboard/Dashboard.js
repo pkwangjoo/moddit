@@ -16,7 +16,7 @@ import PostListByUser from "../posts/PostListByUser";
 import MListByUser from "../marketplace/MListByUser";
 import { privateChat, getPrivateChat } from "../../actions/chatRoom";
 import ChatList from "../chat/ChatList";
-import ModuleItem from "../module/ModuleItem";
+import ModuleList from "../module/ModuleList";
 
 const Dashboard = ({
   auth: { user },
@@ -136,17 +136,19 @@ const Dashboard = ({
   };
 
   const HasProfile = () => {
-    return user._id === match.params.user_id ? (
-      <Fragment>
-        <AuthHeader />
-        <Body />
-      </Fragment>
-    ) : (
-      <Fragment>
-        <NormalHeader />
-        <Body />
-      </Fragment>
-    );
+    return user._id === match.params.user_id
+      ? profile && (
+          <Fragment>
+            <AuthHeader />
+            <Body />
+          </Fragment>
+        )
+      : profile && (
+          <Fragment>
+            <NormalHeader />
+            <Body />
+          </Fragment>
+        );
   };
 
   const AuthHeader = () => (
@@ -214,14 +216,10 @@ const Dashboard = ({
               {dashboardState.privateChat &&
                 match.params.user_id === user._id && <ChatList />}
               {dashboardState.modules && (
-                <Fragment>
-                  {profile.modules.map((module) => {
-                    return <ModuleItem key={module._id} module={module} />;
-                  })}
-                </Fragment>
+                <ModuleList userID={match.params.user_id} />
               )}
               {dashboardState.marketplace && (
-                <MListByUser useID={match.params.user_id} />
+                <MListByUser userID={match.params.user_id} />
               )}
             </div>
           </div>

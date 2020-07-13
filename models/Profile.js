@@ -18,6 +18,13 @@ const profileSchema = new mongoose.Schema({
       autopopulate: true,
     },
   ],
+  completedModules: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Module",
+      autopopulate: true,
+    },
+  ],
 });
 
 profileSchema.plugin(require("mongoose-autopopulate"));

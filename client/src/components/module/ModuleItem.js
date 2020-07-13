@@ -1,6 +1,21 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-const ModuleItem = ({ module }) => {
+import axios from "axios";
+const ModuleItem = ({ module, profile }) => {
+  const [completed, toggleCompleted] = useState(false);
+
+  const completeModule = async () => {
+    await axios.post(`/api/profile/modules/${module._id}/completed`);
+    toggleCompleted(true);
+  };
+
+  /**
+   * Checks whether the module has been completed or not
+   */
+
+  const moduleCompleted = () => {
+    return profile.completedModules.some((mod) => mod._id === module._id);
+  };
   return (
     <Fragment>
       <div class="ui fluid raised card">
@@ -15,6 +30,16 @@ const ModuleItem = ({ module }) => {
           >
             Go to Forum
           </Link>
+          <button
+            onClick={completeModule}
+            className={
+              completed || moduleCompleted()
+                ? "ui disabled button"
+                : "ui basic primary button"
+            }
+          >
+            Completed
+          </button>
         </div>
       </div>
     </Fragment>
