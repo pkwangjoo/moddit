@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-const ModuleItem = ({ module, profile }) => {
+const ModuleItem = ({ module, profile, auth }) => {
   const [completed, toggleCompleted] = useState(false);
 
   const completeModule = async () => {
@@ -30,16 +30,19 @@ const ModuleItem = ({ module, profile }) => {
           >
             Go to Forum
           </Link>
-          <button
-            onClick={completeModule}
-            className={
-              completed || moduleCompleted()
-                ? "ui disabled button"
-                : "ui basic primary button"
-            }
-          >
-            Completed
-          </button>
+
+          {auth.user._id === profile.user._id && (
+            <button
+              onClick={completeModule}
+              className={
+                completed || moduleCompleted()
+                  ? "ui disabled button"
+                  : "ui basic primary button"
+              }
+            >
+              Completed
+            </button>
+          )}
         </div>
       </div>
     </Fragment>
