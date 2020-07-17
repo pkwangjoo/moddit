@@ -11,6 +11,11 @@ import {
 import { getPostsByUser, clearPosts } from "../../actions/post";
 import { getMarketplacesByUser, clearMPost } from "../../actions/marketplace";
 
+import { getLeaderboardsByUser } from "../../actions/leaderboard";
+import LeaderboardByUser from "../leaderboard/LeaderboardByUser";
+
+import BadgeList from "../badge/BadgeList";
+
 import ListingListByUser from "../listing/ListingListByUser";
 import PostListByUser from "../posts/PostListByUser";
 import MListByUser from "../marketplace/MListByUser";
@@ -32,6 +37,7 @@ const Dashboard = ({
   privateChat,
   getPrivateChat,
   getMarketplacesByUser,
+  getLeaderboardsByUser,
   match,
   history,
 }) => {
@@ -41,6 +47,7 @@ const Dashboard = ({
     getListingsByUser(match.params.user_id);
     getPrivateChat(match.params.user_id);
     getMarketplacesByUser(match.params.user_id);
+    getLeaderboardsByUser(match.params.user_id);
 
     return () => {
       clearProfile();
@@ -55,6 +62,7 @@ const Dashboard = ({
     match.params.user_id,
     getPrivateChat,
     getMarketplacesByUser,
+    getLeaderboardsByUser,
   ]);
 
   const [dashboardState, setDashboardState] = useState({
@@ -63,6 +71,7 @@ const Dashboard = ({
     marketplace: false,
     privateChat: false,
     modules: false,
+    leaderboards: false,
   });
 
   const toggleListing = (e) => {
@@ -72,6 +81,7 @@ const Dashboard = ({
       privateChat: false,
       modules: false,
       marketplace: false,
+      leaderboards: false,
     });
   };
 
@@ -82,6 +92,7 @@ const Dashboard = ({
       privateChat: false,
       modules: false,
       marketplace: false,
+      leaderboards: false,
     });
   };
 
@@ -92,6 +103,7 @@ const Dashboard = ({
       privateChat: true,
       modules: false,
       marketplace: false,
+      leaderboards: false,
     });
   };
 
@@ -102,6 +114,7 @@ const Dashboard = ({
       privateChat: false,
       modules: true,
       marketplace: false,
+      leaderboards: false,
     });
   };
 
@@ -112,8 +125,20 @@ const Dashboard = ({
       privateChat: false,
       modules: false,
       marketplace: true,
+      leaderboards: false,
     });
   };
+
+  const toggleLeaderboards = (e) => {
+    setDashboardState({
+      listings: false,
+      posts: false,
+      privatechat: false,
+      modules: false,
+      marketplace: false,
+      leaderboards: true,
+    })
+  }
 
   const startMessage = (e) => {
     const userData = {
@@ -201,6 +226,9 @@ const Dashboard = ({
               <a onClick={toggleMarketplace} class="item">
                 Marketplace
               </a>
+              <a onClick = {toggleLeaderboards} class="item">
+                Badges
+              </a>
             </div>
           </div>
           <div class="twelve wide stretched column">
@@ -222,6 +250,9 @@ const Dashboard = ({
               )}
               {dashboardState.marketplace && (
                 <MListByUser useID={match.params.user_id} />
+              )}
+              {dashboardState.leaderboards && (
+                <BadgeList userID={match.params.user_id} />
               )}
             </div>
           </div>
@@ -259,4 +290,5 @@ export default connect(mapStateToProps, {
   clearListings,
   clearMPost,
   getMarketplacesByUser,
+  getLeaderboardsByUser,
 })(withRouter(Dashboard));

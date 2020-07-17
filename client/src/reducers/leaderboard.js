@@ -1,5 +1,6 @@
 const initialState = {
     leaderboards: [],
+    leaderboard: null,
     loading: true,
     error: {},
   };
@@ -14,6 +15,14 @@ const initialState = {
           leaderboards: payload,
           loading: false,
         };
+
+      
+      case "SELECT_LEADERBOARD":
+        return {
+          ...state,
+          leaderboard: payload,
+          loading: false,
+        }
   
       case "LEADERBOARD_ERROR":
         return {
