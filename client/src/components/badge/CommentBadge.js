@@ -17,7 +17,8 @@ const CommentBadge = ({
         <div class="description">
             {commentsBadge && (
               <div>
-                <img src="./test.jpg" alt="Comment Badge" width="50" height="50"></img>
+                <img src="./test.jpg" alt="Comment Badge" width="50" height="50"
+                ></img>
               <span>
                   Top Commenter!
               </span>
