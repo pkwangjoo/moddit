@@ -16,9 +16,18 @@ const CommentBadge = ({
       <div class="content">
         <div class="description">
             {commentsBadge && (
-                <p>
-                    Top Commenter!
-                </p>
+              <div>
+                <img src="./test.jpg" alt="Comment Badge" width="50" height="50"></img>
+              <span>
+                  Top Commenter!
+              </span>
+              </div>
+            )}
+
+            {!commentsBadge && (
+              <p>
+                Comment at least 50 times to earn the Comment Badge!
+              </p>
             )}
         </div>
       </div>

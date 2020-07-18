@@ -20,6 +20,12 @@ const PointBadge = ({
                     Top Contributor!
                 </p>
             )}
+
+            {!pointsBadge && (
+              <p>
+                Earn at least 500 points to earn the Points Badge!
+              </p>
+            )}
         </div>
       </div>
     </div>

@@ -23,17 +23,24 @@ const BadgeList = ({
                 key={leaderboard._id}
                 leaderboard={leaderboard}
             />
+
+            <div class="ui divider"></div>
             
             <DiscussionBadge
                 key={leaderboard._id}
                 leaderboard={leaderboard}
             />
+
+            <div class="ui divider"></div>
+
             
             <MarketplaceBadge
                 key={leaderboard._id}
                 leaderboard={leaderboard}
             />
             
+            <div class="ui divider"></div>
+
             <CommentBadge
                 key={leaderboard._id}
                 leaderboard={leaderboard}

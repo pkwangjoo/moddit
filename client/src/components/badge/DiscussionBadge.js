@@ -20,6 +20,12 @@ const DiscussionBadge = ({
                     Top Discussor!
                 </p>
             )}
+
+            {!discussionBadge && (
+                <p>
+                    Contribute at least 50 posts to earn the Discussion Badge!
+                </p>
+            )}
         </div>
       </div>
     </div>

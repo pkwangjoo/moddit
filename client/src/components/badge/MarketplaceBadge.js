@@ -20,6 +20,12 @@ const MarketplaceBadge = ({
                     Top Sharer!
                 </p>
             )}
+
+            {!marketplaceBadge && (
+                <p>
+                    Contribute at least 50 marketplaces to earn the Marketplace badge!
+                </p>
+            )}
         </div>
       </div>
     </div>
