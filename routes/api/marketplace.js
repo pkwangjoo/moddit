@@ -17,6 +17,7 @@ const File = require('../../models/File');
 const db = require('../../config/default.json')
 const mongoURI = db.mongoURI;
 const { check, validationResult } = require('express-validator');
+const { timeStamp } = require('console');
 
 // Create Mongo Connection
 const conn = mongoose.createConnection(mongoURI, {
@@ -173,6 +174,12 @@ router.post(
 router.delete('/:marketplace_id', async (req, res) => {
     try {
         const marketplace = await Marketplace.findById(req.params.marketplace_id);
+
+        gfs.remove({_id: req.params.marketplace_id, root: 'uploads'}, function(err) {
+            if (err) {
+                return res.status(500).send('Server Error')
+            }
+        })
 
         if (!marketplace.author._id === req.user.id) {
             return res.status(401).send('Not allowed to delete');
