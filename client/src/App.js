@@ -4,6 +4,7 @@ import "./App.css";
 import Navbar from "./components/layout/Navbar";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import Alert from "./components/alert/Alert";
 import Main from "./components/layout/Main";
 import PostList from "./components/posts/PostList";
 import ProtectedRoute from "./components/route/ProtectedRoute";
@@ -49,7 +50,7 @@ function App() {
 
           <div className="ui main text container">
             <Route exact path="/" component={Main} />
-
+            <Alert />
             <Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />

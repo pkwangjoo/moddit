@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { createForumMarketplace } from "../../actions/marketplace";
 import PropTypes from "prop-types";
@@ -9,13 +9,14 @@ const ForumMarketplaceForm = ({ createForumMarketplace, history, match }) => {
   const [formData, setFormData] = useState({
     title: "",
     text: "",
+    tag: "default",
   });
 
   const forumID = match.params.forum_id;
 
   const [selectedFile, setFile] = useState(null);
 
-  const { title, text } = formData;
+  const { title, text, tag } = formData;
 
   const fileData = new FormData();
 
@@ -31,8 +32,27 @@ const ForumMarketplaceForm = ({ createForumMarketplace, history, match }) => {
     e.preventDefault();
     fileData.append("text", text);
     fileData.append("title", title);
+    fileData.append("tag", tag);
     fileData.append("file", selectedFile);
+
     createForumMarketplace(forumID, fileData, history);
+  };
+
+  const TagOptions = () => {
+    return (
+      <Fragment>
+        <label>
+          Tags:
+          <p></p>
+          <select value={tag} onChange={onChange} name="tag">
+            <option value="Default">Default</option>
+            <option value="Sample Exam Answers">Sample Exam Answers</option>
+            <option value="Notes">Notes</option>
+            <option value="Cheatsheets">Cheatsheets</option>
+          </select>
+        </label>
+      </Fragment>
+    );
   };
 
   return (
@@ -60,6 +80,9 @@ const ForumMarketplaceForm = ({ createForumMarketplace, history, match }) => {
           />
           <label className="custom-file-label" htmlFor="customFile"></label>
         </div>
+        <p></p>
+        <TagOptions />
+        <p></p>
         <button class="ui button" type="submit">
           Submit
         </button>

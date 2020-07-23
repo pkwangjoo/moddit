@@ -21,7 +21,7 @@ import PostListByUser from "../posts/PostListByUser";
 import MListByUser from "../marketplace/MListByUser";
 import { privateChat, getPrivateChat } from "../../actions/chatRoom";
 import ChatList from "../chat/ChatList";
-import ModuleItem from "../module/ModuleItem";
+import ModuleList from "../module/ModuleList";
 
 const Dashboard = ({
   auth: { user },
@@ -71,7 +71,11 @@ const Dashboard = ({
     marketplace: false,
     privateChat: false,
     modules: false,
+
     leaderboards: false,
+
+    bio: true,
+
   });
 
   const toggleListing = (e) => {
@@ -81,7 +85,11 @@ const Dashboard = ({
       privateChat: false,
       modules: false,
       marketplace: false,
+
       leaderboards: false,
+
+      bio: false,
+
     });
   };
 
@@ -92,7 +100,11 @@ const Dashboard = ({
       privateChat: false,
       modules: false,
       marketplace: false,
+
       leaderboards: false,
+
+      bio: false,
+
     });
   };
 
@@ -103,7 +115,11 @@ const Dashboard = ({
       privateChat: true,
       modules: false,
       marketplace: false,
+
       leaderboards: false,
+
+      bio: false,
+
     });
   };
 
@@ -114,7 +130,11 @@ const Dashboard = ({
       privateChat: false,
       modules: true,
       marketplace: false,
+
       leaderboards: false,
+
+      bio: false,
+
     });
   };
 
@@ -125,7 +145,22 @@ const Dashboard = ({
       privateChat: false,
       modules: false,
       marketplace: true,
+
       leaderboards: false,
+
+      bio: false,
+    });
+  };
+
+  const toggleBio = (e) => {
+    setDashboardState({
+      listings: false,
+      posts: false,
+      privateChat: false,
+      modules: false,
+      marketplace: false,
+      bio: true,
+
     });
   };
 
@@ -161,17 +196,19 @@ const Dashboard = ({
   };
 
   const HasProfile = () => {
-    return user._id === match.params.user_id ? (
-      <Fragment>
-        <AuthHeader />
-        <Body />
-      </Fragment>
-    ) : (
-      <Fragment>
-        <NormalHeader />
-        <Body />
-      </Fragment>
-    );
+    return user._id === match.params.user_id
+      ? profile && (
+          <Fragment>
+            <AuthHeader />
+            <Body />
+          </Fragment>
+        )
+      : profile && (
+          <Fragment>
+            <NormalHeader />
+            <Body />
+          </Fragment>
+        );
   };
 
   const AuthHeader = () => (
@@ -192,23 +229,12 @@ const Dashboard = ({
   const Body = () => {
     return (
       <Fragment>
-        <div role="list" class="ui list">
-          <div role="listitem" class="item">
-            <i aria-hidden="true" class="fas fa-university"></i>
-            <div class="content">{profile.major}</div>
-          </div>
-
-          <div role="listitem" class="item">
-            <i aria-hidden="true" class="mail icon"></i>
-            <div class="content">
-              <a href="">{profile.user.email}</a>
-            </div>
-          </div>
-        </div>
         <div class="ui grid">
           <div class="four wide column">
             <div class="ui vertical fluid tabular menu">
-              <a class="item">Bio</a>
+              <a onClick={toggleBio} class="item">
+                Bio
+              </a>
               <a onClick={togglePost} class="item">
                 Posts
               </a>
@@ -242,14 +268,25 @@ const Dashboard = ({
               {dashboardState.privateChat &&
                 match.params.user_id === user._id && <ChatList />}
               {dashboardState.modules && (
-                <Fragment>
-                  {profile.modules.map((module) => {
-                    return <ModuleItem key={module._id} module={module} />;
-                  })}
-                </Fragment>
+                <ModuleList userID={match.params.user_id} />
               )}
               {dashboardState.marketplace && (
-                <MListByUser useID={match.params.user_id} />
+                <MListByUser userID={match.params.user_id} />
+              )}
+              {dashboardState.bio && (
+                <div role="list" class="ui list">
+                  <div role="listitem" class="item">
+                    <i aria-hidden="true" class="fas fa-university"></i>
+                    <div class="content">{profile.major}</div>
+                  </div>
+
+                  <div role="listitem" class="item">
+                    <i aria-hidden="true" class="mail icon"></i>
+                    <div class="content">
+                      <a href="">{profile.user.email}</a>
+                    </div>
+                  </div>
+                </div>
               )}
               {dashboardState.leaderboards && (
                 <BadgeList userID={match.params.user_id} />
