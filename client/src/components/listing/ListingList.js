@@ -1,6 +1,11 @@
 import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
-import { getListings, clearListings } from "../../actions/listing";
+import {
+  getListings,
+  clearListings,
+  updateListing,
+  getListingByTag,
+} from "../../actions/listing";
 import { Link } from "react-router-dom";
 import ListingItem from "./ListingItem";
 
@@ -9,18 +14,40 @@ const ListingList = ({
   forumID,
   getListings,
   clearListings,
+  getListingByTag,
+  updateListing,
 }) => {
   useEffect(() => {
     getListings(forumID);
 
     return () => clearListings();
   }, [getListings]);
+
   return (
     <Fragment>
-      <div class="ui pointing menu">
-        <a class="active item">All Listings</a>
+      <div class="ui menu">
+        <a class="item" onClick={() => getListings(forumID)}>
+          All Listings
+        </a>
 
         <div class="right menu">
+          <div class="ui simple dropdown item">
+            View by Tags <i class="dropdown icon"></i>
+            <div class="menu">
+              <a class="item" onClick={() => getListings(forumID)}>
+                All
+              </a>
+              <a class="item" onClick={() => getListingByTag("Consultation")}>
+                Consultation
+              </a>
+              <a class="item" onClick={() => getListingByTag("Meet-up")}>
+                Meet-up
+              </a>
+              <a class="item" onClick={() => getListingByTag("Study Session")}>
+                Study Session
+              </a>
+            </div>
+          </div>
           <div class="item">
             <Link to={`/forums/${forumID}/listings/new`}>New Listing</Link>
           </div>
@@ -39,6 +66,9 @@ const mapStateToProps = (state) => ({
   listing: state.listing,
 });
 
-export default connect(mapStateToProps, { getListings, clearListings })(
-  ListingList
-);
+export default connect(mapStateToProps, {
+  getListings,
+  clearListings,
+  updateListing,
+  getListingByTag,
+})(ListingList);

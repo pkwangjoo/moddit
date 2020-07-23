@@ -55,6 +55,10 @@ const marketplaceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  tag: {
+    type: String,
+  },
 });
 
 marketplaceSchema.plugin(require("mongoose-autopopulate"));

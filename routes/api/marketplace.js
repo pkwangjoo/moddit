@@ -257,7 +257,7 @@ router.post(
 
   async (req, res) => {
     try {
-      const { title, text } = req.body;
+      const { title, text, tag } = req.body;
 
       let newMarketplace = new Marketplace({
         title: title,
@@ -266,11 +266,12 @@ router.post(
         filename: req.file.originalname,
         author: req.user.id,
         forum: req.params.forum_id,
+        tag: tag,
       });
 
-      console.log("Marketplace");
-
       await newMarketplace.save();
+
+      console.log(newMarketplace);
       res.json(newMarketplace);
     } catch (err) {
       console.log(err.message);
@@ -293,6 +294,21 @@ router.get("/forum/:forum_id", isLoggedIn, async (req, res) => {
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
+  }
+});
+
+/**
+ * Gets marketplace by tags
+ */
+
+router.get("/tag/:tag_name", isLoggedIn, async (req, res) => {
+  try {
+    const marketplaces = await Marketplace.find({ tag: req.params.tag_name });
+
+    res.json(marketplaces);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
   }
 });
 
