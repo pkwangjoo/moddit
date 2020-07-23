@@ -9,11 +9,19 @@ import {
   clearListings,
 } from "../../actions/listing";
 import { getPostsByUser, clearPosts } from "../../actions/post";
+import { getMarketplacesByUser, clearMPost } from "../../actions/marketplace";
+
+import { getLeaderboardsByUser } from "../../actions/leaderboard";
+import LeaderboardByUser from "../leaderboard/LeaderboardByUser";
+
+import BadgeList from "../badge/BadgeList";
+
 import ListingListByUser from "../listing/ListingListByUser";
 import PostListByUser from "../posts/PostListByUser";
+import MListByUser from "../marketplace/MListByUser";
 import { privateChat, getPrivateChat } from "../../actions/chatRoom";
 import ChatList from "../chat/ChatList";
-import ModuleItem from "../module/ModuleItem";
+import ModuleList from "../module/ModuleList";
 
 const Dashboard = ({
   auth: { user },
@@ -25,8 +33,11 @@ const Dashboard = ({
   clearProfile,
   clearListings,
   clearPosts,
+  clearMPost,
   privateChat,
   getPrivateChat,
+  getMarketplacesByUser,
+  getLeaderboardsByUser,
   match,
   history,
 }) => {
@@ -35,11 +46,14 @@ const Dashboard = ({
     getPostsByUser(match.params.user_id);
     getListingsByUser(match.params.user_id);
     getPrivateChat(match.params.user_id);
+    getMarketplacesByUser(match.params.user_id);
+    getLeaderboardsByUser(match.params.user_id);
 
     return () => {
       clearProfile();
       clearPosts();
       clearListings();
+      clearMPost();
     };
   }, [
     getUserProfile,
@@ -47,6 +61,8 @@ const Dashboard = ({
     getListingsByUser,
     match.params.user_id,
     getPrivateChat,
+    getMarketplacesByUser,
+    getLeaderboardsByUser,
   ]);
 
   const [dashboardState, setDashboardState] = useState({
@@ -55,6 +71,11 @@ const Dashboard = ({
     marketplace: false,
     privateChat: false,
     modules: false,
+
+    leaderboards: false,
+
+    bio: true,
+
   });
 
   const toggleListing = (e) => {
@@ -63,6 +84,12 @@ const Dashboard = ({
       posts: false,
       privateChat: false,
       modules: false,
+      marketplace: false,
+
+      leaderboards: false,
+
+      bio: false,
+
     });
   };
 
@@ -72,6 +99,12 @@ const Dashboard = ({
       posts: true,
       privateChat: false,
       modules: false,
+      marketplace: false,
+
+      leaderboards: false,
+
+      bio: false,
+
     });
   };
 
@@ -81,6 +114,12 @@ const Dashboard = ({
       posts: false,
       privateChat: true,
       modules: false,
+      marketplace: false,
+
+      leaderboards: false,
+
+      bio: false,
+
     });
   };
 
@@ -90,8 +129,51 @@ const Dashboard = ({
       posts: false,
       privateChat: false,
       modules: true,
+      marketplace: false,
+
+      leaderboards: false,
+
+      bio: false,
+
     });
   };
+
+  const toggleMarketplace = (e) => {
+    setDashboardState({
+      listings: false,
+      posts: false,
+      privateChat: false,
+      modules: false,
+      marketplace: true,
+
+      leaderboards: false,
+
+      bio: false,
+    });
+  };
+
+  const toggleBio = (e) => {
+    setDashboardState({
+      listings: false,
+      posts: false,
+      privateChat: false,
+      modules: false,
+      marketplace: false,
+      bio: true,
+
+    });
+  };
+
+  const toggleLeaderboards = (e) => {
+    setDashboardState({
+      listings: false,
+      posts: false,
+      privatechat: false,
+      modules: false,
+      marketplace: false,
+      leaderboards: true,
+    })
+  }
 
   const startMessage = (e) => {
     const userData = {
@@ -114,17 +196,19 @@ const Dashboard = ({
   };
 
   const HasProfile = () => {
-    return user._id === match.params.user_id ? (
-      <Fragment>
-        <AuthHeader />
-        <Body />
-      </Fragment>
-    ) : (
-      <Fragment>
-        <NormalHeader />
-        <Body />
-      </Fragment>
-    );
+    return user._id === match.params.user_id
+      ? profile && (
+          <Fragment>
+            <AuthHeader />
+            <Body />
+          </Fragment>
+        )
+      : profile && (
+          <Fragment>
+            <NormalHeader />
+            <Body />
+          </Fragment>
+        );
   };
 
   const AuthHeader = () => (
@@ -145,23 +229,12 @@ const Dashboard = ({
   const Body = () => {
     return (
       <Fragment>
-        <div role="list" class="ui list">
-          <div role="listitem" class="item">
-            <i aria-hidden="true" class="fas fa-university"></i>
-            <div class="content">{profile.major}</div>
-          </div>
-
-          <div role="listitem" class="item">
-            <i aria-hidden="true" class="mail icon"></i>
-            <div class="content">
-              <a href="">{profile.user.email}</a>
-            </div>
-          </div>
-        </div>
         <div class="ui grid">
           <div class="four wide column">
             <div class="ui vertical fluid tabular menu">
-              <a class="item">Bio</a>
+              <a onClick={toggleBio} class="item">
+                Bio
+              </a>
               <a onClick={togglePost} class="item">
                 Posts
               </a>
@@ -176,6 +249,12 @@ const Dashboard = ({
               <a onClick={toggleModules} class="item">
                 Modules
               </a>
+              <a onClick={toggleMarketplace} class="item">
+                Marketplace
+              </a>
+              <a onClick = {toggleLeaderboards} class="item">
+                Badges
+              </a>
             </div>
           </div>
           <div class="twelve wide stretched column">
@@ -189,11 +268,28 @@ const Dashboard = ({
               {dashboardState.privateChat &&
                 match.params.user_id === user._id && <ChatList />}
               {dashboardState.modules && (
-                <Fragment>
-                  {profile.modules.map((module) => {
-                    return <ModuleItem key={module._id} module={module} />;
-                  })}
-                </Fragment>
+                <ModuleList userID={match.params.user_id} />
+              )}
+              {dashboardState.marketplace && (
+                <MListByUser userID={match.params.user_id} />
+              )}
+              {dashboardState.bio && (
+                <div role="list" class="ui list">
+                  <div role="listitem" class="item">
+                    <i aria-hidden="true" class="fas fa-university"></i>
+                    <div class="content">{profile.major}</div>
+                  </div>
+
+                  <div role="listitem" class="item">
+                    <i aria-hidden="true" class="mail icon"></i>
+                    <div class="content">
+                      <a href="">{profile.user.email}</a>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {dashboardState.leaderboards && (
+                <BadgeList userID={match.params.user_id} />
               )}
             </div>
           </div>
@@ -229,4 +325,7 @@ export default connect(mapStateToProps, {
   getPrivateChat,
   clearPosts,
   clearListings,
+  clearMPost,
+  getMarketplacesByUser,
+  getLeaderboardsByUser,
 })(withRouter(Dashboard));

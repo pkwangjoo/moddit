@@ -9,7 +9,7 @@ const ListingItem = ({
   addParticipant,
   deleteListing,
   auth,
-  listing: { _id, author, title, text, date, limit, participants },
+  listing: { _id, author, title, text, date, limit, participants, tag },
 }) => {
   const handleClick = (e) => {
     addParticipant(_id);
@@ -32,6 +32,7 @@ const ListingItem = ({
         <div class="header">{title} </div>
         <div class="meta">
           <Moment format="DD/MM/YY">{date}</Moment>
+          <span className="category">{tag}</span>
         </div>
         <div class="description">
           <p>{text}</p>

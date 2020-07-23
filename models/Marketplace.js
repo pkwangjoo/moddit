@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const marketplaceSchema = new mongoose.Schema({
-
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -28,13 +27,13 @@ const marketplaceSchema = new mongoose.Schema({
     },
   ],
 
-  // comments: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "Comment",
-  //     autopopulate: true,
-  //   },
-  // ],
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+      autopopulate: true,
+    },
+  ],
 
   date: {
     type: Date,
@@ -46,27 +45,23 @@ const marketplaceSchema = new mongoose.Schema({
     ref: "Forum",
   },
 
+
   files: [
     {
     type: mongoose.Schema.Types.ObjectId,
     ref: "File",
     autopopulate: true,
+
   },
 ],
 
-  // file: {
-  //   type: String,
-  //   // ref: 'upload.files',
-  //   required: true
-  // },
 
-  // filename: {
-  //   type: String,
-  //   required: true
-  // }
 
+  tag: {
+    type: String,
+  },
 });
 
-marketplaceSchema.plugin(require('mongoose-autopopulate'));
+marketplaceSchema.plugin(require("mongoose-autopopulate"));
 
 module.exports = mongoose.model("Marketplace", marketplaceSchema);

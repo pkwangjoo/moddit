@@ -50,6 +50,11 @@ export const addComment = (post_id, formData) => async (dispatch) => {
       type: "ADD_COMMENT",
       payload: res.data,
     });
+
+    dispatch({
+      type: "UPDATE_COMMENTS",
+      payload: res.data,
+    });
   } catch (err) {
     dispatch({
       type: "POST_ERROR",
@@ -67,7 +72,7 @@ export const likePost = (post_id) => async (dispatch) => {
       payload: { post_id, likes: res.data },
     });
   } catch (err) {
-    console.log(err);
+    console.log(err.response);
     dispatch({
       type: "POST_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },
@@ -84,7 +89,7 @@ export const unlikePost = (post_id) => async (dispatch) => {
       payload: { post_id, likes: res.data },
     });
   } catch (err) {
-    console.log(err);
+    console.log(err.response);
     dispatch({
       type: "POST_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },
@@ -195,6 +200,29 @@ export const createForumPost = (forum_id, formData, history) => async (
       payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
+};
+
+export const getPostsByTag = (tagName) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/posts/tag/${tagName}`);
+
+    dispatch({
+      type: "GET_POSTS",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "POST_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const updatePosts = (posts) => (dispatch) => {
+  dispatch({
+    type: "GET_POSTS",
+    payload: posts,
+  });
 };
 
 export const clearPosts = () => (dispatch) => {

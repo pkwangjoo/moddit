@@ -137,6 +137,29 @@ export const addChatRoom = (listing_id, roomData) => async (dispatch) => {
   }
 };
 
+export const updateListing = (listings) => (dispatch) => {
+  dispatch({
+    type: "GET_LISTINGS",
+    payload: listings,
+  });
+};
+
+export const getListingByTag = (tagName) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/listing/tag/${tagName}`);
+
+    dispatch({
+      type: "GET_LISTINGS",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "LISTING_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
 export const clearListings = () => (dispatch) => {
   dispatch({
     type: "CLEAR_LISTINGS",

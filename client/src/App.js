@@ -4,6 +4,7 @@ import "./App.css";
 import Navbar from "./components/layout/Navbar";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import Alert from "./components/alert/Alert";
 import Main from "./components/layout/Main";
 import PostList from "./components/posts/PostList";
 import ProtectedRoute from "./components/route/ProtectedRoute";
@@ -27,6 +28,10 @@ import { loadUser } from "./actions/auth";
 
 import MarketplaceList from "./components/marketplace/MarketplaceList";
 import MarketplaceForm from "./components/marketplace/MarketplaceForm";
+import ForumMarketplaceForm from "./components/marketplace/ForumMarketplaceForm";
+import Marketplace from "./components/marketplace/Marketplace";
+
+import LeaderboardList from "./components/leaderboard/LeaderboardList";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -45,7 +50,7 @@ function App() {
 
           <div className="ui main text container">
             <Route exact path="/" component={Main} />
-
+            <Alert />
             <Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
@@ -80,6 +85,11 @@ function App() {
               />
               <ProtectedRoute
                 exact
+                path="/forums/:forum_id/marketplaces/new"
+                component={ForumMarketplaceForm}
+              />
+              <ProtectedRoute
+                exact
                 path="/listing/:listing_id"
                 component={Listing}
               />
@@ -91,9 +101,24 @@ function App() {
               />
               <ProtectedRoute exact path="/users" component={UserList} />
 
-              <ProtectedRoute exact path='/marketplace' component = {MarketplaceList}/>
-              <ProtectedRoute exact path='/marketplace/new' component = {MarketplaceForm}/>
+              <ProtectedRoute
+                exact
+                path="/marketplace"
+                component={MarketplaceList}
+              />
+              <ProtectedRoute
+                exact
+                path="/marketplace/:marketplace_id"
+                component={Marketplace}
+              />
+              <ProtectedRoute
+                exact
+                path="/marketplace/new"
+                component={MarketplaceForm}
+              />
               <ProtectedRoute exact path="/module" component={ModuleSearch} />
+
+              <Route exact path="/leaderboard" component={LeaderboardList} />
             </Switch>
           </div>
         </Fragment>

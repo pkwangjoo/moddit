@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 // import PostItem from "./PostItem";
 import MarketplaceItem from "./MarketplaceItem";
 
-const MarketplaceList = ({ getMarketplaces, marketplace: { marketplaces, loading } }) => {
-
+const MarketplaceList = ({
+  getMarketplaces,
+  marketplace: { marketplaces, loading },
+}) => {
   useEffect(() => {
     getMarketplaces();
   }, [getMarketplaces]);
@@ -25,22 +27,14 @@ const MarketplaceList = ({ getMarketplaces, marketplace: { marketplaces, loading
       </div>
       {!loading && (
         <Fragment>
-          {/* <div>
-            {marketplaces.map((mp) => (
-              <MarketplaceItem key={mp._id} post={mp} />
-            ))}
-          </div> */}
-
-          {marketplaces.map(marketplace => (
-            <MarketplaceItem key={marketplace._id} marketplace={marketplace}/>
+          {marketplaces.map((marketplace) => (
+            <MarketplaceItem key={marketplace._id} marketplace={marketplace} />
           ))}
-          
         </Fragment>
       )}
     </div>
   );
-
-}
+};
 
 MarketplaceList.propTypes = {
   getMarketplaces: PropTypes.func.isRequired,
@@ -48,7 +42,7 @@ MarketplaceList.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  marketplace: state.marketplace
+  marketplace: state.marketplace,
 });
 
 export default connect(mapStateToProps, { getMarketplaces })(MarketplaceList);

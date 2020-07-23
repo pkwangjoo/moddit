@@ -4,6 +4,7 @@ const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Comment = require("../../models/Comment");
+const Leaderboard = require("../../models/Leaderboard");
 const { check, validationResult } = require("express-validator");
 
 /**
@@ -13,6 +14,47 @@ router.get("/", isLoggedIn, async (req, res) => {
   try {
     let posts = await Post.find()
       .sort({ date: -1 })
+      .populate("author", ["name", "avatar"])
+      .populate({
+        path: "comments",
+        populate: { path: "author", select: "name" },
+      });
+    console.log(posts);
+    res.json(posts);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+/**
+ * sorting the post by likes
+ */
+router.get("/", isLoggedIn, async (req, res) => {
+  try {
+    let posts = await Post.find()
+      .sort({ likeCount: 1 })
+      .populate("author", ["name", "avatar"])
+      .populate({
+        path: "comments",
+        populate: { path: "author", select: "name" },
+      });
+    console.log(posts);
+    res.json(posts);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+/**
+ * Sorting the post by the number of comments
+ */
+
+router.get("/", isLoggedIn, async (req, res) => {
+  try {
+    let posts = await Post.find()
+      .sort({ commentCount: 1 })
       .populate("author", ["name", "avatar"])
       .populate({
         path: "comments",
@@ -55,13 +97,16 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { title, text } = req.body;
+      const { title, text, tag } = req.body;
 
       let newPost = new Post({
         title: title,
         text: text,
         author: req.user.id,
+        tag: tag,
       });
+
+      console.log(newPost);
 
       await newPost.save();
       res.json(newPost);
@@ -84,6 +129,8 @@ router.delete("/:post_id", isLoggedIn, async (req, res) => {
     if (!post.author._id === req.user.id) {
       return res.status(401).send("not allowed to delete");
     }
+
+    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { posts: -1, points: -5 } }, { new: true, upsert: true });
 
     await post.remove();
     res.json({ msg: "post was deleted" });
@@ -133,7 +180,7 @@ router.post(
 );
 
 /**
- * Add likkes to a particular post
+ * Add likes to a particular post
  */
 router.put("/:id/like", isLoggedIn, async (req, res) => {
   try {
@@ -224,6 +271,8 @@ router.post(
         populate: { path: "author" },
       });
 
+    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { comments: 1, points: 1 } }, { new: true, upsert: true });
+
       await post.save();
       post.comments.sort();
       res.json(post.comments);
@@ -288,14 +337,21 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { title, text } = req.body;
+      const { title, text, tag } = req.body;
 
       let newPost = new Post({
         title: title,
         text: text,
         author: req.user.id,
         forum: req.params.forum_id,
+        tag: tag,
       });
+
+
+    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { posts: 1, points: 5 } }, { new: true, upsert: true });
+
+      console.log(newPost);
+
 
       await newPost.save();
 
@@ -306,5 +362,21 @@ router.post(
     }
   }
 );
+
+/**
+ *
+ * Get posts by tag
+ */
+
+router.get("/tag/:tag_name", isLoggedIn, async (req, res) => {
+  try {
+    const posts = await Post.find({ tag: req.params.tag_name });
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
 
 module.exports = router;

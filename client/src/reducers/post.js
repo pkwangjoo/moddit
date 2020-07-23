@@ -58,7 +58,7 @@ export default (state = initialState, action) => {
       };
     case "CLEAR_POSTS":
       return {
-        state,
+        ...state,
         post: null,
         posts: [],
       };

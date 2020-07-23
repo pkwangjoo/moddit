@@ -1,6 +1,7 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import io from "socket.io-client";
+import ScrollToBottom, { useScrollToBottom } from "react-scroll-to-bottom";
 
 import {
   getChatMessages,
@@ -9,6 +10,7 @@ import {
 } from "../../actions/chat";
 import Messages from "./Messages/Messages";
 import { Redirect } from "react-router-dom";
+import { clearMPost } from "../../actions/marketplace";
 
 let socket = null;
 const Chat = ({
@@ -18,7 +20,6 @@ const Chat = ({
   getChatMessages,
   udpateChatMessages,
   clearChatMessages,
-  location,
 }) => {
   const [chatMessage, setChatMessage] = useState({
     text: "",
@@ -55,6 +56,19 @@ const Chat = ({
     setChatMessage({ text: "" });
   };
 
+  const Header = () => {
+    return (
+      <div class="ui fluid card">
+        <div class="content">
+          <div class="header">{chatRoom.name}</div>
+          <div class="meta">
+            {chatRoom.private && <span class="category">private</span>}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   if (!auth.isAuthenticated) {
     return <Redirect to="/" />;
   }
@@ -64,11 +78,21 @@ const Chat = ({
   }
   return (
     <div>
-      {chatMessages && (
-        <div>
-          <Messages messages={chatMessages} />
-        </div>
-      )}
+      <Header />
+
+      <div
+        style={{
+          height: "550px",
+          overflow: "scroll",
+          overflow: "hidden",
+        }}
+      >
+        {chatMessages && (
+          <div>
+            <Messages messages={chatMessages} />
+          </div>
+        )}
+      </div>
 
       <form onSubmit={onSubmit}>
         <div class="ui fluid input">

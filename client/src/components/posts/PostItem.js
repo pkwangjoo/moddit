@@ -7,26 +7,23 @@ import { likePost, unlikePost, deletePost } from "../../actions/post";
 
 const PostItem = ({
   auth,
-  post: { _id, text, title, author, date, likes, comments },
+  post: { _id, text, title, author, date, likes, comments, tag },
   likePost,
   unlikePost,
   deletePost,
 }) => {
   const userDidLike = () => {
-    var userExists = false;
+    return likes.some((liker) => liker.user === auth.user._id);
+  };
 
-    for (let i = 0; i < likes.length; i++) {
-      if (likes[i].user === auth.user._id) {
-        userExists = true;
-        break;
-      }
-    }
-
-    return userExists;
+  const cardType = (tag) => {
+    if (tag === "Review" || tag === "Advice")
+      return "ui centered raised fluid orange card";
+    return "ui centered raised fluid card";
   };
 
   return (
-    <div class="ui centered raised fluid card">
+    <div class={cardType(tag)}>
       <div class="content">
         {!auth.loading && auth.user._id === author._id && (
           <div class="right floated meta">
@@ -34,7 +31,7 @@ const PostItem = ({
               onClick={() => deletePost(_id)}
               class="mini ui red basic button"
             >
-              delete
+              -
             </button>
           </div>
         )}
@@ -42,39 +39,39 @@ const PostItem = ({
         <div class="header">{title} </div>
         <div class="meta">
           <Moment format="DD/MM/YY">{date}</Moment>
+          <span className="category">{tag}</span>
         </div>
         <div class="description">
           <p>{text}</p>
         </div>
       </div>
       <div class="extra content">
-        <div className="ui right labeled button">
-          <button
-            onClick={() => likePost(_id)}
-            type="button"
-            className={userDidLike() ? "ui red button" : "ui button"}
-          >
-            {" "}
-            {console.log(userDidLike())}
-            <i aria-hidden="true" class="heart icon"></i>
-            Like
-          </button>
-          <a class="ui left pointing basic label">{likes.length}</a>
-        </div>
-        <button className="ui button" onClick={() => unlikePost(_id)}>
-          unlike
-        </button>
-        <div className="ui right labeled button">
-          <Link to={`/posts/${_id}`} className="ui icon button">
-            <i aria-hidden="true" class="heart icon"></i>
-            Discussions
+        <span style={{ paddingRight: "10px" }}>
+          <i
+            onClick={
+              userDidLike() ? () => unlikePost(_id) : () => likePost(_id)
+            }
+            className={
+              userDidLike() ? "heart red like icon" : "heard outline like icon"
+            }
+          ></i>{" "}
+          {likes.length} likes
+        </span>
+
+        <span>
+          <Link to={`/posts/${_id}`}>
+            {"  "}
+            <i aria-hidden="true" class="comment outline icon"></i>
+            {comments.length} comments
           </Link>
-          <a class="ui left pointing basic label">{comments.length}</a>
+        </span>
+
+        <div className="right floated author">
+          <img class="ui tiny avatar image" src={author.avatar} />
+          <Link to={`/dashboard/${author._id}`}>{author && author.name}</Link>
         </div>
-        <Link to={`/dashboard/${author._id}`} class="right floated author">
-          {author && author.name}
-        </Link>
       </div>
+      <p></p>
     </div>
   );
 };
