@@ -11,19 +11,15 @@ const Grid = require("gridfs-stream");
 const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
-
 const Marketplace = require("../../models/Marketplace");
 const Comment = require("../../models/Comment");
 const Leaderboard = require("../../models/Leaderboard");
-const File = require('../../models/File');
-
+// const File = require('../../models/File');
 // const methodOverride = require('method-override');
 const db = require("../../config/default.json");
 const mongoURI = db.mongoURI;
-
-const { check, validationResult } = require('express-validator');
-const { timeStamp } = require('console');
-
+const { check, validationResult } = require("express-validator");
+const { disconnect } = require("process");
 
 // Create Mongo Connection
 const conn = mongoose.createConnection(mongoURI, {
@@ -99,63 +95,36 @@ router.get("/user/:user_id", isLoggedIn, async (req, res) => {
 // @router POST
 // @desc Creates a new marketplace
 router.post(
-
-    '/',
+  "/",
+  [
+    isLoggedIn,
     [
-        isLoggedIn,
-        [
-            check("text", "text is require").not().isEmpty(),
-            check("title", "title is require").not().isEmpty(),
-            check("file", "file is required").not().isEmpty(),
-        ],
-        upload.array('file', 3),
-
+      check("text", "text is require").not().isEmpty(),
+      check("title", "title is require").not().isEmpty(),
+      check("file", "file is required").not().isEmpty(),
     ],
     upload.single("file"),
   ],
 
+  async (req, res) => {
+    try {
+      const { title, text } = req.body;
 
-    async (req, res) => {
-        try {
-            const { title, text } = req.body;
+      let newMarketplace = new Marketplace({
+        title: title,
+        text: text,
+        file: req.file.filename,
+        filename: req.file.originalname,
+        author: req.user.id,
+      });
 
-            var fileArray = [];
+      let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { marketplace: 1, points: 10 } }, { new: true, upsert: true });
 
-            
-            let newMarketplace = new Marketplace({
-                title: title,
-                text: text,
-                files: [],
-                author: req.user.id,
-            });
-
-            // await newMarketplace.save();
-
-            req.files.forEach(async function (item, index) {
-                try {
-                    let newFile = new File({
-                        file: item.filename,
-                        filename: item.originalname,
-                    });
-
-                    newMarketplace.files.push(newFile);
-                    await newFile.save();
-                } catch (err) {
-                    console.log(err.message);
-                    res.status(500).send('Server Error');
-                }
-            });
-            
-
-            // newMarketplace.files.push(fileArray);
-
-            await newMarketplace.save();
-            res.json(newMarketplace);
-        } catch (err) {
-            console.log(err.message, 'hello');
-            res.status(500).send('Server Error');
-        }
-
+      await newMarketplace.save();
+      res.json(newMarketplace);
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send("Server Error");
     }
   }
 );
@@ -190,21 +159,9 @@ router.post(
 
 //@router DELETE
 //@desc Deletes a marketplace
-
-router.delete('/:marketplace_id', async (req, res) => {
-    try {
-        const marketplace = await Marketplace.findById(req.params.marketplace_id);
-
-        gfs.remove({_id: req.params.marketplace_id, root: 'uploads'}, function(err) {
-            if (err) {
-                return res.status(500).send('Server Error')
-            }
-        })
-
-        if (!marketplace.author._id === req.user.id) {
-            return res.status(401).send('Not allowed to delete');
-        }
-
+router.delete("/:marketplace_id", isLoggedIn, async (req, res) => {
+  try {
+    const marketplace = await Marketplace.findById(req.params.marketplace_id);
 
     if (!marketplace.author._id === req.user.id) {
       return res.status(401).send("Not allowed to delete");
@@ -243,7 +200,6 @@ router.put("/:marketplace_id/like", isLoggedIn, async (req, res) => {
 
 //@router PUT
 //@desc Removes likes from a marketplace
-
 router.put("/:marketplace_id/unlike", isLoggedIn, async (req, res) => {
   try {
     const marketplace = await Marketplace.findById(req.params.marketplace_id);
@@ -303,7 +259,6 @@ router.post(
   ],
 
   async (req, res) => {
-
     try {
       const { title, text, tag } = req.body;
 
@@ -353,29 +308,6 @@ router.get("/forum/:forum_id", isLoggedIn, async (req, res) => {
 /**
  * Gets marketplace by tags
  */
-
-
-router.get('/:marketplace_id', (req, res) => {
-    gfs.files.findOne({ filename: req.params.marketplace_id }, (err, file) => {
-        if (!file || file.length === 0) {
-            return res.status(404).json('File does not exists');
-        };
-        return res.json(file);
-    });
-});
-
-router.get('/:marketplace_id/download', (req, res) => {
-    // Check file exists on DB
-    var filename = req.params.marketplace_id;
-    gfs.files.findOne({ filename: filename }, (err, file) => {
-        if (!file || file.length === 0) {
-            return res.status(404).send('File Not Found');
-        }
-        var readstream = gfs.createReadStream({ filename: filename });
-        readstream.pipe(res);
-    });
-});
-
 
 router.get("/tag/:tag_name", isLoggedIn, async (req, res) => {
   try {
@@ -458,6 +390,5 @@ router.get("/:marketplace_id/comments", isLoggedIn, async (req, res) => {
     res.status(500).send("server error");
   }
 });
-
 
 module.exports = router;

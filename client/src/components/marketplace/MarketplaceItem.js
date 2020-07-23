@@ -4,18 +4,6 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Moment from "react-moment";
 import axios from "axios";
-
-import FileSaver from 'file-saver';
-import FileList from './FileList';
-// import { likePost, unlikePost, deletePost } from "../../actions/post";
-
-const MarketplaceItem = ({
-    auth,
-    marketplace: { _id, text, title, author, date, likes, files /*, filename*/ },
-    //   likePost,
-    //   unlikePost,
-    //   deletePost,
-
 import FileSaver from "file-saver";
 import { likeMPost, unlikeMPost, deleteMPost } from "../../actions/marketplace";
 
@@ -36,11 +24,9 @@ const MarketplaceItem = ({
   likeMPost,
   unlikeMPost,
   deleteMPost,
-
 }) => {
   const fileType = (filename) => {
     const type = filename.slice(-4);
-
 
     switch (type) {
       case ".pdf":
@@ -111,7 +97,6 @@ const MarketplaceItem = ({
             </button>
           </div>
         </div>
-
 
         <div class="extra content">
           <span style={{ paddingRight: "10px" }}>
