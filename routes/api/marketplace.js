@@ -99,7 +99,7 @@ router.get("/user/:user_id", isLoggedIn, async (req, res) => {
 // @router POST
 // @desc Creates a new marketplace
 router.post(
-
+    [
     '/',
     [
         isLoggedIn,
@@ -157,7 +157,6 @@ router.post(
         }
 
     }
-  }
 );
 
 // @route POST
