@@ -45,17 +45,16 @@ const marketplaceSchema = new mongoose.Schema({
     ref: "Forum",
   },
 
-
-  files: [
-    {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "File",
-    autopopulate: true,
-
+  file: {
+    type: String,
+    // ref: 'upload.files',
+    required: true,
   },
-],
 
-
+  filename: {
+    type: String,
+    required: true,
+  },
 
   tag: {
     type: String,

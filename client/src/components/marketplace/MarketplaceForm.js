@@ -22,16 +22,14 @@ const MarketplaceForm = ({ createMarketplace, history }) => {
     }
 
     const onFileChange = (e) => {
-        setFile( e.target.files );
+        setFile( e.target.files[0] );
     }
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        for (var x=0; x<selectedFile.length;x++) {
-            fileData.append('file', selectedFile[x]);
-        }
         fileData.append('text', text);
         fileData.append('title', title);
+        fileData.append('file', selectedFile);
         createMarketplace(fileData, history);
 
 
@@ -54,7 +52,7 @@ const MarketplaceForm = ({ createMarketplace, history }) => {
                     <textarea onChange={onChange} name="text" value={text}></textarea>
                 </div>
                 <div className="custom-file mb-4">
-                    <input type='file' className="custom-file-input" name='file' onChange={onFileChange} multiple />
+                    <input type='file' className="custom-file-input" name='file' onChange={onFileChange}/>
                     <label className="custom-file-label" htmlFor="customFile">
                     </label>
                 </div>
