@@ -4,6 +4,7 @@ const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Comment = require("../../models/Comment");
+const Leaderboard = require("../../models/Leaderboard");
 const { check, validationResult } = require("express-validator");
 
 /**
@@ -128,6 +129,8 @@ router.delete("/:post_id", isLoggedIn, async (req, res) => {
     if (!post.author._id === req.user.id) {
       return res.status(401).send("not allowed to delete");
     }
+
+    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { posts: -1, points: -5 } }, { new: true, upsert: true });
 
     await post.remove();
     res.json({ msg: "post was deleted" });
@@ -268,6 +271,8 @@ router.post(
         populate: { path: "author" },
       });
 
+    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { comments: 1, points: 1 } }, { new: true, upsert: true });
+
       await post.save();
       post.comments.sort();
       res.json(post.comments);
@@ -342,7 +347,11 @@ router.post(
         tag: tag,
       });
 
+
+    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { posts: 1, points: 5 } }, { new: true, upsert: true });
+
       console.log(newPost);
+
 
       await newPost.save();
 

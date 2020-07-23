@@ -23,6 +23,7 @@ app.use("/api/listing", require("./routes/api/listing"));
 app.use("/api/dashboard", require("./routes/api/dashboard"));
 app.use("/api/marketplace", require("./routes/api/marketplace"));
 app.use("/api/module", require("./routes/api/module"));
+app.use("/api/leaderboard", require("./routes/api/leaderboard"));
 
 app.get("/", (req, res) => {
   res.send("API running");

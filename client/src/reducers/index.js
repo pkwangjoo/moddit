@@ -10,7 +10,11 @@ import listing from "./listing";
 import user from "./user";
 import marketplace from "./marketplace";
 import module from "./module";
+
+import leaderboard from "./leaderboard";
+
 import alert from "./alert";
+
 
 export default combineReducers({
   auth,
@@ -24,5 +28,9 @@ export default combineReducers({
   user,
   marketplace,
   module,
+
+  leaderboard,
+
   alert,
+
 });
