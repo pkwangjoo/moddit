@@ -174,4 +174,41 @@ router.get("/:user_id/modules", isLoggedIn, async (req, res) => {
   }
 });
 
+router.get("/:user_id/completedModules", isLoggedIn, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.params.user_id });
+
+    if (!profile) {
+      return res.status(400).send("no such profile");
+    }
+
+    res.json(profile.completedModules);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+router.post("/modules/:module_id/completed", isLoggedIn, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    const module = await Module.findById(req.params.module_id);
+
+    profile.modules = profile.modules.filter(
+      (mod) => !mod._id.equals(req.params.module_id)
+    );
+
+    !profile.completedModules.some((mod) =>
+      mod._id.equals(req.params.module_id)
+    ) && profile.completedModules.push(module);
+
+    await profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
+
 module.exports = router;

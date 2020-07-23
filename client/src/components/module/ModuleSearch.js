@@ -38,18 +38,20 @@ const ModuleSearch = ({
     await axios.post(`/api/profile/modules/${module._id}`);
   };
 
-  const addedModule = (module_id) => {
-    const foundProfile = profile;
-    var moduleExists = false;
+  /**
+   * To check whether the module has been completed
+   */
 
-    for (let i = 0; i < foundProfile.modules.length; i++) {
-      if (foundProfile.modules[i]._id === module_id) {
-        moduleExists = true;
-        break;
-      }
-    }
+  const hasCompleted = (module_id) => {
+    return profile.completedModules.some((mod) => mod._id === module_id);
+  };
 
-    return moduleExists;
+  /**
+   * To check whether the user is taking the module currently
+   */
+
+  const hasTaken = (module_id) => {
+    return profile.completedModules.some((mod) => mod._id === module_id);
   };
 
   const FoundModule = () => {
@@ -71,7 +73,8 @@ const ModuleSearch = ({
               Go to Forum
             </Link>
 
-            {!addedModule(module._id) && addModuleClick ? (
+            {!(hasCompleted(module._id) || hasTaken(module._id)) &&
+            addModuleClick ? (
               <button onClick={addModule} className="ui button basic primary">
                 Add to modules
               </button>
@@ -88,8 +91,8 @@ const ModuleSearch = ({
   const { modCode } = modData;
   return (
     <Fragment>
-      <form onSubmit={onSubmit}>
-        <div class="ui fluid icon input">
+      <form className="ui fluid form" onSubmit={onSubmit}>
+        {/* <div class="ui fluid icon input">
           <input
             type="text"
             name="modCode"
@@ -97,7 +100,22 @@ const ModuleSearch = ({
             onChange={onChange}
             placeholder="Search for a module"
           />
+          <div class="ui pointing label">Please enter a value</div>
           <i type="submit" class="search icon"></i>
+        </div> */}
+        <div class="field">
+          <input
+            type="text"
+            name="modCode"
+            value={modCode}
+            onChange={onChange}
+            placeholder="Search for a module"
+          />
+          {modData.modCode === "" && (
+            <div class="ui pointing label">
+              Please enter the module code and press "Enter"
+            </div>
+          )}
         </div>
       </form>
       {!loading &&

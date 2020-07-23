@@ -201,6 +201,29 @@ export const getMarketplacesByUser = (user_id) => async (dispatch) => {
   }
 };
 
+export const getMarketplacesByTag = (tagName) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/marketplace/tag/${tagName}`);
+
+    dispatch({
+      type: "GET_MARKETPLACES",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "MARKETPLACE_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const updateMPosts = (marketplaces) => (dispatch) => {
+  dispatch({
+    type: "GET_MARKETPLACES",
+    payload: marketplaces,
+  });
+};
+
 export const clearMPost = () => (dispatch) => {
   dispatch({
     type: "CLEAR_MARKETPLACE",

@@ -61,7 +61,7 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { title, text, limit } = req.body;
+      const { title, text, limit, tag } = req.body;
 
       let newListing = new Listing({
         title: title,
@@ -69,6 +69,7 @@ router.post(
         author: req.user.id,
         forum: req.params.forum_id,
         limit: limit,
+        tag: tag,
       });
 
       await newListing.save();
@@ -161,6 +162,17 @@ router.get("/user/:user_id", isLoggedIn, async (req, res) => {
     res.json(listings);
   } catch (err) {
     console.log(err.message);
+    res.status(500).send("server error");
+  }
+});
+
+router.get("/tag/:tag_name", isLoggedIn, async (req, res) => {
+  try {
+    const listings = await Listing.find({ tag: req.params.tag_name });
+
+    res.json(listings);
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send("server error");
   }
 });
