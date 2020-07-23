@@ -16,15 +16,31 @@ const DiscussionBadge = ({
       <div class="content">
         <div class="description">
             {discussionBadge && (
-                <p>
-                    Top Discussor!
-                </p>
+                <div>
+                <img 
+                src={require("../img/discussor.png")}
+                alt="Discussion Badge"
+                width="100"
+                height="100"
+                />
+              <span>
+                Top Discussor!
+              </span>
+              </div>
             )}
 
             {!discussionBadge && (
-                <p>
-                    Contribute at least 50 posts to earn the Discussion Badge!
-                </p>
+                <div>
+                <img 
+                src={require("../img/cross.png")}
+                alt="No Badge"
+                width="100"
+                height="100"
+                />
+              <span>
+              Make 500 discussions to earn the Discussor Badge!
+              </span>
+              </div>
             )}
         </div>
       </div>

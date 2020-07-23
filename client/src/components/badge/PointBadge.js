@@ -16,15 +16,31 @@ const PointBadge = ({
       <div class="content">
         <div class="description">
             {pointsBadge && (
-                <p>
-                    Top Contributor!
-                </p>
+                <div>
+                <img 
+                src={require("../img/contributor.png")}
+                alt="Points Badge"
+                width="100"
+                height="100"
+                />
+              <span>
+                Top Contributor!
+              </span>
+              </div>
             )}
 
             {!pointsBadge && (
-              <p>
-                Earn at least 500 points to earn the Points Badge!
-              </p>
+               <div>
+               <img 
+               src={require("../img/cross.png")}
+               alt="No Badge"
+               width="100"
+               height="100"
+               />
+             <span>
+              Earn at least 500 points to earn the Point Badge!
+             </span>
+             </div>
             )}
         </div>
       </div>

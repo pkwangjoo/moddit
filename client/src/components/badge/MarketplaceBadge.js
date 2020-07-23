@@ -16,15 +16,31 @@ const MarketplaceBadge = ({
       <div class="content">
         <div class="description">
             {marketplaceBadge && (
-                <p>
-                    Top Sharer!
-                </p>
+                <div>
+                <img 
+                src={require("../img/sharer.png")}
+                alt="Comment Badge"
+                width="100"
+                height="100"
+                />
+              <span>
+                Top Sharer!
+              </span>
+              </div>
             )}
 
             {!marketplaceBadge && (
-                <p>
-                    Contribute at least 50 marketplaces to earn the Marketplace badge!
-                </p>
+              <div>
+              <img 
+              src={require("../img/cross.png")}
+              alt="No Badge"
+              width="100"
+              height="100"
+              />
+            <span>
+            Share 50 marketplaces to earn the Marketplace badge!
+            </span>
+            </div>
             )}
         </div>
       </div>
