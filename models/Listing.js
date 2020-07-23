@@ -39,6 +39,9 @@ const listingSchema = new mongoose.Schema({
   limit: {
     type: Number,
   },
+  tag: {
+    type: String,
+  },
 });
 
 listingSchema.plugin(require("mongoose-autopopulate"));

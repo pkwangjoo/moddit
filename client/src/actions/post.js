@@ -202,6 +202,29 @@ export const createForumPost = (forum_id, formData, history) => async (
   }
 };
 
+export const getPostsByTag = (tagName) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/posts/tag/${tagName}`);
+
+    dispatch({
+      type: "GET_POSTS",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "POST_ERROR",
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const updatePosts = (posts) => (dispatch) => {
+  dispatch({
+    type: "GET_POSTS",
+    payload: posts,
+  });
+};
+
 export const clearPosts = () => (dispatch) => {
   dispatch({
     type: "CLEAR_POSTS",

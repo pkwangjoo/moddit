@@ -7,6 +7,7 @@ import { getModules, getCompletedModules } from "../../actions/module";
 const ModuleList = ({
   userID,
   module: { modules, loading },
+  auth,
   profile: { profile },
   getCompletedModules,
   getModules,
@@ -54,7 +55,7 @@ const ModuleList = ({
         </a>
       </div>
       {modules.map((mod) => (
-        <ModuleItem key={mod._id} module={mod} profile={profile} />
+        <ModuleItem key={mod._id} module={mod} profile={profile} auth={auth} />
       ))}
     </Fragment>
   );
@@ -63,6 +64,7 @@ const ModuleList = ({
 const mapStateToProps = (state) => ({
   module: state.module,
   profile: state.profile,
+  auth: state.auth,
 });
 export default connect(mapStateToProps, { getModules, getCompletedModules })(
   ModuleList

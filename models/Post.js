@@ -30,6 +30,7 @@ const postSchema = new mongoose.Schema({
       autopopulate: true,
     },
   ],
+
   date: {
     type: Date,
     default: Date.now,
@@ -37,6 +38,9 @@ const postSchema = new mongoose.Schema({
   forum: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Forum",
+  },
+  tag: {
+    type: String,
   },
 });
 

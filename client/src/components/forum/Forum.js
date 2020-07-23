@@ -66,6 +66,7 @@ const Forum = ({
             </a>
           </div>
         </div>
+
         {forumState.posts && <ForumPostList forumID={match.params.forum_id} />}
         {forumState.listings && <ListingList forumID={match.params.forum_id} />}
         {forumState.marketplace && (

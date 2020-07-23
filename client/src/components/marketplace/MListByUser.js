@@ -10,7 +10,7 @@ const MListByUser = ({
 }) => {
   useEffect(() => {
     getMarketplacesByUser(userID);
-  });
+  }, []);
   return (
     <Fragment>
       {!loading && (

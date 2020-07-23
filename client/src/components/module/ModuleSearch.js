@@ -91,8 +91,8 @@ const ModuleSearch = ({
   const { modCode } = modData;
   return (
     <Fragment>
-      <form onSubmit={onSubmit}>
-        <div class="ui fluid icon input">
+      <form className="ui fluid form" onSubmit={onSubmit}>
+        {/* <div class="ui fluid icon input">
           <input
             type="text"
             name="modCode"
@@ -100,7 +100,22 @@ const ModuleSearch = ({
             onChange={onChange}
             placeholder="Search for a module"
           />
+          <div class="ui pointing label">Please enter a value</div>
           <i type="submit" class="search icon"></i>
+        </div> */}
+        <div class="field">
+          <input
+            type="text"
+            name="modCode"
+            value={modCode}
+            onChange={onChange}
+            placeholder="Search for a module"
+          />
+          {modData.modCode === "" && (
+            <div class="ui pointing label">
+              Please enter the module code and press "Enter"
+            </div>
+          )}
         </div>
       </form>
       {!loading &&
