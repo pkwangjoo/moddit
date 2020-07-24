@@ -47,9 +47,8 @@ function App() {
       <Router>
         <Fragment>
           <Navbar />
-
+          <Route exact path="/" component={Main} />
           <div className="ui main text container">
-            <Route exact path="/" component={Main} />
             <Alert />
             <Switch>
               <Route exact path="/login" component={Login} />
