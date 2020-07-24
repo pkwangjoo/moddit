@@ -20,14 +20,14 @@ const BadgeList = ({
       {!loading && (
         <div>
             <PointBadge
-                key={leaderboard._id}
+                // key={leaderboard._id}
                 leaderboard={leaderboard}
             />
 
             <div class="ui divider"></div>
             
             <DiscussionBadge
-                key={leaderboard._id}
+                // key={leaderboard._id}
                 leaderboard={leaderboard}
             />
 
@@ -35,14 +35,14 @@ const BadgeList = ({
 
             
             <MarketplaceBadge
-                key={leaderboard._id}
+                // key={leaderboard._id}
                 leaderboard={leaderboard}
             />
             
             <div class="ui divider"></div>
 
             <CommentBadge
-                key={leaderboard._id}
+                // key={leaderboard._id}
                 leaderboard={leaderboard}
             />
         </div>
