@@ -50,6 +50,8 @@ export const register = ({ name, email, password }) => async (dispatch) => {
       type: "REGISTER_FAIL",
     });
 
+    console.log(errors[0]);
+
     errors.map((err) => dispatch(addAlert(err.msg, "negative")));
   }
 };

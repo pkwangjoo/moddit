@@ -59,9 +59,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
               <li>
                 <Link to="/forums">Forum</Link>
               </li>
-              {/* <li>
-                <Link to="/chat/join">Chat</Link>
-              </li> */}
+
               <li>
                 <Link to="/users">Users</Link>
               </li>
