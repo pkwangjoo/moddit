@@ -2,6 +2,8 @@
 
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
+// import { v4 as uuid } from "uuid";
+import { addAlert } from "./alert";
 
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
@@ -37,15 +39,18 @@ export const register = ({ name, email, password }) => async (dispatch) => {
       type: "REGISTER_SUCCESS",
       payload: res.data, // the token
     });
+
     dispatch(loadUser());
+
+    dispatch(addAlert("User Successfully registered", "success"));
   } catch (err) {
     const errors = err.response.data.errors;
-
-    console.log(errors);
 
     dispatch({
       type: "REGISTER_FAIL",
     });
+
+    errors.map((err) => dispatch(addAlert(err.msg, "negative")));
   }
 };
 
@@ -67,14 +72,15 @@ export const login = (email, password) => async (dispatch) => {
     });
 
     dispatch(loadUser());
+    dispatch(addAlert("User successfully logged in", "success"));
   } catch (err) {
     const errors = err.response.data.errors;
-
-    console.log(errors);
 
     dispatch({
       type: "LOGIN_FAIL",
     });
+
+    errors.map((err) => dispatch(addAlert(err.msg, "negative")));
   }
 };
 
@@ -82,4 +88,5 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   dispatch({ type: "LOGOUT" });
   dispatch({ type: "CLEAR_PROFILE" });
+  dispatch(addAlert("Logged out", "info"));
 };

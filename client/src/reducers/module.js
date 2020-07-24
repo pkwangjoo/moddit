@@ -20,6 +20,9 @@ export default (state = initialState, action) => {
     case "MODULE_ERROR":
       return { ...state, error: payload, loading: false };
 
+    case "CLEAR_MODULE":
+      return { ...state, module: null, loading: false };
+
     default:
       return state;
   }

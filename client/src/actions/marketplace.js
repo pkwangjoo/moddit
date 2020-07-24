@@ -1,4 +1,5 @@
 import axios from "axios";
+import { addAlert } from "./alert";
 
 export const getMarketplaces = () => async (dispatch) => {
   try {
@@ -86,6 +87,12 @@ export const createForumMarketplace = (forum_id, formData, history) => async (
       type: "MARKETPLACE_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },
     });
+
+    const errors = err.response.data.errors;
+
+    console.log(errors);
+
+    errors.map((err) => dispatch(addAlert(err.msg, "negative")));
   }
 };
 

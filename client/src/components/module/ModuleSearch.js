@@ -1,13 +1,14 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { getModule } from "../../actions/module";
+import { getModule, clearModule } from "../../actions/module";
 import { getLoggedProfile } from "../../actions/profile";
 import axios from "axios";
 
 const ModuleSearch = ({
   getModule,
   getLoggedProfile,
+  clearModule,
   module: { module, loading },
   profile: { profile },
 }) => {
@@ -26,6 +27,7 @@ const ModuleSearch = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
+    clearModule();
     getModule(modData);
     setModData({
       modCode: "",
@@ -51,7 +53,7 @@ const ModuleSearch = ({
    */
 
   const hasTaken = (module_id) => {
-    return profile.completedModules.some((mod) => mod._id === module_id);
+    return profile.modules.some((mod) => mod._id === module_id);
   };
 
   const FoundModule = () => {
@@ -90,7 +92,7 @@ const ModuleSearch = ({
 
   const { modCode } = modData;
   return (
-    <Fragment>
+    <div style={{ marginTop: "15px" }}>
       <form className="ui fluid form" onSubmit={onSubmit}>
         {/* <div class="ui fluid icon input">
           <input
@@ -118,10 +120,8 @@ const ModuleSearch = ({
           )}
         </div>
       </form>
-      {!loading &&
-        profile !== null &&
-        (module !== null ? <FoundModule /> : <ModuleNotFound />)}
-    </Fragment>
+      {!loading && profile !== null && module !== null && <FoundModule />}
+    </div>
   );
 };
 
@@ -130,6 +130,8 @@ const mapStateToProps = (state) => ({
   profile: state.profile,
 });
 
-export default connect(mapStateToProps, { getModule, getLoggedProfile })(
-  ModuleSearch
-);
+export default connect(mapStateToProps, {
+  getModule,
+  getLoggedProfile,
+  clearModule,
+})(ModuleSearch);

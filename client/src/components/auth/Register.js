@@ -55,6 +55,9 @@ const Register = ({ register, isAuthenticated }) => {
             value={password}
             onChange={onChange}
           />
+          <div className="ui pointing label">
+            Password must be 6 characters or longer
+          </div>
         </div>
 
         <input type="submit" className="ui button" value="Register" />
