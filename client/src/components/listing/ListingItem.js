@@ -15,6 +15,12 @@ const ListingItem = ({
     addParticipant(_id);
     history.push(`/listing/${_id}`);
   };
+
+  const userInListing = () => {
+    return participants.some(
+      (participant) => participant._id === auth.user._id
+    );
+  };
   return (
     <div class="ui centered raised fluid card">
       <div class="content">
@@ -43,7 +49,7 @@ const ListingItem = ({
           <i class="users icon"></i> {participants.length} / {limit} Members
         </a>
         {"  "}
-        {participants.length < limit ? (
+        {participants.length < limit || userInListing() ? (
           <button onClick={handleClick} class="ui basic green button">
             Participate
           </button>

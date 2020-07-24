@@ -12,7 +12,7 @@ const axios = require("axios");
 
 router.post(
   "/",
-  [check("modCode", "modCode is required").not().isEmpty()],
+  [check("modCode", "Please type in your module code").not().isEmpty()],
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -25,6 +25,7 @@ router.post(
       const Url = `https://api.nusmods.com/v2/2018-2019/modules/${moduleCode}.json`;
 
       const response = await axios.get(Url);
+
       const data = response.data;
 
       const moduleInDatabase = await Module.exists({
@@ -34,6 +35,7 @@ router.post(
       if (moduleInDatabase) {
         console.log("this module was created before");
         const module = await Module.findOne({ moduleCode: data.moduleCode });
+
         return res.json(module);
       }
 
@@ -51,9 +53,11 @@ router.post(
 
       await newModule.save();
 
+      console.log(newModule);
+
       res.json(newModule);
     } catch (err) {
-      res.status(500).send("server error");
+      res.status(500).json({ errors: [{ msg: "module is not found!" }] });
     }
   }
 );

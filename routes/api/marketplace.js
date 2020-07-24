@@ -118,7 +118,11 @@ router.post(
         author: req.user.id,
       });
 
-      let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { marketplace: 1, points: 10 } }, { new: true, upsert: true });
+      let newLeaderboard = await Leaderboard.findOneAndUpdate(
+        { author: req.user.id },
+        { $inc: { marketplace: 1, points: 10 } },
+        { new: true, upsert: true }
+      );
 
       req.files.forEach(async function(item, index) {
         try {
@@ -145,34 +149,6 @@ router.post(
   }
 );
 
-// @route POST
-// @desc Uploads file to DB
-// router.post('/upload', upload.single('file'), (req, res) => {
-//     res.json({ file: req.file });
-//     res.redirect('/');
-// });
-
-// router.post('/upload', (req, res) => {
-//     req.pipe(gfs.createWriteStream({
-//         filename: req.body.name
-//     }).once('close', function(savedFile) {
-//         console.log('File Saved', savedFile);
-//         console.log(savedFile);
-//         return res.json({ file: savedFile })
-//     }));
-// });
-
-// router.get('/', (req, res) => {
-//     gfs.files.find().toArray((err, files) => {
-//         // Check if files exist
-//         if (!files || files.length === 0) {
-//             return res.status(404).json('Files do not exist');
-//         };
-//         return res.json(files);
-//     });
-
-// });
-
 //@router DELETE
 //@desc Deletes a marketplace
 router.delete("/:marketplace_id", isLoggedIn, async (req, res) => {
@@ -189,7 +165,11 @@ router.delete("/:marketplace_id", isLoggedIn, async (req, res) => {
       return res.status(401).send("Not allowed to delete");
     }
 
-    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { posts: -1, points: -10 } }, { new: true, upsert: true });
+    let newLeaderboard = await Leaderboard.findOneAndUpdate(
+      { author: req.user.id },
+      { $inc: { posts: -1, points: -10 } },
+      { new: true, upsert: true }
+    );
 
     await marketplace.remove();
     res.json({ msg: "Post was deleted" });
@@ -282,6 +262,11 @@ router.post(
 
   async (req, res) => {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
       const { title, text, tag } = req.body;
 
       let newMarketplace = new Marketplace({
@@ -293,7 +278,11 @@ router.post(
         tag: tag,
       });
 
-      let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { marketplace: 1, points: 10 } }, { new: true, upsert: true });
+      let newLeaderboard = await Leaderboard.findOneAndUpdate(
+        { author: req.user.id },
+        { $inc: { marketplace: 1, points: 10 } },
+        { new: true, upsert: true }
+      );
 
       req.files.forEach(async function(item, index) {
         try {
@@ -312,7 +301,6 @@ router.post(
         }
       })
 
-      console.log("Marketplace");
 
       await newMarketplace.save();
 
@@ -401,7 +389,11 @@ router.post(
 
       marketplace.comments.push(newComment);
 
-    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { comments: 1, points: 1 } }, { new: true, upsert: true });
+      let newLeaderboard = await Leaderboard.findOneAndUpdate(
+        { author: req.user.id },
+        { $inc: { comments: 1, points: 1 } },
+        { new: true, upsert: true }
+      );
 
       await marketplace.save();
 

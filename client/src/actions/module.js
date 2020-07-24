@@ -1,4 +1,5 @@
 import axios from "axios";
+import { addAlert } from "./alert";
 
 export const getModule = (modData) => async (dispatch) => {
   try {
@@ -19,6 +20,9 @@ export const getModule = (modData) => async (dispatch) => {
       type: "MODULE_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },
     });
+    const errors = err.response.data.errors;
+
+    errors.map((err) => dispatch(addAlert(err.msg, "negative")));
   }
 };
 
@@ -52,4 +56,10 @@ export const getCompletedModules = (user_id) => async (dispatch) => {
       payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
+};
+
+export const clearModule = () => (dispatch) => {
+  dispatch({
+    type: "CLEAR_MODULE",
+  });
 };
