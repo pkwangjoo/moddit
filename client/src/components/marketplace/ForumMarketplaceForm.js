@@ -25,15 +25,17 @@ const ForumMarketplaceForm = ({ createForumMarketplace, history, match }) => {
   };
 
   const onFileChange = (e) => {
-    setFile(e.target.files[0]);
+    setFile(e.target.files);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    for (var x = 0; x < selectedFile.length; x++) {
+      fileData.append('file', selectedFile[x]);
+    }
     fileData.append("text", text);
     fileData.append("title", title);
     fileData.append("tag", tag);
-    fileData.append("file", selectedFile);
 
     createForumMarketplace(forumID, fileData, history);
   };
@@ -77,6 +79,7 @@ const ForumMarketplaceForm = ({ createForumMarketplace, history, match }) => {
             className="custom-file-input"
             name="file"
             onChange={onFileChange}
+            multiple
           />
           <label className="custom-file-label" htmlFor="customFile"></label>
         </div>

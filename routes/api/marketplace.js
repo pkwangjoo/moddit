@@ -12,6 +12,7 @@ const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Marketplace = require("../../models/Marketplace");
+const File = require('../../models/File');
 const Comment = require("../../models/Comment");
 const Leaderboard = require("../../models/Leaderboard");
 // const File = require('../../models/File');
@@ -19,7 +20,7 @@ const Leaderboard = require("../../models/Leaderboard");
 const db = require("../../config/default.json");
 const mongoURI = db.mongoURI;
 const { check, validationResult } = require("express-validator");
-const { disconnect } = require("process");
+const { disconnect, send } = require("process");
 
 // Create Mongo Connection
 const conn = mongoose.createConnection(mongoURI, {
@@ -103,7 +104,7 @@ router.post(
       check("title", "title is require").not().isEmpty(),
       check("file", "file is required").not().isEmpty(),
     ],
-    upload.single("file"),
+    upload.array("file",3),
   ],
 
   async (req, res) => {
@@ -113,12 +114,27 @@ router.post(
       let newMarketplace = new Marketplace({
         title: title,
         text: text,
-        file: req.file.filename,
-        filename: req.file.originalname,
+        files: [],
         author: req.user.id,
       });
 
       let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { marketplace: 1, points: 10 } }, { new: true, upsert: true });
+
+      req.files.forEach(async function(item, index) {
+        try {
+          let newFile = new File({
+            file: item.filename,
+            filename: item.originalname,
+          });
+
+          newMarketplace.files.push(newFile)
+          await newFile.save();
+
+        } catch (err) {
+          console.log(err.message);
+          res.status(500).send('Server Error');
+        }
+      })
 
       await newMarketplace.save();
       res.json(newMarketplace);
@@ -162,6 +178,12 @@ router.post(
 router.delete("/:marketplace_id", isLoggedIn, async (req, res) => {
   try {
     const marketplace = await Marketplace.findById(req.params.marketplace_id);
+
+    gfs.remove({ _id: req.params.marketplace_id, root:'uploads'}, function(err) {
+      if (err) {
+        return res.status(500).send('Server Error');
+      }
+    });
 
     if (!marketplace.author._id === req.user.id) {
       return res.status(401).send("Not allowed to delete");
@@ -255,7 +277,7 @@ router.post(
       check("title", "title is require").not().isEmpty(),
       check("file", "file is required").not().isEmpty(),
     ],
-    upload.single("file"),
+    upload.any("file"),
   ],
 
   async (req, res) => {
@@ -265,8 +287,7 @@ router.post(
       let newMarketplace = new Marketplace({
         title: title,
         text: text,
-        file: req.file.filename,
-        filename: req.file.originalname,
+        files: [],
         author: req.user.id,
         forum: req.params.forum_id,
         tag: tag,
@@ -274,13 +295,30 @@ router.post(
 
       let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { marketplace: 1, points: 10 } }, { new: true, upsert: true });
 
-      console.log("Marketplace");
+      req.files.forEach(async function(item, index) {
+        try {
+          let newFile = new File({
+            file: item.filename,
+            filename: item.originalname,
+          })
 
+          
+          newMarketplace.files.push(newFile)
+          await newFile.save();
+
+        } catch (err) {
+          console.log(err.message);
+          // res.status(500).send('Server Error');
+        }
+      })
+
+      console.log("Marketplace");
 
       await newMarketplace.save();
 
       console.log(newMarketplace);
       res.json(newMarketplace);
+
     } catch (err) {
       console.log(err.message);
       res.status(500).send("Server Error");
