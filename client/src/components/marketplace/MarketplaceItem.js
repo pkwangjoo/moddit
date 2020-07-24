@@ -6,6 +6,7 @@ import Moment from "react-moment";
 import axios from "axios";
 import FileSaver from "file-saver";
 import { likeMPost, unlikeMPost, deleteMPost } from "../../actions/marketplace";
+import FileList from './FileList';
 
 const MarketplaceItem = ({
   auth,
@@ -16,8 +17,7 @@ const MarketplaceItem = ({
     author,
     date,
     likes,
-    file,
-    filename,
+    files,
     comments,
     tag,
   },
@@ -25,40 +25,41 @@ const MarketplaceItem = ({
   unlikeMPost,
   deleteMPost,
 }) => {
-  const fileType = (filename) => {
-    const type = filename.slice(-4);
 
-    switch (type) {
-      case ".pdf":
-        return "file pdf outline icon";
+  // const fileType = (filename) => {
+  //   const type = filename.slice(-4);
 
-      case "docx" || "docs":
-        return "file word outline icon";
+  //   switch (type) {
+  //     case ".pdf":
+  //       return "file pdf outline icon";
 
-      case ".csv" || "xlsx" || ".xls":
-        return "file excel outline icon";
+  //     case "docx" || "docs":
+  //       return "file word outline icon";
 
-      case ".ppt" || "pptx":
-        return "file powerpoint outline icon";
+  //     case ".csv" || "xlsx" || ".xls":
+  //       return "file excel outline icon";
 
-      default:
-        return "file outline icon";
-    }
-  };
+  //     case ".ppt" || "pptx":
+  //       return "file powerpoint outline icon";
 
-  const downloadFile = async () => {
-    axios({
-      method: "GET",
-      url: `/api/marketplace/${file}/download`,
-      responseType: "blob",
-    })
-      .then((response) => {
-        FileSaver.saveAs(response.data, `${file}`);
-      })
-      .then(() => {
-        console.log("Download Complete");
-      });
-  };
+  //     default:
+  //       return "file outline icon";
+  //   }
+  // };
+
+  // const downloadFile = async () => {
+  //   axios({
+  //     method: "GET",
+  //     url: `/api/marketplace/${file}/download`,
+  //     responseType: "blob",
+  //   })
+  //     .then((response) => {
+  //       FileSaver.saveAs(response.data, `${file}`);
+  //     })
+  //     .then(() => {
+  //       console.log("Download Complete");
+  //     });
+  // };
 
   const userDidLike = () => {
     return likes.some((liker) => liker.user === auth.user._id);
@@ -91,10 +92,10 @@ const MarketplaceItem = ({
           <br></br>
 
           <div class="ui tiny vertical labeled icon buttons">
-            <button class="ui button" onClick={downloadFile}>
-              <i class={filename && fileType(filename)}></i>
-              {filename}
-            </button>
+              {files.map((file) => (
+                <FileList key={file._id} file={file} />
+              ))}
+
           </div>
         </div>
 
