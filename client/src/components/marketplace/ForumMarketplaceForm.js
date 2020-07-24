@@ -1,11 +1,17 @@
 import React, { useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { createForumMarketplace } from "../../actions/marketplace";
+import { addAlert } from "../../actions/alert";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import axios from "axios";
 
-const ForumMarketplaceForm = ({ createForumMarketplace, history, match }) => {
+const ForumMarketplaceForm = ({
+  createForumMarketplace,
+  history,
+  match,
+  addAlert,
+}) => {
   const [formData, setFormData] = useState({
     title: "",
     text: "",
@@ -14,7 +20,7 @@ const ForumMarketplaceForm = ({ createForumMarketplace, history, match }) => {
 
   const forumID = match.params.forum_id;
 
-  const [selectedFile, setFile] = useState(null);
+  const [selectedFile, setFile] = useState([]);
 
   const { title, text, tag } = formData;
 
@@ -28,11 +34,21 @@ const ForumMarketplaceForm = ({ createForumMarketplace, history, match }) => {
     setFile(e.target.files);
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    for (var x = 0; x < selectedFile.length; x++) {
-      fileData.append('file', selectedFile[x]);
+
+    if (title === "" || text === "" || selectedFile === []) {
+      if (title === "") addAlert("title is required", "negative");
+      if (text === "") addAlert("text is required", "negative");
+      if (selectedFile.length <= 0) addAlert("please select files", "negative");
+
+      return;
     }
+
+    for (var x = 0; x < selectedFile.length; x++) {
+      fileData.append("file", selectedFile[x]);
+    }
+
     fileData.append("text", text);
     fileData.append("title", title);
     fileData.append("tag", tag);
@@ -94,6 +110,6 @@ const ForumMarketplaceForm = ({ createForumMarketplace, history, match }) => {
   );
 };
 
-export default connect(null, { createForumMarketplace })(
+export default connect(null, { createForumMarketplace, addAlert })(
   withRouter(ForumMarketplaceForm)
 );

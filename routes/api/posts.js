@@ -130,7 +130,11 @@ router.delete("/:post_id", isLoggedIn, async (req, res) => {
       return res.status(401).send("not allowed to delete");
     }
 
-    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { posts: -1, points: -5 } }, { new: true, upsert: true });
+    let newLeaderboard = await Leaderboard.findOneAndUpdate(
+      { author: req.user.id },
+      { $inc: { posts: -1, points: -5 } },
+      { new: true, upsert: true }
+    );
 
     await post.remove();
     res.json({ msg: "post was deleted" });
@@ -271,7 +275,11 @@ router.post(
         populate: { path: "author" },
       });
 
-    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { comments: 1, points: 1 } }, { new: true, upsert: true });
+      let newLeaderboard = await Leaderboard.findOneAndUpdate(
+        { author: req.user.id },
+        { $inc: { comments: 1, points: 1 } },
+        { new: true, upsert: true }
+      );
 
       await post.save();
       post.comments.sort();
@@ -332,6 +340,7 @@ router.post(
   ],
   async (req, res) => {
     try {
+      console.log(req.body);
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -347,11 +356,13 @@ router.post(
         tag: tag,
       });
 
-
-    let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.user.id }, { $inc: { posts: 1, points: 5 } }, { new: true, upsert: true });
+      let newLeaderboard = await Leaderboard.findOneAndUpdate(
+        { author: req.user.id },
+        { $inc: { posts: 1, points: 5 } },
+        { new: true, upsert: true }
+      );
 
       console.log(newPost);
-
 
       await newPost.save();
 

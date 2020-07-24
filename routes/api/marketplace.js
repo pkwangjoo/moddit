@@ -12,7 +12,7 @@ const isLoggedIn = require("../../middleware/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Marketplace = require("../../models/Marketplace");
-const File = require('../../models/File');
+const File = require("../../models/File");
 const Comment = require("../../models/Comment");
 const Leaderboard = require("../../models/Leaderboard");
 // const File = require('../../models/File');
@@ -104,7 +104,7 @@ router.post(
       check("title", "title is require").not().isEmpty(),
       check("file", "file is required").not().isEmpty(),
     ],
-    upload.array("file",3),
+    upload.array("file", 3),
   ],
 
   async (req, res) => {
@@ -124,26 +124,25 @@ router.post(
         { new: true, upsert: true }
       );
 
-      req.files.forEach(async function(item, index) {
+      req.files.forEach(async function (item, index) {
         try {
           let newFile = new File({
             file: item.filename,
             filename: item.originalname,
           });
 
-          newMarketplace.files.push(newFile)
+          newMarketplace.files.push(newFile);
           await newFile.save();
-
         } catch (err) {
-          console.log(err.message);
-          res.status(500).send('Server Error');
+          // console.log(err.message);
+          res.status(500).send("Server Error");
         }
-      })
+      });
 
       await newMarketplace.save();
       res.json(newMarketplace);
     } catch (err) {
-      console.log(err.message);
+      // console.log(err.message);
       res.status(500).send("Server Error");
     }
   }
@@ -155,9 +154,11 @@ router.delete("/:marketplace_id", isLoggedIn, async (req, res) => {
   try {
     const marketplace = await Marketplace.findById(req.params.marketplace_id);
 
-    gfs.remove({ _id: req.params.marketplace_id, root:'uploads'}, function(err) {
+    gfs.remove({ _id: req.params.marketplace_id, root: "uploads" }, function (
+      err
+    ) {
       if (err) {
-        return res.status(500).send('Server Error');
+        return res.status(500).send("Server Error");
       }
     });
 
@@ -253,19 +254,20 @@ router.post(
   [
     isLoggedIn,
     [
-      check("text", "text is require").not().isEmpty(),
-      check("title", "title is require").not().isEmpty(),
-      check("file", "file is required").not().isEmpty(),
+      check("text", "text is required").not().isEmpty(),
+      check("title", "title is required").not().isEmpty(),
+      check("files", "file is required").not().isEmpty(),
     ],
     upload.any("file"),
   ],
 
   async (req, res) => {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-      }
+      const errors = validationResult(req.body);
+
+      // if (!errors.isEmpty()) {
+      //   return res.status(400).json({ errors: errors.array() });
+      // }
 
       const { title, text, tag } = req.body;
 
@@ -284,29 +286,25 @@ router.post(
         { new: true, upsert: true }
       );
 
-      req.files.forEach(async function(item, index) {
+      req.files.forEach(async function (item, index) {
         try {
           let newFile = new File({
             file: item.filename,
             filename: item.originalname,
-          })
+          });
 
-          
-          newMarketplace.files.push(newFile)
+          newMarketplace.files.push(newFile);
           await newFile.save();
-
         } catch (err) {
           console.log(err.message);
           // res.status(500).send('Server Error');
         }
-      })
-
+      });
 
       await newMarketplace.save();
 
       console.log(newMarketplace);
       res.json(newMarketplace);
-
     } catch (err) {
       console.log(err.message);
       res.status(500).send("Server Error");

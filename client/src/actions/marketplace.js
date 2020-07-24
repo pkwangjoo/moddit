@@ -88,11 +88,9 @@ export const createForumMarketplace = (forum_id, formData, history) => async (
       payload: { msg: err.response.statusText, status: err.response.status },
     });
 
-    const errors = err.response.data.errors;
+    console.log(err);
 
-    console.log(errors);
-
-    errors.map((err) => dispatch(addAlert(err.msg, "negative")));
+    // errors.map((err) => dispatch(addAlert(err.msg, "negative")));
   }
 };
 
