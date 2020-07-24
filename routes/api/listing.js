@@ -63,12 +63,15 @@ router.post(
 
       const { title, text, limit, tag } = req.body;
 
+      const user = await User.findById(req.user.id);
+
       let newListing = new Listing({
         title: title,
         text: text,
         author: req.user.id,
         forum: req.params.forum_id,
         limit: limit,
+        participants: [user],
         tag: tag,
       });
 

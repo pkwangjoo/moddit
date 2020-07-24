@@ -1,4 +1,5 @@
 import axios from "axios";
+import { addAlert } from "./alert";
 
 export const getListings = (form_id) => async (dispatch) => {
   try {
@@ -76,6 +77,12 @@ export const createListing = (forum_id, formData, history) => async (
       type: "LISTING_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },
     });
+
+    const errors = err.response.data.errors;
+
+    console.log(errors);
+
+    errors.map((err) => dispatch(addAlert(err.msg, "negative")));
   }
 };
 

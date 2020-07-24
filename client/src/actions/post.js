@@ -1,4 +1,5 @@
 import axios from "axios";
+import { addAlert } from "./alert";
 
 export const getPosts = () => async (dispatch) => {
   try {
@@ -199,6 +200,10 @@ export const createForumPost = (forum_id, formData, history) => async (
       type: "POST_ERROR",
       payload: { msg: err.response.statusText, status: err.response.status },
     });
+
+    const errors = err.response.data.errors;
+
+    errors.map((err) => dispatch(addAlert(err.msg, "negative")));
   }
 };
 
