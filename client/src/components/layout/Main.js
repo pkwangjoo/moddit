@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./Main.css"
 
 const Main = () => {
   return (
@@ -10,10 +11,10 @@ const Main = () => {
       <div className="pusher">
         <div className="ui vertical masthead center aligned segment">
           <div className="ui text container">
-            <h1 className="ui header">
+            <h1 className="ui header" id="title">
               Moddit
                 </h1>
-            <h2>Collaborate with your peers!</h2>
+            <h2 id="subtitle">Collaborate with your peers!</h2>
             <br/>
             <div className="ui huge secondary button">
               <Link to="/forums">
@@ -36,7 +37,7 @@ const Main = () => {
                 <p>Completing your modules will give you access to special tags to help your juniors out!</p>
               </div>
               <div className="six wide right floated column">
-                <img src="assets/images/wireframe/white-image.png" className="ui large bordered rounded image" />
+                <img src={require("../img/homepage.jpg")} className="ui large bordered rounded image" />
               </div>
             </div>
             <div className="row">
