@@ -333,9 +333,12 @@ router.get("/forum/:forum_id", isLoggedIn, async (req, res) => {
  * Gets marketplace by tags
  */
 
-router.get("/tag/:tag_name", isLoggedIn, async (req, res) => {
+router.get("/forum/:forum_id/tag/:tag_name", isLoggedIn, async (req, res) => {
   try {
-    const marketplaces = await Marketplace.find({ tag: req.params.tag_name });
+    const marketplaces = await Marketplace.find({
+      tag: req.params.tag_name,
+      forum: req.params.forum_id,
+    });
 
     res.json(marketplaces);
   } catch (err) {

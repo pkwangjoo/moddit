@@ -206,9 +206,11 @@ export const getMarketplacesByUser = (user_id) => async (dispatch) => {
   }
 };
 
-export const getMarketplacesByTag = (tagName) => async (dispatch) => {
+export const getMarketplacesByTag = (tagName, forumID) => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/marketplace/tag/${tagName}`);
+    const res = await axios.get(
+      `/api/marketplace/forum/${forumID}/tag/${tagName}`
+    );
 
     dispatch({
       type: "GET_MARKETPLACES",

@@ -169,9 +169,12 @@ router.get("/user/:user_id", isLoggedIn, async (req, res) => {
   }
 });
 
-router.get("/tag/:tag_name", isLoggedIn, async (req, res) => {
+router.get("/forum/:forum_id/tag/:tag_name", isLoggedIn, async (req, res) => {
   try {
-    const listings = await Listing.find({ tag: req.params.tag_name });
+    const listings = await Listing.find({
+      tag: req.params.tag_name,
+      forum: req.params.forum_id,
+    });
 
     res.json(listings);
   } catch (err) {

@@ -75,7 +75,6 @@ const Dashboard = ({
     leaderboards: false,
 
     bio: true,
-
   });
 
   const toggleListing = (e) => {
@@ -89,7 +88,6 @@ const Dashboard = ({
       leaderboards: false,
 
       bio: false,
-
     });
   };
 
@@ -104,7 +102,6 @@ const Dashboard = ({
       leaderboards: false,
 
       bio: false,
-
     });
   };
 
@@ -119,7 +116,6 @@ const Dashboard = ({
       leaderboards: false,
 
       bio: false,
-
     });
   };
 
@@ -134,7 +130,6 @@ const Dashboard = ({
       leaderboards: false,
 
       bio: false,
-
     });
   };
 
@@ -160,7 +155,6 @@ const Dashboard = ({
       modules: false,
       marketplace: false,
       bio: true,
-
     });
   };
 
@@ -172,8 +166,8 @@ const Dashboard = ({
       modules: false,
       marketplace: false,
       leaderboards: true,
-    })
-  }
+    });
+  };
 
   const startMessage = (e) => {
     const userData = {
@@ -232,27 +226,50 @@ const Dashboard = ({
         <div class="ui grid">
           <div class="four wide column">
             <div class="ui vertical fluid tabular menu">
-              <a onClick={toggleBio} class="item">
+              <a
+                onClick={toggleBio}
+                class={dashboardState.bio ? "active item" : "item"}
+              >
                 Bio
               </a>
-              <a onClick={togglePost} class="item">
+              <a
+                onClick={togglePost}
+                class={dashboardState.posts ? "active item" : "item"}
+              >
                 Posts
               </a>
-              <a onClick={toggleListing} class="item">
+              <a
+                onClick={toggleListing}
+                class={dashboardState.listings ? "active item" : "item"}
+              >
                 Listings
               </a>
               {match.params.user_id === user._id && (
-                <a onClick={togglePrivateChat} className="item">
+                <a
+                  onClick={togglePrivateChat}
+                  className={
+                    dashboardState.privateChat ? "active item" : "item"
+                  }
+                >
                   Private Chats
                 </a>
               )}
-              <a onClick={toggleModules} class="item">
+              <a
+                onClick={toggleModules}
+                class={dashboardState.modules ? "active item" : "item"}
+              >
                 Modules
               </a>
-              <a onClick={toggleMarketplace} class="item">
+              <a
+                onClick={toggleMarketplace}
+                class={dashboardState.marketplace ? "active item" : "item"}
+              >
                 Marketplace
               </a>
-              <a onClick = {toggleLeaderboards} class="item">
+              <a
+                onClick={toggleLeaderboards}
+                class={dashboardState.leaderboards ? "active item" : "item"}
+              >
                 Badges
               </a>
             </div>

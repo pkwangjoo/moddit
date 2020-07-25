@@ -61,20 +61,41 @@ const ForumPostList = ({
               <a class="item" onClick={() => getForumPosts(forumID)}>
                 All
               </a>
-              <a class="item" onClick={() => getPostsByTag("Lecture")}>
+              <a class="item" onClick={() => getPostsByTag("Lecture", forumID)}>
                 Lecture
               </a>
-              <a class="item" onClick={() => getPostsByTag("Tutorial")}>
+              <a
+                class="item"
+                onClick={() => getPostsByTag("Tutorial", forumID)}
+              >
                 Tutorial
               </a>
-              <a class="item" onClick={() => getPostsByTag("Assignment")}>
+              <a
+                class="item"
+                onClick={() => getPostsByTag("Assignment", forumID)}
+              >
                 Assignment
               </a>
-              <a class="item" onClick={() => getPostsByTag("Problem Set")}>
+              <a
+                class="item"
+                onClick={() => getPostsByTag("Problem Set", forumID)}
+              >
                 Problem Set
               </a>
-              <a class="item" onClick={() => getPostsByTag("Admin")}>
+              <a class="item" onClick={() => getPostsByTag("Admin", forumID)}>
                 Admin
+              </a>
+              <a
+                className="item"
+                onClick={() => getPostsByTag("Review", forumID)}
+              >
+                Review
+              </a>
+              <a
+                className="item"
+                onClick={() => getPostsByTag("Advice", forumID)}
+              >
+                Advice
               </a>
             </div>
           </div>

@@ -151,9 +151,9 @@ export const updateListing = (listings) => (dispatch) => {
   });
 };
 
-export const getListingByTag = (tagName) => async (dispatch) => {
+export const getListingByTag = (tagName, forumID) => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/listing/tag/${tagName}`);
+    const res = await axios.get(`/api/listing/forum/${forumID}/tag/${tagName}`);
 
     dispatch({
       type: "GET_LISTINGS",

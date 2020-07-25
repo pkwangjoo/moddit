@@ -46,6 +46,7 @@ const ForumPostForm = ({
         <label>
           Only for seniors:
           <select value={tag} onChange={onChange} name="tag">
+            <option value="Default">Default</option>
             <option value="Review">Review</option>
             <option value="Advice">Advice</option>
           </select>

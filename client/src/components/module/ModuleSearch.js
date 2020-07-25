@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { getModule, clearModule } from "../../actions/module";
 import { getLoggedProfile } from "../../actions/profile";
 import axios from "axios";
+import { clearMPost } from "../../actions/marketplace";
 
 const ModuleSearch = ({
   getModule,
@@ -20,6 +21,8 @@ const ModuleSearch = ({
 
   useEffect(() => {
     getLoggedProfile();
+
+    return () => clearModule();
   }, []);
 
   const onChange = (e) =>
@@ -32,6 +35,7 @@ const ModuleSearch = ({
     setModData({
       modCode: "",
     });
+    clearModule();
   };
 
   const addModule = async () => {

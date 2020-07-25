@@ -14,37 +14,36 @@ const BadgeList = ({
 }) => {
   useEffect(() => {
     getLeaderboardsByUser(userID);
-  });
+  }, [getLeaderboardsByUser]);
   return (
     <Fragment>
       {!loading && (
         <div>
-            <PointBadge
-                // key={leaderboard._id}
-                leaderboard={leaderboard}
-            />
+          <PointBadge
+            // key={leaderboard._id}
+            leaderboard={leaderboard}
+          />
 
-            <div class="ui divider"></div>
-            
-            <DiscussionBadge
-                // key={leaderboard._id}
-                leaderboard={leaderboard}
-            />
+          <div class="ui divider"></div>
 
-            <div class="ui divider"></div>
+          <DiscussionBadge
+            // key={leaderboard._id}
+            leaderboard={leaderboard}
+          />
 
-            
-            <MarketplaceBadge
-                // key={leaderboard._id}
-                leaderboard={leaderboard}
-            />
-            
-            <div class="ui divider"></div>
+          <div class="ui divider"></div>
 
-            <CommentBadge
-                // key={leaderboard._id}
-                leaderboard={leaderboard}
-            />
+          <MarketplaceBadge
+            // key={leaderboard._id}
+            leaderboard={leaderboard}
+          />
+
+          <div class="ui divider"></div>
+
+          <CommentBadge
+            // key={leaderboard._id}
+            leaderboard={leaderboard}
+          />
         </div>
       )}
     </Fragment>

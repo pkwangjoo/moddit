@@ -207,9 +207,9 @@ export const createForumPost = (forum_id, formData, history) => async (
   }
 };
 
-export const getPostsByTag = (tagName) => async (dispatch) => {
+export const getPostsByTag = (tagName, forumID) => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/posts/tag/${tagName}`);
+    const res = await axios.get(`/api/posts/forum/${forumID}/tag/${tagName}`);
 
     dispatch({
       type: "GET_POSTS",

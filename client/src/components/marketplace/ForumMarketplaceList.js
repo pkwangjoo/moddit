@@ -66,16 +66,21 @@ const ForumMarketplaceList = ({
               </a>
               <a
                 class="item"
-                onClick={() => getMarketplacesByTag("Sample Exam Answers")}
+                onClick={() =>
+                  getMarketplacesByTag("Sample Exam Answers", forumID)
+                }
               >
                 Sample Exam Answers
               </a>
-              <a class="item" onClick={() => getMarketplacesByTag("Notes")}>
+              <a
+                class="item"
+                onClick={() => getMarketplacesByTag("Notes", forumID)}
+              >
                 Notes
               </a>
               <a
                 class="item"
-                onClick={() => getMarketplacesByTag("Cheatsheets")}
+                onClick={() => getMarketplacesByTag("Cheatsheets", forumID)}
               >
                 Cheatsheets
               </a>

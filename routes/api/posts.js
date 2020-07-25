@@ -379,9 +379,12 @@ router.post(
  * Get posts by tag
  */
 
-router.get("/tag/:tag_name", isLoggedIn, async (req, res) => {
+router.get("/forum/:forum_id/tag/:tag_name", isLoggedIn, async (req, res) => {
   try {
-    const posts = await Post.find({ tag: req.params.tag_name });
+    const posts = await Post.find({
+      tag: req.params.tag_name,
+      forum: req.params.forum_id,
+    });
 
     res.json(posts);
   } catch (err) {

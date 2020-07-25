@@ -37,13 +37,22 @@ const ListingList = ({
               <a class="item" onClick={() => getListings(forumID)}>
                 All
               </a>
-              <a class="item" onClick={() => getListingByTag("Consultation")}>
+              <a
+                class="item"
+                onClick={() => getListingByTag("Consultation", forumID)}
+              >
                 Consultation
               </a>
-              <a class="item" onClick={() => getListingByTag("Meet-up")}>
+              <a
+                class="item"
+                onClick={() => getListingByTag("Meet-up", forumID)}
+              >
                 Meet-up
               </a>
-              <a class="item" onClick={() => getListingByTag("Study Session")}>
+              <a
+                class="item"
+                onClick={() => getListingByTag("Study Session", forumID)}
+              >
                 Study Session
               </a>
             </div>
