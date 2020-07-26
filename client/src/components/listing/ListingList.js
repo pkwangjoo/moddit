@@ -25,7 +25,7 @@ const ListingList = ({
 
   return (
     <Fragment>
-      <div class="ui menu">
+      <div class="ui stackable menu">
         <a class="item" onClick={() => getListings(forumID)}>
           All Listings
         </a>
