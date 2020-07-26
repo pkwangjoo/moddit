@@ -227,18 +227,21 @@ const Dashboard = ({
           <div class="four wide column">
             <div class="ui vertical fluid tabular menu">
               <a
+                style={{ fontSize: "2vw" }}
                 onClick={toggleBio}
                 class={dashboardState.bio ? "active item" : "item"}
               >
                 Bio
               </a>
               <a
+                style={{ fontSize: "2vw" }}
                 onClick={togglePost}
                 class={dashboardState.posts ? "active item" : "item"}
               >
                 Posts
               </a>
               <a
+                style={{ fontSize: "2vw" }}
                 onClick={toggleListing}
                 class={dashboardState.listings ? "active item" : "item"}
               >
@@ -246,6 +249,7 @@ const Dashboard = ({
               </a>
               {match.params.user_id === user._id && (
                 <a
+                  style={{ fontSize: "2vw" }}
                   onClick={togglePrivateChat}
                   className={
                     dashboardState.privateChat ? "active item" : "item"
@@ -255,18 +259,21 @@ const Dashboard = ({
                 </a>
               )}
               <a
+                style={{ fontSize: "2vw" }}
                 onClick={toggleModules}
                 class={dashboardState.modules ? "active item" : "item"}
               >
                 Modules
               </a>
               <a
+                style={{ fontSize: "2vw" }}
                 onClick={toggleMarketplace}
                 class={dashboardState.marketplace ? "active item" : "item"}
               >
                 Marketplace
               </a>
               <a
+                style={{ fontSize: "2vw" }}
                 onClick={toggleLeaderboards}
                 class={dashboardState.leaderboards ? "active item" : "item"}
               >

@@ -41,7 +41,7 @@ const ForumMarketplaceList = ({
   };
   return (
     <div>
-      <div class="ui menu">
+      <div class="ui stackable menu">
         <a class=" item" onClick={() => getForumMarketplaces(forumID)}>
           All Marketplaces
         </a>

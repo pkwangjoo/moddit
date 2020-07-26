@@ -168,7 +168,7 @@ router.delete("/:marketplace_id", isLoggedIn, async (req, res) => {
 
     let newLeaderboard = await Leaderboard.findOneAndUpdate(
       { author: req.user.id },
-      { $inc: { posts: -1, points: -10 } },
+      { $inc: { marketplace: -1, points: -10 } },
       { new: true, upsert: true }
     );
 

@@ -27,10 +27,10 @@ const ListingItem = ({
         {!auth.loading && auth.user._id === author._id && (
           <div class="right floated meta">
             <button
-              onClick={(e) => deleteListing(_id)}
-              class="mini ui red basic button"
+              onClick={() => deleteListing(_id)}
+              class="mini ui red circular basic icon button"
             >
-              delete
+              <i class="trash alternate outline icon"></i>
             </button>
           </div>
         )}

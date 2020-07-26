@@ -38,7 +38,7 @@ const ForumPostList = ({
 
   return (
     <div style={{ marginBottom: "20px" }}>
-      <div class="ui menu">
+      <div class="ui stackable menu">
         <a class=" item" onClick={() => getForumPosts(forumID)}>
           All Posts
         </a>
