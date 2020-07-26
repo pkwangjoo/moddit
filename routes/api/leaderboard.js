@@ -40,7 +40,6 @@ router.get("/:user_id", async (req, res) => {
   try {
     let newLeaderboard = await Leaderboard.findOneAndUpdate({ author: req.params.user_id }, { $inc: { posts: 0 } }, { new: true, upsert: true });
     console.log(newLeaderboard);
-    console.log('hello');
     res.json(newLeaderboard); 
   } catch (err) {
     console.log(err.message);
