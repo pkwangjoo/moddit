@@ -7,7 +7,7 @@ const PointBadge = ({
 
     var pointsBadge = false;
 
-    if (points > 0) {
+    if (points > 999) {
         pointsBadge = true;
     }
 
@@ -38,7 +38,7 @@ const PointBadge = ({
                height="100"
                />
              <span>
-              Earn at least 500 points to earn the Point Badge!
+              Earn at least 1000 points to earn the Point Badge!
              </span>
              </div>
             )}

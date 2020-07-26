@@ -7,7 +7,7 @@ const MarketplaceBadge = ({
 
     var marketplaceBadge = false;
 
-    if (marketplace > 0) {
+    if (marketplace > 49) {
         marketplaceBadge = true;
     }
 

@@ -7,7 +7,7 @@ const DiscussionBadge = ({
 
     var discussionBadge = false;
 
-    if (posts > 0) {
+    if (posts > 99) {
         discussionBadge = true;
     }
 
@@ -38,7 +38,7 @@ const DiscussionBadge = ({
                 height="100"
                 />
               <span>
-              Make 500 discussions to earn the Discussor Badge!
+              Make 100 discussions to earn the Discussor Badge!
               </span>
               </div>
             )}

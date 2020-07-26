@@ -7,7 +7,7 @@ const CommentBadge = ({
 
     var commentsBadge = false;
 
-    if (comments > 0) {
+    if (comments > 199) {
         commentsBadge = true;
     }
 
@@ -38,7 +38,7 @@ const CommentBadge = ({
               height="100"
               />
             <span>
-             Comment 100 times to earn the Comment Badge!
+             Comment 200 times to earn the Comment Badge!
             </span>
             </div>
             )}
