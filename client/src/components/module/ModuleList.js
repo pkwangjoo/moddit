@@ -2,7 +2,11 @@ import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import ModuleItem from "./ModuleItem";
 
-import { getModules, getCompletedModules } from "../../actions/module";
+import {
+  getModules,
+  getCompletedModules,
+  clearModules,
+} from "../../actions/module";
 
 const ModuleList = ({
   userID,
@@ -10,10 +14,13 @@ const ModuleList = ({
   auth,
   profile: { profile },
   getCompletedModules,
+  clearModules,
   getModules,
 }) => {
   useEffect(() => {
     getModules(userID);
+
+    return () => clearModules();
   }, [getModules, getCompletedModules]);
 
   const [moduleListState, toggleModuleListState] = useState({
@@ -66,6 +73,8 @@ const mapStateToProps = (state) => ({
   profile: state.profile,
   auth: state.auth,
 });
-export default connect(mapStateToProps, { getModules, getCompletedModules })(
-  ModuleList
-);
+export default connect(mapStateToProps, {
+  getModules,
+  getCompletedModules,
+  clearModules,
+})(ModuleList);

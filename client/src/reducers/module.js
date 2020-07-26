@@ -22,6 +22,8 @@ export default (state = initialState, action) => {
 
     case "CLEAR_MODULE":
       return { ...state, module: null, loading: false };
+    case "CLEAR_MODULES":
+      return { ...state, module: null, modules: [], loading: true };
 
     default:
       return state;

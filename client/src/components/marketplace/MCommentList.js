@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getMComments } from "../../actions/comment";
+import { getMComments, clearComments } from "../../actions/comment";
 
 import { Link } from "react-router-dom";
 import CommentItem from "../posts/CommentItem";
@@ -9,10 +9,13 @@ import CommentItem from "../posts/CommentItem";
 const MCommentList = ({
   marketplace,
   getMComments,
+  clearComments,
   comment: { comments, loading },
 }) => {
   useEffect(() => {
     getMComments(marketplace.marketplace._id);
+
+    return () => clearComments();
   }, [getMComments]);
   return (
     comments.length !== 0 && (
@@ -40,4 +43,6 @@ const mapStateToProps = (state) => ({
   marketplace: state.marketplace,
 });
 
-export default connect(mapStateToProps, { getMComments })(MCommentList);
+export default connect(mapStateToProps, { getMComments, clearComments })(
+  MCommentList
+);

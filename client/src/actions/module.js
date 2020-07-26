@@ -63,3 +63,9 @@ export const clearModule = () => (dispatch) => {
     type: "CLEAR_MODULE",
   });
 };
+
+export const clearModules = () => (dispatch) => {
+  dispatch({
+    type: "CLEAR_MODULES",
+  });
+};

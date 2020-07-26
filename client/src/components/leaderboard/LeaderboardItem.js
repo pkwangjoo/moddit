@@ -1,26 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { getUserProfile } from "../../actions/profile";
+import axios from "axios";
 
-const LeaderboardItem = ({ leaderboard: { author, posts, marketplace, comments, points }, number }) => {
+const LeaderboardItem = ({
+  leaderboard: { author, posts, marketplace, comments, points },
+
+  number,
+}) => {
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    axios.get(`/api/profile/${author._id}`).then((res) => setProfile(res.data));
+  }, []);
   return (
-    <div class="item">
-      <a class="ui tiny image">
-        <img src={author.avatar} />
-      </a>
+    <div class="ui centered raised fluid card">
       <div class="content">
-        {number}
+        <img class="right floated mini ui image" src={author.avatar}></img>
         <Link to={`/dashboard/${author._id}`} class="header">
-          {author.name}
+          {number}. {author.name}
         </Link>
+        <div class="meta">{profile && profile.major}</div>
+        {console.log(profile)}
         <div class="description">
           <p>
-            Posts: { posts }
-            <br/>
+            Posts: {posts}
+            <br />
             Marketplace: {marketplace}
-            <br/>
+            <br />
             Comments: {comments}
-            <br/>
-            Points: { points }
+            <br />
+            Points: {points}
           </p>
         </div>
       </div>
@@ -28,4 +39,4 @@ const LeaderboardItem = ({ leaderboard: { author, posts, marketplace, comments, 
   );
 };
 
-export default LeaderboardItem;
+export default connect(null, { getUserProfile })(LeaderboardItem);

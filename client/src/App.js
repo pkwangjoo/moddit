@@ -1,5 +1,10 @@
 import React, { Fragment, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  withRouter,
+} from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/layout/Navbar";
 import Login from "./components/auth/Login";
@@ -63,7 +68,7 @@ function App() {
               <ProtectedRoute
                 exact
                 path="/dashboard/:user_id"
-                component={Dashboard}
+                component={withRouter(Dashboard)}
               />
               <ProtectedRoute
                 exact

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getComments } from "../../actions/comment";
+import { getComments, clearComments } from "../../actions/comment";
 
 import { Link } from "react-router-dom";
 import CommentItem from "./CommentItem";
@@ -9,6 +9,8 @@ import CommentItem from "./CommentItem";
 const CommentList = ({ post, getComments, comment: { comments, loading } }) => {
   useEffect(() => {
     getComments(post.post._id);
+
+    return () => clearComments();
   }, [getComments]);
   return (
     comments.length !== 0 && (
@@ -41,4 +43,6 @@ const mapStateToProps = (state) => ({
   post: state.post,
 });
 
-export default connect(mapStateToProps, { getComments })(CommentList);
+export default connect(mapStateToProps, { getComments, clearComments })(
+  CommentList
+);

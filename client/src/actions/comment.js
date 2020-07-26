@@ -88,3 +88,9 @@ export const addCommentReply = (comment_id, formData) => async (dispatch) => {
     });
   }
 };
+
+export const clearComments = () => (dispatch) => {
+  dispatch({
+    type: "CLEAR_COMMENTS",
+  });
+};

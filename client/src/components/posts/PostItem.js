@@ -29,9 +29,9 @@ const PostItem = ({
           <div class="right floated meta">
             <button
               onClick={() => deletePost(_id)}
-              class="mini ui red basic button"
+              class="mini ui red circular basic icon button"
             >
-              -
+              <i class="trash alternate outline icon"></i>
             </button>
           </div>
         )}

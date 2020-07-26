@@ -7,6 +7,7 @@ const Message = ({ auth, message: { sender, text } }) => {
   return sender === auth.user._id || sender._id === auth.user._id ? (
     <div className="messageContainer justifyEnd">
       <p className="sentText pr-10">{sender.name}</p>
+      <br />
       <div className="messageBox backgroundOrange">
         {" "}
         <p className="messageText colorWhite">{text}</p>

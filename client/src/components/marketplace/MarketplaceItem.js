@@ -6,61 +6,15 @@ import Moment from "react-moment";
 import axios from "axios";
 import FileSaver from "file-saver";
 import { likeMPost, unlikeMPost, deleteMPost } from "../../actions/marketplace";
-import FileList from './FileList';
+import FileList from "./FileList";
 
 const MarketplaceItem = ({
   auth,
-  marketplace: {
-    _id,
-    text,
-    title,
-    author,
-    date,
-    likes,
-    files,
-    comments,
-    tag,
-  },
+  marketplace: { _id, text, title, author, date, likes, files, comments, tag },
   likeMPost,
   unlikeMPost,
   deleteMPost,
 }) => {
-
-  // const fileType = (filename) => {
-  //   const type = filename.slice(-4);
-
-  //   switch (type) {
-  //     case ".pdf":
-  //       return "file pdf outline icon";
-
-  //     case "docx" || "docs":
-  //       return "file word outline icon";
-
-  //     case ".csv" || "xlsx" || ".xls":
-  //       return "file excel outline icon";
-
-  //     case ".ppt" || "pptx":
-  //       return "file powerpoint outline icon";
-
-  //     default:
-  //       return "file outline icon";
-  //   }
-  // };
-
-  // const downloadFile = async () => {
-  //   axios({
-  //     method: "GET",
-  //     url: `/api/marketplace/${file}/download`,
-  //     responseType: "blob",
-  //   })
-  //     .then((response) => {
-  //       FileSaver.saveAs(response.data, `${file}`);
-  //     })
-  //     .then(() => {
-  //       console.log("Download Complete");
-  //     });
-  // };
-
   const userDidLike = () => {
     return likes.some((liker) => liker.user === auth.user._id);
   };
@@ -73,9 +27,9 @@ const MarketplaceItem = ({
             <div class="right floated meta">
               <button
                 onClick={() => deleteMPost(_id)}
-                class="mini ui red basic button"
+                class="mini ui red circular basic icon button"
               >
-                delete
+                <i class="trash alternate outline icon"></i>
               </button>
             </div>
           )}
@@ -92,10 +46,9 @@ const MarketplaceItem = ({
           <br></br>
 
           <div class="ui tiny vertical labeled icon buttons">
-              {files.map((file) => (
-                <FileList key={file._id} file={file} />
-              ))}
-
+            {files.map((file) => (
+              <FileList key={file._id} file={file} />
+            ))}
           </div>
         </div>
 

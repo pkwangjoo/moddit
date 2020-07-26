@@ -50,6 +50,9 @@ export default (state = initialState, action) => {
         ),
         loading: false,
       };
+
+    case "CLEAR_COMMENTS":
+      return { ...state, comments: [], loading: true };
     default:
       return state;
   }
