@@ -12,7 +12,9 @@ const ListingItem = ({
   listing: { _id, author, title, text, date, limit, participants, tag },
 }) => {
   const handleClick = (e) => {
-    addParticipant(_id);
+    if (!userInListing()) {
+      addParticipant(_id);
+    }
     history.push(`/listing/${_id}`);
   };
 

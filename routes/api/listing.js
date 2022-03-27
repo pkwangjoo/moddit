@@ -22,6 +22,7 @@ router.get("/", isLoggedIn, async (req, res) => {
 router.get("/:listing_id", async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.listing_id);
+    console.log(listing);
 
     res.json(listing);
   } catch (err) {
