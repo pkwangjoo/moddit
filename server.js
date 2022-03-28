@@ -51,8 +51,8 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("join", ({ room }, cb) => {
-    console.log("someone has joined the room " + room.name);
+  socket.on("join", ({ room, user }, cb) => {
+    console.log(user.name + " has joined the room " + room.name);
     socket.join(room._id);
   });
   socket.on("disconnect", () => console.log("user disconnected"));

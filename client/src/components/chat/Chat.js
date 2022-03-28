@@ -31,7 +31,7 @@ const Chat = ({
     socket = io.connect("/");
     chatRoom && getChatMessages(chatRoom._id);
 
-    chatRoom && socket.emit("join", { room: chatRoom });
+    chatRoom && socket.emit("join", { room: chatRoom, user: auth.user });
 
     socket.on("message", (msg) => {
       udpateChatMessages(msg);
