@@ -20,24 +20,6 @@ router.get("/", isLoggedIn, async (req, res) => {
 
 router.get("/chatRoom/:chatroom_id/messages", isLoggedIn, async (req, res) => {
   try {
-    // const chatRoom = await ChatRoom.findById(req.params.chatroom_id);
-    // const currUser = await User.findById(req.user.id);
-
-    // var userInChatRoom = false;
-
-    // for (let i = 0; i < chatRoom.users.length; i++) {
-    //   if (chatRoom.users[i].equals(currUser)) {
-    //     userInChatRoom = true;
-    //     break;
-    //   }
-    // }
-
-    // if (!userInChatRoom) {
-    //   return res
-    //     .status(400)
-    //     .send("The current user is not authorised to view to messages");
-    // }
-
     let chatmessages = await ChatMessage.find({
       chatRoom: req.params.chatroom_id,
     });
@@ -83,7 +65,6 @@ router.post("/chatRoom/private", isLoggedIn, async (req, res) => {
         users: { $all: [sender_id, receiver_id] },
       });
 
-      console.log(exisitingChatRoom);
       return res.json(exisitingChatRoom);
     }
 

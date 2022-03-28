@@ -11,6 +11,7 @@ import {
 import Messages from "./Messages/Messages";
 import { Redirect } from "react-router-dom";
 import { clearMPost } from "../../actions/marketplace";
+import { serializeUser } from "passport";
 
 let socket = null;
 const Chat = ({
@@ -38,6 +39,7 @@ const Chat = ({
     });
 
     return () => {
+      socket.emit("disconnectUser", {user: auth.user});
       socket.disconnect();
       clearChatMessages();
     };

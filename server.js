@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
 
       await chatMessage.execPopulate("sender");
       if (msg.chatRoom) {
-        io.to(msg.chatRoom._id).emit("message", chatMessage);
+        io.to(msg.chatRoom._id).emit("message", chatMesssage);
       } else {
         io.emit("message", chatMessage);
       }
@@ -55,5 +55,9 @@ io.on("connection", (socket) => {
     console.log(user.name + " has joined the room " + room.name);
     socket.join(room._id);
   });
-  socket.on("disconnect", () => console.log("user disconnected"));
+
+  socket.on("disconnectUser", ({user}) => {
+    console.log(user.name + " disconnected");
+    socket.disconnect();
+  });
 });

@@ -88,8 +88,6 @@ export const privateChat = (userData, history) => async (dispatch) => {
       config
     );
 
-    console.log(res.data);
-
     dispatch({
       type: "JOIN_CHATROOM",
       payload: res.data,
