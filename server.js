@@ -28,7 +28,7 @@ app.use("/api/leaderboard", require("./routes/api/leaderboard"));
 app.get("/", (req, res) => {
   res.send("API running");
 });
-//##################################################socket##########################################
+//##################################################socket########################################
 io.on("connection", (socket) => {
   socket.on("sendMessage", async (msg, cb) => {
     try {
