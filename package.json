@@ -22,7 +22,7 @@
     "gridfs-stream": "^1.1.1",
     "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.9.16",
     "mongoose-autopopulate": "^0.12.2",
     "multer": "^1.4.2",
