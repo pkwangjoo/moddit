@@ -21,7 +21,7 @@
     "gravatar": "^1.8.0",
     "gridfs-stream": "^1.1.1",
     "http": "0.0.1-security",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.26.0",
     "mongoose": "^5.9.16",
     "mongoose-autopopulate": "^0.12.2",
